@@ -95,10 +95,12 @@ public class RequestThrottler extends ZooKeeperCriticalThread {
      * a connection that is now closed, and/or a request that will have a
      * request latency higher than the sessionTimeout. The staleness of
      * a request is tunable property, @see Request for details.
+     * true为直接丢弃请求 默认值true
      */
     private static volatile boolean dropStaleRequests = Boolean.parseBoolean(System.getProperty("zookeeper.request_throttle_drop_stale", "true"));
 
     protected boolean shouldThrottleOp(Request request, long elapsedTime) {
+        //对于ping和session操作并且配置了限制等待时间 并且超过了
         return request.isThrottlable()
                 && ZooKeeperServer.getThrottledOpWaitTime() > 0
                 && elapsedTime > ZooKeeperServer.getThrottledOpWaitTime();
@@ -143,19 +145,22 @@ public class RequestThrottler extends ZooKeeperCriticalThread {
                 if (killed) {
                     break;
                 }
-
+                //获取ZooKeeperServer提交的request
                 Request request = submittedRequests.take();
+                //如果是结束请求 直接break 然后线程执行结束
                 if (Request.requestOfDeath == request) {
                     break;
                 }
-
+                //如果是失效请求
                 if (request.mustDrop()) {
                     continue;
                 }
 
                 // Throttling is disabled when maxRequests = 0
+                //有请求限制
                 if (maxRequests > 0) {
                     while (!killed) {
+                        //如果连接关闭或者失效(超时)
                         if (dropStaleRequests && request.isStale()) {
                             // Note: this will close the connection
                             dropRequest(request);
@@ -163,9 +168,11 @@ public class RequestThrottler extends ZooKeeperCriticalThread {
                             request = null;
                             break;
                         }
+                        //处理中的请求小于最大请求
                         if (zks.getInProcess() < maxRequests) {
                             break;
                         }
+                        //否则等待 在等待中request超时也会被dropRequest
                         throttleSleep(stallTime);
                     }
                 }
@@ -173,17 +180,20 @@ public class RequestThrottler extends ZooKeeperCriticalThread {
                 if (killed) {
                     break;
                 }
-
+                //前面dropRequest之后 设置的 request = null;
                 // A dropped stale request will be null
                 if (request != null) {
+                    //计数
                     if (request.isStale()) {
                         ServerMetrics.getMetrics().STALE_REQUESTS.add(1);
                     }
                     final long elapsedTime = Time.currentElapsedTime() - request.requestThrottleQueueTime;
                     ServerMetrics.getMetrics().REQUEST_THROTTLE_QUEUE_TIME.add(elapsedTime);
                     if (shouldThrottleOp(request, elapsedTime)) {
-                      request.setIsThrottled(true);
-                      ServerMetrics.getMetrics().THROTTLED_OPS.add(1);
+                        //添加节流标志
+                        request.setIsThrottled(true);
+                        //计数
+                        ServerMetrics.getMetrics().THROTTLED_OPS.add(1);
                     }
                     zks.submitRequestNow(request);
                 }
@@ -232,6 +242,7 @@ public class RequestThrottler extends ZooKeeperCriticalThread {
         ServerCnxn conn = request.getConnection();
         if (conn != null) {
             // Note: this will close the connection
+            //失效发送close
             conn.setInvalid();
         }
         // Notify ZooKeeperServer that the request has finished so that it can

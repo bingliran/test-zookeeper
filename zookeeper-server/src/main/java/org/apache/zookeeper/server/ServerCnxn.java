@@ -129,6 +129,7 @@ public abstract class ServerCnxn implements Stats, Watcher {
      * of request throttling. This flag may be false when a connection is
      * actually closed (false negative), but should never be true with
      * a connection is still alive (false positive).
+     * 连接是否关闭
      */
     private volatile boolean stale = false;
 
@@ -352,6 +353,7 @@ public abstract class ServerCnxn implements Stats, Watcher {
         }
     }
 
+    //计数
     protected void packetReceived(long bytes) {
         incrPacketsReceived();
         ServerStats serverStats = serverStats();

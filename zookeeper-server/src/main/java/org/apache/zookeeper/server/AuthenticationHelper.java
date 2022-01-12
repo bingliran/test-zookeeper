@@ -116,6 +116,7 @@ public class AuthenticationHelper {
      * @return true when authentication enforcement is success otherwise false
      */
     public boolean enforceAuthentication(ServerCnxn connection, int xid) throws IOException {
+        //需要强制认证并且 && 当前连接没有认证
         if (isEnforceAuthEnabled() && !isCnxnAuthenticated(connection)) {
             //Un authenticated connection, lets inform user with response and then close the session
             LOG.error("Client authentication scheme(s) {} does not match with any of the expected "

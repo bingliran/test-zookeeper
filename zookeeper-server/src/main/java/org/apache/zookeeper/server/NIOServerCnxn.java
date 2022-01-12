@@ -66,6 +66,9 @@ public class NIOServerCnxn extends ServerCnxn {
 
     private final SelectionKey sk;
 
+    /**
+     * 当前连接是否接收过连接请求
+     */
     private boolean initialized;
 
     private final ByteBuffer lenBuffer = ByteBuffer.allocate(4);
@@ -162,6 +165,7 @@ public class NIOServerCnxn extends ServerCnxn {
      * @throws EndOfStreamException
      */
     private void handleFailedRead() throws EndOfStreamException {
+        //设置关闭连接
         setStale();
         ServerMetrics.getMetrics().CONNECTION_DROP_COUNT.add(1);
         throw new EndOfStreamException("Unable to read additional data from client,"
@@ -173,6 +177,7 @@ public class NIOServerCnxn extends ServerCnxn {
 
     /** Read the request payload (everything following the length prefix) */
     private void readPayload() throws IOException, InterruptedException, ClientCnxnLimitException {
+        //失败
         if (incomingBuffer.remaining() != 0) { // have we read length bytes?
             int rc = sock.read(incomingBuffer); // sock is non-blocking, so ok
             if (rc < 0) {
@@ -182,10 +187,13 @@ public class NIOServerCnxn extends ServerCnxn {
 
         if (incomingBuffer.remaining() == 0) { // have we read length bytes?
             incomingBuffer.flip();
+            //计数
             packetReceived(4 + incomingBuffer.remaining());
             if (!initialized) {
+                //连接
                 readConnectRequest();
             } else {
+                //内容
                 readRequest();
             }
             lenBuffer.clear();
@@ -322,19 +330,25 @@ public class NIOServerCnxn extends ServerCnxn {
      */
     void doIO(SelectionKey k) throws InterruptedException {
         try {
+            //nio通道是否开启
             if (!isSocketOpen()) {
                 LOG.warn("trying to do i/o on a null socket for session: 0x{}", Long.toHexString(sessionId));
 
                 return;
             }
+            //nio连接可读状态
             if (k.isReadable()) {
                 int rc = sock.read(incomingBuffer);
+                //没有数据直接关闭连接
                 if (rc < 0) {
                     handleFailedRead();
                 }
+                //如果incomingBuffer读取过了
                 if (incomingBuffer.remaining() == 0) {
                     boolean isPayload;
+                    //incomingBuffer和lenBuffer都读取过了
                     if (incomingBuffer == lenBuffer) { // start of next request
+                        //重置
                         incomingBuffer.flip();
                         isPayload = readLength(k);
                         incomingBuffer.clear();
@@ -343,6 +357,7 @@ public class NIOServerCnxn extends ServerCnxn {
                         isPayload = true;
                     }
                     if (isPayload) { // not the case for 4letterword
+                        //请求
                         readPayload();
                     } else {
                         // four letter words take care
@@ -415,7 +430,7 @@ public class NIOServerCnxn extends ServerCnxn {
     // the selector.
     public void enableRecv() {
         if (throttled.compareAndSet(true, false)) {
-            //执行selector唤醒
+            //执行nio selector唤醒
             requestInterestOpsUpdate();
         }
     }
@@ -471,7 +486,17 @@ public class NIOServerCnxn extends ServerCnxn {
         }
 
     }
-    /** Return if four letter word found and responded to, otw false **/
+    /** Return if four letter word found and responded to, otw false
+     * [ruok] 查看当前zkServer是否启动，返回imok. ...
+     * [dump] 列出未经处理的会话和临时节点 ...
+     * [conf] 查看服务器配置 ...
+     * [cons] 展示连接到服务器的客户端信息 ...
+     * [envi] 环境变量 ...
+     * [mntr] 监控zk健康信息 ...
+     * [wchs] 展示watch的信息
+     * 四字命令
+     *
+     * **/
     private boolean checkFourLetterWord(final SelectionKey k, final int len) throws IOException {
         // We take advantage of the limited size of the length to look
         // for cmds. They are all 4-bytes which fits inside of an int
@@ -542,6 +567,7 @@ public class NIOServerCnxn extends ServerCnxn {
     private boolean readLength(SelectionKey k) throws IOException {
         // Read the length, now get the buffer
         int len = lenBuffer.getInt();
+        //接收指令
         if (!initialized && checkFourLetterWord(sk, len)) {
             return false;
         }
@@ -555,6 +581,7 @@ public class NIOServerCnxn extends ServerCnxn {
             throw new IOException("ZooKeeperServer not running");
         }
         // checkRequestSize will throw IOException if request is rejected
+        //验证大小和创建
         zkServer.checkRequestSizeWhenReceivingMessage(len);
         incomingBuffer = ByteBuffer.allocate(len);
         return true;

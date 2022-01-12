@@ -71,6 +71,7 @@ public class ProviderRegistry {
     }
 
     public static ServerAuthenticationProvider getServerProvider(String scheme) {
+        //包装过程 AuthenticationProvider 包装为 ServerAuthenticationProvider
         return WrappedAuthenticationProvider.wrap(getProvider(scheme));
     }
 

@@ -145,6 +145,8 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     public static final int DEFAULT_TICK_TIME = 3000;
     protected int tickTime = DEFAULT_TICK_TIME;
     public static final int DEFAULT_THROTTLED_OP_WAIT_TIME = 0; // disabled
+
+    //通知客户端在多久内最好不要尝试重新发起 默认0
     protected static volatile int throttledOpWaitTime =
         Integer.getInteger("zookeeper.throttled_op_wait_time", DEFAULT_THROTTLED_OP_WAIT_TIME);
     /** value of -1 indicates unset, use default */
@@ -273,6 +275,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     /**
      * The size threshold after which a request is considered a large request
      * and is checked against the large request byte limit.
+     * 单次请求上限
      */
     private volatile int largeRequestThreshold = -1;
 
@@ -1055,14 +1058,16 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             baos.close();
             ByteBuffer bb = ByteBuffer.wrap(baos.toByteArray());
             bb.putInt(bb.remaining() - 4).rewind();
+            //先返回基本的响应结果 在决定关闭连接或者 继续接收
             cnxn.sendBuffer(bb);
-
+            //验证通过
             if (valid) {
                 LOG.debug(
                     "Established session 0x{} with negotiated timeout {} for client {}",
                     Long.toHexString(cnxn.getSessionId()),
                     cnxn.getSessionTimeout(),
                     cnxn.getRemoteSocketAddress());
+                //继续接收请求
                 cnxn.enableRecv();
             } else {
 
@@ -1120,10 +1125,12 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
                 }
             }
         }
+        //通过限流
         requestThrottler.submitRequest(si);
     }
 
     public void submitRequestNow(Request si) {
+        //未初始化完成
         if (firstProcessor == null) {
             synchronized (this) {
                 try {
@@ -1144,17 +1151,21 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         }
         try {
             touch(si.cnxn);
+            //验证请求类型是否存在 OpCode
             boolean validpacket = Request.isValid(si.type);
             if (validpacket) {
                 setLocalSessionFlag(si);
+                //处理链
                 firstProcessor.processRequest(si);
                 if (si.cnxn != null) {
+                    //增加正在处理的请求
                     incInProcess();
                 }
             } else {
                 LOG.warn("Received packet at server of unknown type {}", si.type);
                 // Update request accounting/throttling limits
                 requestFinished(si);
+                //返回未知请求错误
                 new UnimplementedRequestProcessor().processRequest(si);
             }
         } catch (MissingSessionException e) {
@@ -1553,6 +1564,9 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         return currentLargeRequestBytes.get();
     }
 
+    /**
+     * 是否大于单次请求上限
+     */
     private boolean isLargeRequest(int length) {
         // The large request limit is disabled when threshold is -1
         if (largeRequestThreshold == -1) {
@@ -1561,10 +1575,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         return length > largeRequestThreshold;
     }
 
+    /**
+     * 验证请求大小
+     */
     public boolean checkRequestSizeWhenReceivingMessage(int length) throws IOException {
         if (!isLargeRequest(length)) {
             return true;
         }
+        //正在请求的数据总大小是否超过限制
         if (currentLargeRequestBytes.get() + length <= largeRequestMaxBytes) {
             return true;
         } else {
@@ -1578,9 +1596,10 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         if (!isLargeRequest(length)) {
             return true;
         }
-
+        //添加正在请求数据的总大小
         int bytes = currentLargeRequestBytes.addAndGet(length);
         if (bytes > largeRequestMaxBytes) {
+            //超过拒绝并减少
             currentLargeRequestBytes.addAndGet(-length);
             ServerMetrics.getMetrics().LARGE_REQUESTS_REJECTED.add(1);
             throw new IOException("Rejecting large request");
@@ -1589,6 +1608,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     }
 
     public void requestFinished(Request request) {
+        //还原修改当前请求占用
         int largeRequestLength = request.getLargeRequestSize();
         if (largeRequestLength != -1) {
             currentLargeRequestBytes.addAndGet(-largeRequestLength);
@@ -1599,6 +1619,9 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         // We have the request, now process and setup for next
         InputStream bais = new ByteBufferInputStream(incomingBuffer);
         BinaryInputArchive bia = BinaryInputArchive.getArchive(bais);
+        //请求头
+        //xid 请求编号(顺序)
+        //type 请求操作类型 OpCode
         RequestHeader h = new RequestHeader();
         h.deserialize(bia, "header");
 
@@ -1611,23 +1634,38 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         //
         // It's fine if the IOException thrown before we decrease the count
         // in cnxn, since it will close the cnxn anyway.
+        //请求数量限制
         cnxn.incrOutstandingAndCheckThrottle(h);
 
         // Through the magic of byte buffers, txn will not be
         // pointing
         // to the start of the txn
+        //复制可读
         incomingBuffer = incomingBuffer.slice();
+        //如果请求类型是授权
         if (h.getType() == OpCode.auth) {
             LOG.info("got auth packet {}", cnxn.getRemoteSocketAddress());
+            //反序列化AuthPacket对象
             AuthPacket authPacket = new AuthPacket();
             ByteBufferInputStream.byteBuffer2Record(incomingBuffer, authPacket);
+            //获取权限管理方案
+            /*
+             * world: 只有一个id是anyone,world:anyone代表任何人都能访问
+             * auth: username/password
+             * digest: id为username:BASE64(SHA1(password)),需要先通过auth
+             * ip: ip地址可以为频段ip:192.168.1.0/16
+             * ....
+             * super: 这种scheme情况下id拥有超级权限
+             */
             String scheme = authPacket.getScheme();
+            //根据对应的scheme获取ServerAuthenticationProvider
             ServerAuthenticationProvider ap = ProviderRegistry.getServerProvider(scheme);
             Code authReturn = KeeperException.Code.AUTHFAILED;
             if (ap != null) {
                 try {
                     // handleAuthentication may close the connection, to allow the client to choose
                     // a different server to connect to.
+                    //验证权限
                     authReturn = ap.handleAuthentication(
                         new ServerAuthenticationProvider.ServerObjs(this, cnxn),
                         authPacket.getAuth());
@@ -1640,6 +1678,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
                 LOG.info("Session 0x{}: auth success for scheme {} and address {}",
                         Long.toHexString(cnxn.getSessionId()), scheme,
                         cnxn.getRemoteSocketAddress());
+                //验证成功
                 ReplyHeader rh = new ReplyHeader(h.getXid(), 0, KeeperException.Code.OK.intValue());
                 cnxn.sendResponse(rh, null, null);
             } else {
@@ -1660,21 +1699,26 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             }
             return;
         } else if (h.getType() == OpCode.sasl) {
+            //sasl
             processSasl(incomingBuffer, cnxn, h);
         } else {
+            //验证
             if (!authHelper.enforceAuthentication(cnxn, h.getXid())) {
                 // Authentication enforcement is failed
                 // Already sent response to user about failure and closed the session, lets return
                 return;
             } else {
+                //
                 Request si = new Request(cnxn, cnxn.getSessionId(), h.getXid(), h.getType(), incomingBuffer, cnxn.getAuthInfo());
                 int length = incomingBuffer.limit();
+                //大于单次请求大小时验证是否超过了总大小
                 if (isLargeRequest(length)) {
                     // checkRequestSize will throw IOException if request is rejected
                     checkRequestSizeWhenMessageReceived(length);
                     si.setLargeRequestSize(length);
                 }
                 si.setOwner(ServerCnxn.me);
+                //提交这个请求   OpCode
                 submitRequest(si);
             }
         }

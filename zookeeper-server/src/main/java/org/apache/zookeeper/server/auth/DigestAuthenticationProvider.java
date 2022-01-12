@@ -125,7 +125,9 @@ public class DigestAuthenticationProvider implements AuthenticationProvider {
     public KeeperException.Code handleAuthentication(ServerCnxn cnxn, byte[] authData) {
         String id = new String(authData);
         try {
+            //username:base64
             String digest = generateDigest(id);
+            //如果和super匹配
             if (digest.equals(superDigest)) {
                 cnxn.addAuthInfo(new Id("super", ""));
             }
