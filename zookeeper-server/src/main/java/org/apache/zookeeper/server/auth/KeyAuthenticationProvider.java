@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server.auth;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.data.Id;

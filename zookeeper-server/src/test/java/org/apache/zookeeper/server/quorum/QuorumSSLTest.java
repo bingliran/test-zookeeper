@@ -24,9 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -56,6 +58,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import javax.net.ssl.SSLServerSocketFactory;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.client.ZKClientConfig;
 import org.apache.zookeeper.common.QuorumX509Util;
@@ -191,13 +194,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
 
         defaultKeyPair = createKeyPair();
         X509Certificate validCertificate = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            HOSTNAME,
-            "127.0.0.1",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                HOSTNAME,
+                "127.0.0.1",
+                null,
+                null);
         writeKeystore(validCertificate, defaultKeyPair, validKeystorePath);
 
         setSSLSystemProperties();
@@ -293,15 +296,15 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
         BigInteger serialNumber = new BigInteger(128, new Random());
 
         JcaX509v3CertificateBuilder jcaX509v3CertificateBuilder = new JcaX509v3CertificateBuilder(
-            nameBuilder.build(),
-            serialNumber,
-            certStartTime,
-            certEndTime,
-            nameBuilder.build(),
-            keyPair.getPublic());
+                nameBuilder.build(),
+                serialNumber,
+                certStartTime,
+                certEndTime,
+                nameBuilder.build(),
+                keyPair.getPublic());
         X509v3CertificateBuilder certificateBuilder = jcaX509v3CertificateBuilder
-            .addExtension(Extension.basicConstraints, true, new BasicConstraints(0))
-            .addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyCertSign | KeyUsage.cRLSign));
+                .addExtension(Extension.basicConstraints, true, new BasicConstraints(0))
+                .addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyCertSign | KeyUsage.cRLSign));
 
         return new JcaX509CertificateConverter().getCertificate(certificateBuilder.build(contentSigner));
     }
@@ -322,13 +325,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     }
 
     public X509Certificate buildEndEntityCert(
-        KeyPair keyPair,
-        X509Certificate caCert,
-        PrivateKey caPrivateKey,
-        String hostname,
-        String ipAddress,
-        String crlPath,
-        Integer ocspPort) throws Exception {
+            KeyPair keyPair,
+            X509Certificate caCert,
+            PrivateKey caPrivateKey,
+            String hostname,
+            String ipAddress,
+            String crlPath,
+            Integer ocspPort) throws Exception {
         X509CertificateHolder holder = new JcaX509CertificateHolder(caCert);
         ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").build(caPrivateKey);
 
@@ -342,45 +345,45 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
         }
 
         SubjectPublicKeyInfo entityKeyInfo = SubjectPublicKeyInfoFactory.createSubjectPublicKeyInfo(
-            PublicKeyFactory.createKey(keyPair.getPublic().getEncoded()));
+                PublicKeyFactory.createKey(keyPair.getPublic().getEncoded()));
         X509ExtensionUtils extensionUtils = new BcX509ExtensionUtils();
         JcaX509v3CertificateBuilder jcaX509v3CertificateBuilder = new JcaX509v3CertificateBuilder(
-            holder.getSubject(),
-            new BigInteger(128, new Random()),
-            certStartTime,
-            certEndTime,
-            new X500Name("CN=Test End Entity Certificate"),
-            keyPair.getPublic());
+                holder.getSubject(),
+                new BigInteger(128, new Random()),
+                certStartTime,
+                certEndTime,
+                new X500Name("CN=Test End Entity Certificate"),
+                keyPair.getPublic());
         X509v3CertificateBuilder certificateBuilder = jcaX509v3CertificateBuilder
-            .addExtension(Extension.authorityKeyIdentifier, false, extensionUtils.createAuthorityKeyIdentifier(holder))
-            .addExtension(Extension.subjectKeyIdentifier, false, extensionUtils.createSubjectKeyIdentifier(entityKeyInfo))
-            .addExtension(Extension.basicConstraints, true, new BasicConstraints(false))
-            .addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
+                .addExtension(Extension.authorityKeyIdentifier, false, extensionUtils.createAuthorityKeyIdentifier(holder))
+                .addExtension(Extension.subjectKeyIdentifier, false, extensionUtils.createSubjectKeyIdentifier(entityKeyInfo))
+                .addExtension(Extension.basicConstraints, true, new BasicConstraints(false))
+                .addExtension(Extension.keyUsage, true, new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
 
         if (!generalNames.isEmpty()) {
             certificateBuilder.addExtension(
-                Extension.subjectAlternativeName,
-                true,
-                new GeneralNames(generalNames.toArray(new GeneralName[]{})));
+                    Extension.subjectAlternativeName,
+                    true,
+                    new GeneralNames(generalNames.toArray(new GeneralName[]{})));
         }
 
         if (crlPath != null) {
             DistributionPointName distPointOne = new DistributionPointName(
-                new GeneralNames(new GeneralName(GeneralName.uniformResourceIdentifier, "file://" + crlPath)));
+                    new GeneralNames(new GeneralName(GeneralName.uniformResourceIdentifier, "file://" + crlPath)));
 
             certificateBuilder.addExtension(
-                Extension.cRLDistributionPoints,
-                false,
-                new CRLDistPoint(new DistributionPoint[]{new DistributionPoint(distPointOne, null, null)}));
+                    Extension.cRLDistributionPoints,
+                    false,
+                    new CRLDistPoint(new DistributionPoint[]{new DistributionPoint(distPointOne, null, null)}));
         }
 
         if (ocspPort != null) {
             certificateBuilder.addExtension(
-                Extension.authorityInfoAccess,
-                false,
-                new AuthorityInformationAccess(
-                    X509ObjectIdentifiers.ocspAccessMethod,
-                    new GeneralName(GeneralName.uniformResourceIdentifier, "http://" + hostname + ":" + ocspPort)));
+                    Extension.authorityInfoAccess,
+                    false,
+                    new AuthorityInformationAccess(
+                            X509ObjectIdentifiers.ocspAccessMethod,
+                            new GeneralName(GeneralName.uniformResourceIdentifier, "http://" + hostname + ":" + ocspPort)));
         }
 
         return new JcaX509CertificateConverter().getCertificate(certificateBuilder.build(signer));
@@ -574,13 +577,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     public void testHostnameVerificationWithInvalidHostname() throws Exception {
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            "bleepbloop",
-            null,
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                "bleepbloop",
+                null,
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, false);
@@ -591,13 +594,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     public void testHostnameVerificationWithInvalidIPAddress() throws Exception {
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            null,
-            "140.211.11.105",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                null,
+                "140.211.11.105",
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, false);
@@ -608,13 +611,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     public void testHostnameVerificationWithInvalidIpAddressAndInvalidHostname() throws Exception {
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            "bleepbloop",
-            "140.211.11.105",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                "bleepbloop",
+                "140.211.11.105",
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, false);
@@ -628,13 +631,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
 
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            "bleepbloop",
-            "140.211.11.105",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                "bleepbloop",
+                "140.211.11.105",
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, false);
@@ -645,13 +648,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     public void testHostnameVerificationWithInvalidIpAddressAndValidHostname() throws Exception {
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            "localhost",
-            "140.211.11.105",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                "localhost",
+                "140.211.11.105",
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, true);
@@ -662,20 +665,20 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
     public void testHostnameVerificationWithValidIpAddressAndInvalidHostname() throws Exception {
         String badhostnameKeystorePath = tmpDir + "/badhost.jks";
         X509Certificate badHostCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            "bleepbloop",
-            "127.0.0.1",
-            null,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                "bleepbloop",
+                "127.0.0.1",
+                null,
+                null);
         writeKeystore(badHostCert, defaultKeyPair, badhostnameKeystorePath);
 
         testHostnameVerification(badhostnameKeystorePath, true);
     }
 
     /**
-     * @param keystorePath The keystore to use
+     * @param keystorePath  The keystore to use
      * @param expectSuccess True for expecting the keystore to pass hostname verification, false for expecting failure
      * @throws Exception
      */
@@ -720,8 +723,8 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
         q3.start();
 
         assertEquals(
-            expectSuccess,
-            ClientBase.waitForServerUp("127.0.0.1:" + clientPortQp3, CONNECTION_TIMEOUT));
+                expectSuccess,
+                ClientBase.waitForServerUp("127.0.0.1:" + clientPortQp3, CONNECTION_TIMEOUT));
     }
 
     @Test
@@ -739,13 +742,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
         String revokedInCRLKeystorePath = tmpDir + "/crl_revoked.jks";
         String crlPath = tmpDir + "/crl.pem";
         X509Certificate revokedInCRLCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            HOSTNAME,
-            null,
-            crlPath,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                HOSTNAME,
+                null,
+                crlPath,
+                null);
         writeKeystore(revokedInCRLCert, defaultKeyPair, revokedInCRLKeystorePath);
         buildCRL(revokedInCRLCert, crlPath);
 
@@ -769,13 +772,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
         System.setProperty(quorumX509Util.getSslCrlEnabledProperty(), "true");
 
         X509Certificate validCertificate = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            HOSTNAME,
-            null,
-            crlPath,
-            null);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                HOSTNAME,
+                null,
+                crlPath,
+                null);
         writeKeystore(validCertificate, defaultKeyPair, validKeystorePath);
 
         q1.start();
@@ -806,13 +809,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
 
         String revokedInOCSPKeystorePath = tmpDir + "/ocsp_revoked.jks";
         X509Certificate revokedInOCSPCert = buildEndEntityCert(
-            defaultKeyPair,
-            rootCertificate,
-            rootKeyPair.getPrivate(),
-            HOSTNAME,
-            null,
-            null,
-            ocspPort);
+                defaultKeyPair,
+                rootCertificate,
+                rootKeyPair.getPrivate(),
+                HOSTNAME,
+                null,
+                null,
+                ocspPort);
         writeKeystore(revokedInOCSPCert, defaultKeyPair, revokedInOCSPKeystorePath);
 
         HttpServer ocspServer = HttpServer.create(new InetSocketAddress(ocspPort), 0);
@@ -840,13 +843,13 @@ public class QuorumSSLTest extends QuorumPeerTestBase {
             System.setProperty(quorumX509Util.getSslOcspEnabledProperty(), "true");
 
             X509Certificate validCertificate = buildEndEntityCert(
-                defaultKeyPair,
-                rootCertificate,
-                rootKeyPair.getPrivate(),
-                HOSTNAME,
-                null,
-                null,
-                ocspPort);
+                    defaultKeyPair,
+                    rootCertificate,
+                    rootKeyPair.getPrivate(),
+                    HOSTNAME,
+                    null,
+                    null,
+                    ocspPort);
             writeKeystore(validCertificate, defaultKeyPair, validKeystorePath);
 
             q1.start();

@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.Record;
 import org.apache.zookeeper.CreateMode;
@@ -210,7 +212,7 @@ public class PrepRequestProcessorTest extends ClientBase {
         processor.pRequest(createRequest(record, OpCode.create, false));
         assertTrue(pLatch.await(5, TimeUnit.SECONDS), "request hasn't been processed in chain");
 
-        String newMember = "server.0=localhost:" + PortAssignment.unique()  + ":" + PortAssignment.unique() + ":participant";
+        String newMember = "server.0=localhost:" + PortAssignment.unique() + ":" + PortAssignment.unique() + ":participant";
         record = new ReconfigRequest(null, null, newMember, 0);
         pLatch = new CountDownLatch(1);
         processor.pRequest(createRequest(record, OpCode.reconfig, true));
@@ -311,6 +313,7 @@ public class PrepRequestProcessorTest extends ClientBase {
             outcome = request;
             pLatch.countDown();
         }
+
         @Override
         public void shutdown() {
             // TODO Auto-generated method stub
@@ -326,66 +329,80 @@ public class PrepRequestProcessorTest extends ClientBase {
             // TODO Auto-generated method stub
             return false;
         }
+
         @Override
         public boolean commitSession(long id, int to) {
             // TODO Auto-generated method stub
             return false;
         }
+
         @Override
         public void checkSession(long sessionId, Object owner) throws SessionExpiredException, SessionMovedException {
             // TODO Auto-generated method stub
         }
+
         @Override
         public long createSession(int sessionTimeout) {
             // TODO Auto-generated method stub
             return 0;
         }
+
         @Override
         public void dumpSessions(PrintWriter pwriter) {
             // TODO Auto-generated method stub
 
         }
+
         @Override
         public void removeSession(long sessionId) {
             // TODO Auto-generated method stub
 
         }
+
         public int upgradeSession(long sessionId) {
             // TODO Auto-generated method stub
             return 0;
         }
+
         @Override
         public void setOwner(long id, Object owner) throws SessionExpiredException {
             // TODO Auto-generated method stub
 
         }
+
         @Override
         public void shutdown() {
             // TODO Auto-generated method stub
 
         }
+
         @Override
         public boolean touchSession(long sessionId, int sessionTimeout) {
             // TODO Auto-generated method stub
             return false;
         }
+
         @Override
         public void setSessionClosing(long sessionId) {
             // TODO Auto-generated method stub
         }
+
         @Override
         public boolean isTrackingSession(long sessionId) {
             // TODO Auto-generated method stub
             return false;
         }
+
         @Override
         public void checkGlobalSession(long sessionId, Object owner) throws SessionExpiredException, SessionMovedException {
             // TODO Auto-generated method stub
         }
+
         @Override
         public Map<Long, Set<Long>> getSessionExpiryMap() {
             return new HashMap<Long, Set<Long>>();
         }
+
         @Override
         public long getLocalSessionCount() {
             return 0;

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +36,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -208,7 +210,8 @@ public class CreateContainerTest extends ClientBase {
         zk.create("/foo/bar", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
 
         ContainerManager containerManager = new ContainerManager(serverFactory.getZooKeeperServer().getZKDatabase(), serverFactory.getZooKeeperServer().firstProcessor, 1, 100) {
-            @Override protected Collection<String> getCandidates() {
+            @Override
+            protected Collection<String> getCandidates() {
                 return Collections.singletonList("/foo");
             }
         };
@@ -294,12 +297,14 @@ public class CreateContainerTest extends ClientBase {
         zk.create("/foo", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.CONTAINER);
         AtomicInteger deletesQty = new AtomicInteger(0);
         ContainerManager containerManager = new ContainerManager(serverFactory.getZooKeeperServer().getZKDatabase(), serverFactory.getZooKeeperServer().firstProcessor, 1, 100, 0) {
-            @Override protected void postDeleteRequest(Request request) throws RequestProcessor.RequestProcessorException {
+            @Override
+            protected void postDeleteRequest(Request request) throws RequestProcessor.RequestProcessorException {
                 deletesQty.incrementAndGet();
                 super.postDeleteRequest(request);
             }
 
-            @Override protected long getElapsed(DataNode node) {
+            @Override
+            protected long getElapsed(DataNode node) {
                 return 10000;   // some number greater than 0
             }
         };

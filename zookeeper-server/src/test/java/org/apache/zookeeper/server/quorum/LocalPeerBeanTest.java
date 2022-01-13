@@ -25,8 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.server.ServerCnxnFactory;
 import org.junit.jupiter.api.Test;

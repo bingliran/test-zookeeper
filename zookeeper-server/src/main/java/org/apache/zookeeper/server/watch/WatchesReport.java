@@ -35,7 +35,7 @@ public class WatchesReport {
      * Creates a new report.
      *
      * @param id2paths map of session IDs to paths that each session has set
-     * a watch on
+     *                 a watch on
      */
     WatchesReport(Map<Long, Set<String>> id2paths) {
         this.id2paths = Collections.unmodifiableMap(deepCopy(id2paths));

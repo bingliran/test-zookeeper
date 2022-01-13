@@ -21,7 +21,9 @@ package org.apache.zookeeper.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.EnumSet;
+
 import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZKTestCase;
@@ -50,7 +52,8 @@ public class KeeperStateTest extends ZKTestCase {
 
     }
 
-    /** Validate that the deprecated constant still works. There were issues
+    /**
+     * Validate that the deprecated constant still works. There were issues
      * found with switch statements - which need compile time constants.
      */
     @Test
@@ -58,20 +61,22 @@ public class KeeperStateTest extends ZKTestCase {
     public void testDeprecatedCodeOkInSwitch() {
         int test = 1;
         switch (test) {
-        case Code.Ok:
-            assertTrue(true);
-            break;
+            case Code.Ok:
+                assertTrue(true);
+                break;
         }
     }
 
-    /** Verify the enum works (paranoid) */
+    /**
+     * Verify the enum works (paranoid)
+     */
     @Test
     public void testCodeOKInSwitch() {
         Code test = Code.OK;
         switch (test) {
-        case OK:
-            assertTrue(true);
-            break;
+            case OK:
+                assertTrue(true);
+                break;
         }
     }
 

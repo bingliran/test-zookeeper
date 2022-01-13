@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.Adler32;
 import java.util.zip.Checksum;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.Record;
@@ -79,9 +80,9 @@ public class LogChopper {
             return false;
         }
         System.out.println("ZooKeeper Transactional Log File with dbid "
-                           + fhdr.getDbid()
-                           + " txnlog format version "
-                           + fhdr.getVersion());
+                + fhdr.getDbid()
+                + " txnlog format version "
+                + fhdr.getVersion());
 
         fhdr.serialize(choppedStream, "fileheader");
         int count = 0;

@@ -19,8 +19,11 @@
 package org.apache.zookeeper.metrics.prometheus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import io.prometheus.client.CollectorRegistry;
+
 import java.util.Properties;
+
 import org.junit.jupiter.api.Test;
 
 /**

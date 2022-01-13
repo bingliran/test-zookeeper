@@ -23,8 +23,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.jute.OutputArchive;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 import org.apache.zookeeper.test.ClientBase;
@@ -45,10 +47,12 @@ public class TxnLogCountTest {
         ZKDatabase zkDatabase = new ZKDatabase(snapLog);
         int txnRequestCnt = 10;
         int nonTxnRequestCnt = 10;
-        for (int i = 0; i < txnRequestCnt && zkDatabase.append(mockTxnRequest()); i++) {}
+        for (int i = 0; i < txnRequestCnt && zkDatabase.append(mockTxnRequest()); i++) {
+        }
         assertEquals(txnRequestCnt, zkDatabase.getTxnCount());
 
-        for (int i = 0; i < nonTxnRequestCnt && !zkDatabase.append(mockNonTxnRequest()); i++) {}
+        for (int i = 0; i < nonTxnRequestCnt && !zkDatabase.append(mockNonTxnRequest()); i++) {
+        }
         assertEquals(txnRequestCnt, zkDatabase.getTxnCount());
     }
 

@@ -22,12 +22,14 @@ import static org.apache.zookeeper.client.FourLetterWordMain.send4LetterWord;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.regex.Pattern;
+
 import org.apache.zookeeper.TestableZooKeeper;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.common.IOUtils;
@@ -41,7 +43,9 @@ public class FourLetterWordsTest extends ClientBase {
 
     protected static final Logger LOG = LoggerFactory.getLogger(FourLetterWordsTest.class);
 
-    /** Test the various four letter words */
+    /**
+     * Test the various four letter words
+     */
     @Test
     @Timeout(value = 30)
     public void testFourLetterWords() throws Exception {
@@ -115,6 +119,7 @@ public class FourLetterWordsTest extends ClientBase {
         HostPort hpobj = ClientBase.parseHostPortList(hostPort).get(0);
         return send4LetterWord(hpobj.host, hpobj.port, cmd);
     }
+
     private String sendRequest(String cmd, int timeout) throws IOException, SSLContextException {
         HostPort hpobj = ClientBase.parseHostPortList(hostPort).get(0);
         return send4LetterWord(hpobj.host, hpobj.port, cmd, false, timeout);

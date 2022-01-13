@@ -21,8 +21,10 @@ package org.apache.zookeeper.test;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
@@ -84,6 +86,7 @@ public class InvalidSnapshotTest extends ZKTestCase {
 
     /**
      * test the snapshot
+     *
      * @throws Exception an exception could be expected
      */
     @Test

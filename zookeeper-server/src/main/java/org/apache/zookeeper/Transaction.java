@@ -19,6 +19,7 @@ package org.apache.zookeeper;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.yetus.audience.InterfaceAudience;
 import org.apache.zookeeper.AsyncCallback.MultiCallback;
 import org.apache.zookeeper.data.ACL;
@@ -28,7 +29,6 @@ import org.apache.zookeeper.data.ACL;
  * really just a thin layer on top of Zookeeper.multi().
  *
  * @since 3.4.0
- *
  */
 @InterfaceAudience.Public
 public class Transaction {

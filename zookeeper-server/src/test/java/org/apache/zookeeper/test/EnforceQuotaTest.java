@@ -19,7 +19,9 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.Assert.fail;
+
 import java.util.UUID;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.StatsTrack;

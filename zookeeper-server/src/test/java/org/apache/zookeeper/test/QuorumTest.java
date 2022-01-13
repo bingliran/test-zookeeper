@@ -23,10 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.DummyWatcher;
 import org.apache.zookeeper.KeeperException;
@@ -126,12 +128,13 @@ public class QuorumTest extends ZKTestCase {
 
     volatile int counter = 0;
     volatile int errors = 0;
+
     @Test
     public void testLeaderShutdown() throws IOException, InterruptedException, KeeperException {
         ZooKeeper zk = new DisconnectableZooKeeper(
-            qb.hostPort,
-            ClientBase.CONNECTION_TIMEOUT,
-            DummyWatcher.INSTANCE);
+                qb.hostPort,
+                ClientBase.CONNECTION_TIMEOUT,
+                DummyWatcher.INSTANCE);
         zk.create("/blah", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         zk.create("/blah/blah", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         Leader leader = qb.s1.leader;
@@ -183,7 +186,7 @@ public class QuorumTest extends ZKTestCase {
 
     /**
      * Make sure that we can change sessions
-     *  from follower to leader.
+     * from follower to leader.
      *
      * @throws IOException
      * @throws InterruptedException
@@ -193,20 +196,20 @@ public class QuorumTest extends ZKTestCase {
     public void testSessionMoved() throws Exception {
         String[] hostPorts = qb.hostPort.split(",");
         DisconnectableZooKeeper zk = new DisconnectableZooKeeper(
-            hostPorts[0],
-            ClientBase.CONNECTION_TIMEOUT,
-            DummyWatcher.INSTANCE);
+                hostPorts[0],
+                ClientBase.CONNECTION_TIMEOUT,
+                DummyWatcher.INSTANCE);
         zk.create("/sessionMoveTest", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
         // we want to loop through the list twice
         for (int i = 0; i < hostPorts.length * 2; i++) {
             zk.dontReconnect();
             // This should stomp the zk handle
             DisconnectableZooKeeper zknew = new DisconnectableZooKeeper(
-                hostPorts[(i + 1) % hostPorts.length],
-                ClientBase.CONNECTION_TIMEOUT,
-                DummyWatcher.INSTANCE,
-                zk.getSessionId(),
-                zk.getSessionPasswd());
+                    hostPorts[(i + 1) % hostPorts.length],
+                    ClientBase.CONNECTION_TIMEOUT,
+                    DummyWatcher.INSTANCE,
+                    zk.getSessionId(),
+                    zk.getSessionPasswd());
             zknew.setData("/", new byte[1], -1);
             final int[] result = new int[1];
             result[0] = Integer.MAX_VALUE;
@@ -236,6 +239,7 @@ public class QuorumTest extends ZKTestCase {
     private static class DiscoWatcher implements Watcher {
 
         volatile boolean zkDisco = false;
+
         public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.Disconnected) {
                 zkDisco = true;
@@ -256,18 +260,18 @@ public class QuorumTest extends ZKTestCase {
     public void testSessionMovedWithMultiOp() throws Exception {
         String[] hostPorts = qb.hostPort.split(",");
         DisconnectableZooKeeper zk = new DisconnectableZooKeeper(
-            hostPorts[0],
-            ClientBase.CONNECTION_TIMEOUT,
-            DummyWatcher.INSTANCE);
+                hostPorts[0],
+                ClientBase.CONNECTION_TIMEOUT,
+                DummyWatcher.INSTANCE);
         zk.multi(Arrays.asList(Op.create("/testSessionMovedWithMultiOp", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL)));
 
         // session moved to the next server
         ZooKeeper zknew = new ZooKeeper(
-            hostPorts[1],
-            ClientBase.CONNECTION_TIMEOUT,
-            DummyWatcher.INSTANCE,
-            zk.getSessionId(),
-            zk.getSessionPasswd());
+                hostPorts[1],
+                ClientBase.CONNECTION_TIMEOUT,
+                DummyWatcher.INSTANCE,
+                zk.getSessionId(),
+                zk.getSessionPasswd());
 
         zknew.multi(Arrays.asList(Op.create("/testSessionMovedWithMultiOp-1", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL)));
 
@@ -331,7 +335,7 @@ public class QuorumTest extends ZKTestCase {
 
     /**
      * See ZOOKEEPER-790 for details
-     * */
+     */
     @Test
     public void testFollowersStartAfterLeader() throws Exception {
         qu = new QuorumUtil(1);
@@ -370,10 +374,10 @@ public class QuorumTest extends ZKTestCase {
     /**
      * Tests if a multiop submitted to a non-leader propagates to the leader properly
      * (see ZOOKEEPER-1124).
-     *
+     * <p>
      * The test works as follows. It has a client connect to a follower and submit a multiop
      * to the follower. It then verifies that the multiop successfully gets committed by the leader.
-     *
+     * <p>
      * Without the fix in ZOOKEEPER-1124, this fails with a ConnectionLoss KeeperException.
      */
     @Test

@@ -19,17 +19,18 @@ limitations under the License.
 * [ZooKeeper Audit Logs](#ch_auditLogs)
 * [ZooKeeper Audit Log Configuration](#ch_reconfig_format)
 * [Who is taken as user in audit logs?](#ch_zkAuditUser)
-<a name="ch_auditLogs"></a>
+  <a name="ch_auditLogs"></a>
 
 ## ZooKeeper Audit Logs
 
 Apache ZooKeeper supports audit logs from version 3.6.0. By default audit logs are disabled. To enable audit logs
- configure audit.enable=true in conf/zoo.cfg. Audit logs are not logged on all the ZooKeeper servers, but logged only on the servers where client is connected as depicted in below figure.
+configure audit.enable=true in conf/zoo.cfg. Audit logs are not logged on all the ZooKeeper servers, but logged only on
+the servers where client is connected as depicted in below figure.
 
 ![Audit Logs](images/zkAuditLogs.jpg)
 
-
-The audit log captures detailed information for the operations that are selected to be audited. The audit information is written as a set of key=value pairs for the following keys
+The audit log captures detailed information for the operations that are selected to be audited. The audit information is
+written as a set of key=value pairs for the following keys
 
 | Key   | Value |
 | ----- | ----- |
@@ -42,7 +43,8 @@ The audit log captures detailed information for the operations that are selected
 |acl | String representation of znode ACL like cdrwa(create, delete,read, write, admin). This is logged only for setAcl operation
 |result | result of the operation. Possible values are (success/failure/invoked). Result "invoked" is used for serverStop operation because stop is logged before ensuring that server actually stopped.
 
-Below are sample audit logs for all operations, where client is connected from 192.168.1.2, client principal is zkcli@HADOOP.COM, server principal is zookeeper/192.168.1.3@HADOOP.COM
+Below are sample audit logs for all operations, where client is connected from 192.168.1.2, client principal is
+zkcli@HADOOP.COM, server principal is zookeeper/192.168.1.3@HADOOP.COM
 
     user=zookeeper/192.168.1.3 operation=serverStart   result=success
     session=0x19344730000   user=192.168.1.2,zkcli@HADOOP.COM  ip=192.168.1.2    operation=create    znode=/a    znode_type=persistent  result=success
@@ -66,7 +68,8 @@ Below are sample audit logs for all operations, where client is connected from 1
 
 ## ZooKeeper Audit Log Configuration
 
-By default audit logs are disabled. To enable audit logs configure audit.enable=true in conf/zoo.cfg. Audit logging is done using log4j. Following is the default log4j configuration for audit logs in conf/log4j.properties
+By default audit logs are disabled. To enable audit logs configure audit.enable=true in conf/zoo.cfg. Audit logging is
+done using log4j. Following is the default log4j configuration for audit logs in conf/log4j.properties
 
     #
     # zk audit logging
@@ -104,25 +107,32 @@ User is decided based on the configured authentication provider:
 * When IPAuthenticationProvider is configured then authenticated IP is taken as user
 * When SASLAuthenticationProvider is configured then client principal is taken as user
 * When X509AuthenticationProvider is configured then client certificate is taken as user
-* When DigestAuthenticationProvider is configured then authenticated user is user 
+* When DigestAuthenticationProvider is configured then authenticated user is user
 
-Custom authentication provider can override org.apache.zookeeper.server.auth.AuthenticationProvider.getUserName(String id)
- to provide user name. If authentication provider is not overriding this method then whatever is stored in 
- org.apache.zookeeper.data.Id.id is taken as user. 
- Generally only user name is stored in this field but it is up to the custom authentication provider what they store in it. 
- For audit logging value of org.apache.zookeeper.data.Id.id would be taken as user.
+Custom authentication provider can override org.apache.zookeeper.server.auth.AuthenticationProvider.getUserName(String
+id)
+to provide user name. If authentication provider is not overriding this method then whatever is stored in
+org.apache.zookeeper.data.Id.id is taken as user. Generally only user name is stored in this field but it is up to the
+custom authentication provider what they store in it. For audit logging value of org.apache.zookeeper.data.Id.id would
+be taken as user.
 
-In ZooKeeper Server not all the operations are done by clients but some operations are done by the server itself. For example when client closes the session, ephemeral znodes are deleted by the Server. These deletion are not done by clients directly but it is done the server itself these are called system operations. For these system operations the user associated with the ZooKeeper server are taken as user while audit logging these operations. For example if in ZooKeeper server principal is zookeeper/hadoop.hadoop.com@HADOOP.COM then this becomes the system user and all the system operations will be logged with this user name.
+In ZooKeeper Server not all the operations are done by clients but some operations are done by the server itself. For
+example when client closes the session, ephemeral znodes are deleted by the Server. These deletion are not done by
+clients directly but it is done the server itself these are called system operations. For these system operations the
+user associated with the ZooKeeper server are taken as user while audit logging these operations. For example if in
+ZooKeeper server principal is zookeeper/hadoop.hadoop.com@HADOOP.COM then this becomes the system user and all the
+system operations will be logged with this user name.
 
 	user=zookeeper/hadoop.hadoop.com@HADOOP.COM operation=serverStart result=success
 
-
-If there is no user associate with ZooKeeper server then the user who started the ZooKeeper server is taken as the user. For example if server started by root then root is taken as the system user
+If there is no user associate with ZooKeeper server then the user who started the ZooKeeper server is taken as the user.
+For example if server started by root then root is taken as the system user
 
 	user=root operation=serverStart result=success
 
-
-Single client can attach multiple authentication schemes to a session, in this case all authenticated schemes will taken taken as user and will be presented as comma separated list. For example if a client is authenticate with principal zkcli@HADOOP.COM and ip 127.0.0.1 then create znode audit log will be as:		
+Single client can attach multiple authentication schemes to a session, in this case all authenticated schemes will taken
+taken as user and will be presented as comma separated list. For example if a client is authenticate with principal
+zkcli@HADOOP.COM and ip 127.0.0.1 then create znode audit log will be as:
 
 	session=0x10c0bcb0000 user=zkcli@HADOOP.COM,127.0.0.1 ip=127.0.0.1 operation=create znode=/a result=success
 

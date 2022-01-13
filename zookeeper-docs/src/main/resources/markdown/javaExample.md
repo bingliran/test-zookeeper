@@ -27,9 +27,8 @@ limitations under the License.
 
 ## A Simple Watch Client
 
-To introduce you to the ZooKeeper Java API, we develop here a very simple
-watch client. This ZooKeeper client watches a znode for changes
-and responds to by starting or stopping a program.
+To introduce you to the ZooKeeper Java API, we develop here a very simple watch client. This ZooKeeper client watches a
+znode for changes and responds to by starting or stopping a program.
 
 <a name="sc_requirements"></a>
 
@@ -38,10 +37,10 @@ and responds to by starting or stopping a program.
 The client has four requirements:
 
 * It takes as parameters:
-  * the address of the ZooKeeper service
-  * the name of a znode - the one to be watched
-  * the name of a file to write the output to
-  * an executable with arguments.
+    * the address of the ZooKeeper service
+    * the name of a znode - the one to be watched
+    * the name of a file to write the output to
+    * an executable with arguments.
 * It fetches the data associated with the znode and starts the executable.
 * If the znode changes, the client re-fetches the contents and restarts the executable.
 * If the znode disappears, the client kills the executable.
@@ -50,22 +49,20 @@ The client has four requirements:
 
 ### Program Design
 
-Conventionally, ZooKeeper applications are broken into two units, one which maintains the connection,
-and the other which monitors data.  In this application, the class called the **Executor**
-maintains the ZooKeeper connection, and the class called the **DataMonitor** monitors the data
-in the ZooKeeper tree. Also, Executor contains the main thread and contains the execution logic.
-It is responsible for what little user interaction there is, as well as interaction with the executable program you
-pass in as an argument and which the sample (per the requirements) shuts down and restarts, according to the
-state of the znode.
+Conventionally, ZooKeeper applications are broken into two units, one which maintains the connection, and the other
+which monitors data. In this application, the class called the **Executor**
+maintains the ZooKeeper connection, and the class called the **DataMonitor** monitors the data in the ZooKeeper tree.
+Also, Executor contains the main thread and contains the execution logic. It is responsible for what little user
+interaction there is, as well as interaction with the executable program you pass in as an argument and which the
+sample (per the requirements) shuts down and restarts, according to the state of the znode.
 
 <a name="sc_executor"></a>
 
 ## The Executor Class
 
-The Executor object is the primary container of the sample application. It contains
-both the **ZooKeeper** object, **DataMonitor**, as described above in
+The Executor object is the primary container of the sample application. It contains both the **ZooKeeper** object, **
+DataMonitor**, as described above in
 [Program Design](#sc_design).
-
 
     // from the Executor class...
 
@@ -106,37 +103,31 @@ both the **ZooKeeper** object, **DataMonitor**, as described above in
         }
     }
 
-
-Recall that the Executor's job is to start and stop the executable whose name you pass in on the command line.
-It does this in response to events fired by the ZooKeeper object. As you can see in the code above, the Executor passes
-a reference to itself as the Watcher argument in the ZooKeeper constructor. It also passes a reference to itself
-as DataMonitorListener argument to the DataMonitor constructor. Per the Executor's definition, it implements both these
+Recall that the Executor's job is to start and stop the executable whose name you pass in on the command line. It does
+this in response to events fired by the ZooKeeper object. As you can see in the code above, the Executor passes a
+reference to itself as the Watcher argument in the ZooKeeper constructor. It also passes a reference to itself as
+DataMonitorListener argument to the DataMonitor constructor. Per the Executor's definition, it implements both these
 interfaces:
 
     public class Executor implements Watcher, Runnable, DataMonitor.DataMonitorListener {
     ...
 
-
-The **Watcher** interface is defined by the ZooKeeper Java API.
-ZooKeeper uses it to communicate back to its container. It supports only one method, `process()`,
-and ZooKeeper uses it to communicates generic events that the main thread would be interested in,
-such as the state of the ZooKeeper connection or the ZooKeeper session. The Executor in this example simply
-forwards those events down to the DataMonitor to decide what to do with them. It does this simply to illustrate
-the point that, by convention, the Executor or some Executor-like object "owns" the ZooKeeper connection, but it is
-free to delegate the events to other events to other objects. It also uses this as the default channel on which
-to fire watch events. (More on this later.)
-
+The **Watcher** interface is defined by the ZooKeeper Java API. ZooKeeper uses it to communicate back to its container.
+It supports only one method, `process()`, and ZooKeeper uses it to communicates generic events that the main thread
+would be interested in, such as the state of the ZooKeeper connection or the ZooKeeper session. The Executor in this
+example simply forwards those events down to the DataMonitor to decide what to do with them. It does this simply to
+illustrate the point that, by convention, the Executor or some Executor-like object "owns" the ZooKeeper connection, but
+it is free to delegate the events to other events to other objects. It also uses this as the default channel on which to
+fire watch events. (More on this later.)
 
     public void process(WatchedEvent event) {
         dm.process(event);
     }
 
-
 The **DataMonitorListener**
-interface, on the other hand, is not part of the ZooKeeper API. It is a completely custom interface,
-designed for this sample application. The DataMonitor object uses it to communicate back to its container, which
-is also the Executor object. The DataMonitorListener interface looks like this:
-
+interface, on the other hand, is not part of the ZooKeeper API. It is a completely custom interface, designed for this
+sample application. The DataMonitor object uses it to communicate back to its container, which is also the Executor
+object. The DataMonitorListener interface looks like this:
 
     public interface DataMonitorListener {
         /**
@@ -153,20 +144,18 @@ is also the Executor object. The DataMonitorListener interface looks like this:
         void closing(int rc);
     }
 
+This interface is defined in the DataMonitor class and implemented in the Executor class. When `Executor.exists()` is
+invoked, the Executor decides whether to start up or shut down per the requirements. Recall that the requires say to
+kill the executable when the znode ceases to _exist_.
 
-This interface is defined in the DataMonitor class and implemented in the Executor class.
-When `Executor.exists()` is invoked, the Executor decides whether to start up or shut down per the requirements.
-Recall that the requires say to kill the executable when the znode ceases to _exist_.
+When `Executor.closing()` is invoked, the Executor decides whether or not to shut itself down in response to the
+ZooKeeper connection permanently disappearing.
 
-When `Executor.closing()` is invoked, the Executor decides whether or not to shut itself down
-in response to the ZooKeeper connection permanently disappearing.
-
-As you might have guessed, DataMonitor is the object that invokes
-these methods, in response to changes in ZooKeeper's state.
+As you might have guessed, DataMonitor is the object that invokes these methods, in response to changes in ZooKeeper's
+state.
 
 Here are Executor's implementation of
 `DataMonitorListener.exists()` and `DataMonitorListener.closing`:
-
 
     public void exists( byte[] data ) {
         if (data == null) {
@@ -213,14 +202,12 @@ Here are Executor's implementation of
         }
     }
 
-
 <a name="sc_DataMonitor"></a>
 
 ## The DataMonitor Class
 
-The DataMonitor class has the meat of the ZooKeeper logic. It is mostly
-asynchronous and event driven. DataMonitor kicks things off in the constructor with:
-
+The DataMonitor class has the meat of the ZooKeeper logic. It is mostly asynchronous and event driven. DataMonitor kicks
+things off in the constructor with:
 
     public DataMonitor(ZooKeeper zk, String znode, Watcher chainedWatcher,
             DataMonitorListener listener) {
@@ -232,29 +219,23 @@ asynchronous and event driven. DataMonitor kicks things off in the constructor w
         // Get things started by checking if the node exists. We are going
         // to be completely event driven
 
-
-The call to `ZooKeeper.exists()` checks for the existence of the znode,
-sets a watch, and passes a reference to itself (`this`)
-as the completion callback object. In this sense, it kicks things off, since the
-real processing happens when the watch is triggered.
+The call to `ZooKeeper.exists()` checks for the existence of the znode, sets a watch, and passes a reference to
+itself (`this`)
+as the completion callback object. In this sense, it kicks things off, since the real processing happens when the watch
+is triggered.
 
 ###### Note
 
->Don't confuse the completion callback with the watch callback. The `ZooKeeper.exists()`
-completion callback, which happens to be the method `StatCallback.processResult()` implemented
-in the DataMonitor object, is invoked when the asynchronous _setting of the watch_ operation
+> Don't confuse the completion callback with the watch callback. The `ZooKeeper.exists()`
+completion callback, which happens to be the method `StatCallback.processResult()` implemented in the DataMonitor object, is invoked when the asynchronous _setting of the watch_ operation
 (by `ZooKeeper.exists()`) completes on the server.
 
->The triggering of the watch, on the other hand, sends an event to the _Executor_ object, since
-the Executor registered as the Watcher of the ZooKeeper object.
+> The triggering of the watch, on the other hand, sends an event to the _Executor_ object, since the Executor registered as the Watcher of the ZooKeeper object.
 
->As an aside, you might note that the DataMonitor could also register itself as the Watcher
-for this particular watch event. This is new to ZooKeeper 3.0.0 (the support of multiple Watchers). In this
-example, however, DataMonitor does not register as the Watcher.
+> As an aside, you might note that the DataMonitor could also register itself as the Watcher for this particular watch event. This is new to ZooKeeper 3.0.0 (the support of multiple Watchers). In this example, however, DataMonitor does not register as the Watcher.
 
 When the `ZooKeeper.exists()` operation completes on the server, the ZooKeeper API invokes this completion callback on
 the client:
-
 
     public void processResult(int rc, String path, Object ctx, Stat stat) {
         boolean exists;
@@ -295,19 +276,14 @@ the client:
         }
     }
 
-
-The code first checks the error codes for znode existence, fatal errors, and
-recoverable errors. If the file (or znode) exists, it gets the data from the znode, and
-then invoke the exists() callback of Executor if the state has changed. Note,
-it doesn't have to do any Exception processing for the getData call because it
-has watches pending for anything that could cause an error: if the node is deleted
-before it calls `ZooKeeper.getData()`, the watch event set by
-the `ZooKeeper.exists()` triggers a callback;
-if there is a communication error, a connection watch event fires when
-the connection comes back up.
+The code first checks the error codes for znode existence, fatal errors, and recoverable errors. If the file (or znode)
+exists, it gets the data from the znode, and then invoke the exists() callback of Executor if the state has changed.
+Note, it doesn't have to do any Exception processing for the getData call because it has watches pending for anything
+that could cause an error: if the node is deleted before it calls `ZooKeeper.getData()`, the watch event set by
+the `ZooKeeper.exists()` triggers a callback; if there is a communication error, a connection watch event fires when the
+connection comes back up.
 
 Finally, notice how DataMonitor processes watch events:
-
 
     public void process(WatchedEvent event) {
         String path = event.getPath();
@@ -338,21 +314,18 @@ Finally, notice how DataMonitor processes watch events:
         }
     }
 
-
-If the client-side ZooKeeper libraries can re-establish the
-communication channel (SyncConnected event) to ZooKeeper before
-session expiration (Expired event) all of the session's watches will
-automatically be re-established with the server (auto-reset of watches
-is new in ZooKeeper 3.0.0). See [ZooKeeper Watches](zookeeperProgrammers.html#ch_zkWatches)
-in the programmer guide for more on this. A bit lower down in this
-function, when DataMonitor gets an event for a znode, it calls`ZooKeeper.exists()` to find out what has changed.
+If the client-side ZooKeeper libraries can re-establish the communication channel (SyncConnected event) to ZooKeeper
+before session expiration (Expired event) all of the session's watches will automatically be re-established with the
+server (auto-reset of watches is new in ZooKeeper 3.0.0).
+See [ZooKeeper Watches](zookeeperProgrammers.html#ch_zkWatches)
+in the programmer guide for more on this. A bit lower down in this function, when DataMonitor gets an event for a znode,
+it calls`ZooKeeper.exists()` to find out what has changed.
 
 <a name="sc_completeSourceCode"></a>
 
 ## Complete Source Listings
 
 ### Executor.java
-
 
     /**
      * A simple example program to use DataMonitor to start and
@@ -501,9 +474,7 @@ function, when DataMonitor gets an event for a znode, it calls`ZooKeeper.exists(
         }
     }
 
-
 ### DataMonitor.java
-
 
     /**
      * A simple class that monitors the data and existence of a ZooKeeper

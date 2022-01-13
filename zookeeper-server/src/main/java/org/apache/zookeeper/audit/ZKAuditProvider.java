@@ -18,7 +18,9 @@
 package org.apache.zookeeper.audit;
 
 import static org.apache.zookeeper.audit.AuditEvent.FieldName;
+
 import java.lang.reflect.Constructor;
+
 import org.apache.zookeeper.audit.AuditEvent.Result;
 import org.apache.zookeeper.server.ServerCnxnFactory;
 import org.slf4j.Logger;

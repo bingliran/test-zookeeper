@@ -19,7 +19,9 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
+
 import org.apache.zookeeper.jmx.MBeanRegistry;
 import org.apache.zookeeper.server.quorum.Leader;
 import org.apache.zookeeper.server.quorum.LearnerHandler;
@@ -37,6 +39,7 @@ public class QuorumOracleMajTest extends QuorumBaseOracle_2Nodes {
     /***************************************************************/
     /* Test that the majority quorum verifier only counts votes from */
     /* followers in its view                                    */
+
     /***************************************************************/
     @Test
     public void testMajQuorums() throws Throwable {

@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.admin;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.common.KeyStoreFileType;
@@ -77,18 +79,18 @@ public class JettyAdminServerTest extends ZKTestCase {
         try {
             tmpDir = ClientBase.createEmptyTestDir();
             x509TestContext = X509TestContext.newBuilder()
-                                             .setTempDir(tmpDir)
-                                             .setKeyStorePassword("")
-                                             .setKeyStoreKeyType(X509KeyType.EC)
-                                             .setTrustStorePassword("")
-                                             .setTrustStoreKeyType(X509KeyType.EC)
-                                             .build();
+                    .setTempDir(tmpDir)
+                    .setKeyStorePassword("")
+                    .setKeyStoreKeyType(X509KeyType.EC)
+                    .setTrustStorePassword("")
+                    .setTrustStoreKeyType(X509KeyType.EC)
+                    .build();
             System.setProperty(
-                "zookeeper.ssl.quorum.keyStore.location",
-                x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath());
+                    "zookeeper.ssl.quorum.keyStore.location",
+                    x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath());
             System.setProperty(
-                "zookeeper.ssl.quorum.trustStore.location",
-                x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath());
+                    "zookeeper.ssl.quorum.trustStore.location",
+                    x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath());
         } catch (Exception e) {
             LOG.info("Problems encountered while setting up encryption for Jetty admin server test", e);
         }
@@ -103,8 +105,10 @@ public class JettyAdminServerTest extends ZKTestCase {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
+
             public void checkClientTrusted(X509Certificate[] certs, String authType) {
             }
+
             public void checkServerTrusted(X509Certificate[] certs, String authType) {
             }
         }};
@@ -200,13 +204,13 @@ public class JettyAdminServerTest extends ZKTestCase {
         final int ADMIN_SERVER_PORT2 = PortAssignment.unique();
 
         String quorumCfgSection = String.format(
-            "server.1=127.0.0.1:%d:%d;%d\nserver.2=127.0.0.1:%d:%d;%d",
-            PortAssignment.unique(),
-            PortAssignment.unique(),
-            CLIENT_PORT_QP1,
-            PortAssignment.unique(),
-            PortAssignment.unique(),
-            CLIENT_PORT_QP2);
+                "server.1=127.0.0.1:%d:%d;%d\nserver.2=127.0.0.1:%d:%d;%d",
+                PortAssignment.unique(),
+                PortAssignment.unique(),
+                CLIENT_PORT_QP1,
+                PortAssignment.unique(),
+                PortAssignment.unique(),
+                CLIENT_PORT_QP2);
         QuorumPeerTestBase.MainThread q1 = new QuorumPeerTestBase.MainThread(1, CLIENT_PORT_QP1, ADMIN_SERVER_PORT1, quorumCfgSection, null);
         q1.start();
 
@@ -296,8 +300,8 @@ public class JettyAdminServerTest extends ZKTestCase {
      * Using TRACE method to visit admin server
      */
     private void traceAdminServer(int port) throws IOException {
-      traceAdminServer(String.format(URL_FORMAT, port));
-      traceAdminServer(String.format(HTTPS_URL_FORMAT, port));
+        traceAdminServer(String.format(URL_FORMAT, port));
+        traceAdminServer(String.format(HTTPS_URL_FORMAT, port));
     }
 
     /**

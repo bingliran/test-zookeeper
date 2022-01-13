@@ -20,8 +20,10 @@ package org.apache.zookeeper.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.data.StatPersisted;
 import org.junit.jupiter.api.AfterEach;

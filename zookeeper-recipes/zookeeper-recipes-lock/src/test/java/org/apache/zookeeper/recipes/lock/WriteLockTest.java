@@ -20,8 +20,10 @@ package org.apache.zookeeper.recipes.lock;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.test.ClientBase;
 import org.junit.jupiter.api.AfterEach;
@@ -56,6 +58,7 @@ public class WriteLockTest extends ClientBase {
         }
 
     }
+
     protected void runTest(int count) throws Exception {
         nodes = new WriteLock[count];
         for (int i = 0; i < count; i++) {

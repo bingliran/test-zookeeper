@@ -19,11 +19,13 @@
 package org.apache.zookeeper.server.quorum;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.test.ClientBase;
 import org.apache.zookeeper.test.QuorumUtil;
@@ -47,13 +49,13 @@ public class QuorumCnxManagerSocketConnectionTimeoutTest extends ZKTestCase {
 
     /**
      * Testing an error case reported in ZOOKEEPER-3756:
-     *
+     * <p>
      * When a new leader election happens after a ZooKeeper server restarted, in Kubernetes
      * the rest of the servers can not initiate connection to the restarted one. But they
      * get SocketTimeoutException instead of immediate IOException. The Leader Election was
      * time-outing quicker than the socket.connect call, so we ended up with cycles of broken
      * leader elections.
-     *
+     * <p>
      * The fix was to make the connection initiation asynchronous, so one 'broken' connection
      * doesn't make the whole leader election to be blocked, even in case of SocketTimeoutException.
      *
@@ -67,7 +69,7 @@ public class QuorumCnxManagerSocketConnectionTimeoutTest extends ZKTestCase {
         // use a custom socket factory that will cause timeout instead of connecting to the
         // leader election port of the current leader
         final InetSocketAddress leaderElectionAddress =
-            qu.getLeaderQuorumPeer().getElectionAddress().getOne();
+                qu.getLeaderQuorumPeer().getElectionAddress().getOne();
         QuorumCnxManager.setSocketFactory(() -> new SocketStub(leaderElectionAddress));
 
         qu.shutdown(leaderId);

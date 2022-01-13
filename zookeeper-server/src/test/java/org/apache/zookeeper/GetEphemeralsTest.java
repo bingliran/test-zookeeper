@@ -21,11 +21,13 @@ package org.apache.zookeeper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.test.ClientBase;
 import org.junit.jupiter.api.AfterEach;
@@ -87,7 +89,7 @@ public class GetEphemeralsTest extends ClientBase {
         zk.getEphemerals((rc, ctx, paths) -> {
             if (paths == null) {
                 unexpectedBehavior.add(String.format("Expected ephemeral count for"
-                                                             + " allPaths to be %d but was null", expected.length));
+                        + " allPaths to be %d but was null", expected.length));
             } else if (paths.size() != expected.length) {
                 unexpectedBehavior.add(String.format("Expected ephemeral count for allPaths to be %d but was %d", expected.length, paths.size()));
             }
@@ -123,7 +125,7 @@ public class GetEphemeralsTest extends ClientBase {
                 String path = expected[i];
                 if (!paths.contains(path)) {
                     unexpectedBehavior.add(String.format("Expected path=%s didn't exist "
-                                                                 + "in getEphemerals list.", path));
+                            + "in getEphemerals list.", path));
                 }
             }
             doneProcessing.countDown();

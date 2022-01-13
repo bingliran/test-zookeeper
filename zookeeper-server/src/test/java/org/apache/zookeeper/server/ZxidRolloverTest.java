@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.ConnectionLossException;
@@ -157,6 +158,7 @@ public class ZxidRolloverTest extends ZKTestCase {
         // all clients should be connected
         checkClientsConnected();
     }
+
     private void start(int idx) throws Exception {
         qu.start(idx);
         for (String hp : qu.getConnString().split(",")) {
@@ -208,7 +210,9 @@ public class ZxidRolloverTest extends ZKTestCase {
         }
     }
 
-    /** Reset the next zxid to be near epoch end */
+    /**
+     * Reset the next zxid to be near epoch end
+     */
     private void adjustEpochNearEnd() {
         zksLeader.setZxid((zksLeader.getZxid() & 0xffffffff00000000L) | 0xfffffffcL);
     }
@@ -240,6 +244,7 @@ public class ZxidRolloverTest extends ZKTestCase {
         }
         return j;
     }
+
     /**
      * Verify the expected znodes were created and that the last znode, which
      * caused the roll-over, did not.

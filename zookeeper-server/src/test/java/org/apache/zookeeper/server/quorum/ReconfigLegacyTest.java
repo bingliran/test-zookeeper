@@ -22,11 +22,13 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -65,7 +67,7 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         for (int i = 0; i < SERVER_COUNT; i++) {
             clientPorts[i] = PortAssignment.unique();
             server = "server." + i + "=localhost:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                     + ":participant;localhost:" + clientPorts[i];
+                    + ":participant;localhost:" + clientPorts[i];
             allServers.add(server);
             sb.append(server + "\n");
         }
@@ -86,8 +88,8 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         // Check that the static config was split into static and dynamic files correctly.
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(
-                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
+                    "waiting for server " + i + " being up");
             zk[i] = ClientBase.createZKClient("127.0.0.1:" + clientPorts[i]);
             File[] dynamicFiles = mt[i].getDynamicFiles();
 
@@ -124,8 +126,8 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         }
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(
-                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
+                    "waiting for server " + i + " being up");
             zk[i] = ClientBase.createZKClient("127.0.0.1:" + clientPorts[i]);
             ReconfigTest.testServerHasConfig(zk[i], allServers, null);
         }
@@ -139,9 +141,10 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
     /**
      * https://issues.apache.org/jira/browse/ZOOKEEPER-1992
      * 1. When a server starts from old style static config, without a client port in the server
-     *    specification, it should keep the client port in static config file.
+     * specification, it should keep the client port in static config file.
      * 2. After port reconfig, the old port should be removed from static file
-     *    and new port added to dynamic file.
+     * and new port added to dynamic file.
+     *
      * @throws Exception
      */
     @Test
@@ -188,8 +191,8 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         // port in static config file.
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(
-                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
+                    "waiting for server " + i + " being up");
             zk[i] = ClientBase.createZKClient("127.0.0.1:" + clientPorts[i]);
             zkAdmin[i] = new ZooKeeperAdmin("127.0.0.1:" + clientPorts[i], ClientBase.CONNECTION_TIMEOUT, this);
             zkAdmin[i].addAuthInfo("digest", "super:test".getBytes());
@@ -269,7 +272,7 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         // ensure server started
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    "waiting for server " + i + " being up");
         }
 
         ZooKeeper zk = ClientBase.createZKClient("127.0.0.1:" + clientPorts[0]);
@@ -289,7 +292,7 @@ public class ReconfigLegacyTest extends QuorumPeerTestBase {
         // ensure server started
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    "waiting for server " + i + " being up");
         }
         zk = ClientBase.createZKClient("127.0.0.1:" + clientPorts[0]);
 

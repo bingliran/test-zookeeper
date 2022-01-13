@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -47,6 +48,7 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.client.ZKClientConfig;
 import org.apache.zookeeper.server.ServerCnxnFactory;
@@ -59,8 +61,8 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
 
     private X509Util x509Util;
     private static final String[] customCipherSuites = new String[]{
-        "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA",
-        "SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA"
+            "SSL_DHE_DSS_EXPORT_WITH_DES40_CBC_SHA",
+            "SSL_DH_anon_EXPORT_WITH_DES40_CBC_SHA"
     };
 
     public void init(
@@ -246,9 +248,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the PEM file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            KeyStoreFileType.PEM.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                KeyStoreFileType.PEM.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -262,9 +264,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            null,
-            KeyStoreFileType.PEM.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                null,
+                KeyStoreFileType.PEM.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -275,9 +277,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the PEM file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            null /* null StoreFileType means 'autodetect from file extension' */);
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                null /* null StoreFileType means 'autodetect from file extension' */);
     }
 
     @ParameterizedTest
@@ -303,12 +305,12 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the PEM file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(), KeyStoreFileType.PEM.getPropertyValue(),
-            false,
-            false,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(), KeyStoreFileType.PEM.getPropertyValue(),
+                false,
+                false,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -322,13 +324,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            null,
-            KeyStoreFileType.PEM.getPropertyValue(),
-            false,
-            false,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                null,
+                KeyStoreFileType.PEM.getPropertyValue(),
+                false,
+                false,
+                true,
+                true);
 
     }
 
@@ -340,13 +342,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the PEM file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(),
-            null,  // null StoreFileType means 'autodetect from file extension'
-            false,
-            false,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PEM).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(),
+                null,  // null StoreFileType means 'autodetect from file extension'
+                false,
+                false,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -357,9 +359,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the JKS file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            KeyStoreFileType.JKS.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                KeyStoreFileType.JKS.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -373,9 +375,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            null,
-            KeyStoreFileType.JKS.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                null,
+                KeyStoreFileType.JKS.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -386,9 +388,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the JKS file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            null /* null StoreFileType means 'autodetect from file extension' */);
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                null /* null StoreFileType means 'autodetect from file extension' */);
     }
 
     @ParameterizedTest
@@ -414,13 +416,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the JKS file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(),
-            KeyStoreFileType.JKS.getPropertyValue(),
-            true,
-            true,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(),
+                KeyStoreFileType.JKS.getPropertyValue(),
+                true,
+                true,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -434,13 +436,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            null,
-            KeyStoreFileType.JKS.getPropertyValue(),
-            false,
-            false,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                null,
+                KeyStoreFileType.JKS.getPropertyValue(),
+                false,
+                false,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -451,13 +453,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the JKS file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(),
-            null,  // null StoreFileType means 'autodetect from file extension'
-            true,
-            true,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.JKS).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(),
+                null,  // null StoreFileType means 'autodetect from file extension'
+                true,
+                true,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -487,9 +489,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the PKCS12 file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            KeyStoreFileType.PKCS12.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                KeyStoreFileType.PKCS12.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -503,9 +505,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            null,
-            KeyStoreFileType.PKCS12.getPropertyValue());
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                null,
+                KeyStoreFileType.PKCS12.getPropertyValue());
     }
 
     @ParameterizedTest
@@ -516,9 +518,9 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a key manager from the PKCS12 file on disk
         X509KeyManager km = X509Util.createKeyManager(
-            x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            x509TestContext.getKeyStorePassword(),
-            null /* null StoreFileType means 'autodetect from file extension' */);
+                x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                x509TestContext.getKeyStorePassword(),
+                null /* null StoreFileType means 'autodetect from file extension' */);
     }
 
     @ParameterizedTest
@@ -544,12 +546,12 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the PKCS12 file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(), KeyStoreFileType.PKCS12.getPropertyValue(),
-            true,
-            true,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(), KeyStoreFileType.PKCS12.getPropertyValue(),
+                true,
+                true,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -563,13 +565,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         }
         // Make sure that empty password and null password are treated the same
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            null,
-            KeyStoreFileType.PKCS12.getPropertyValue(),
-            false,
-            false,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                null,
+                KeyStoreFileType.PKCS12.getPropertyValue(),
+                false,
+                false,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -580,13 +582,13 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         // Make sure we can instantiate a trust manager from the PKCS12 file on disk
         X509TrustManager tm = X509Util.createTrustManager(
-            x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
-            x509TestContext.getTrustStorePassword(),
-            null,  // null StoreFileType means 'autodetect from file extension'
-            true,
-            true,
-            true,
-            true);
+                x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath(),
+                x509TestContext.getTrustStorePassword(),
+                null,  // null StoreFileType means 'autodetect from file extension'
+                true,
+                true,
+                true,
+                true);
     }
 
     @ParameterizedTest
@@ -620,7 +622,7 @@ public class X509UtilTest extends BaseX509ParameterizedTestCase {
         System.setProperty(x509Util.getSslHandshakeDetectionTimeoutMillisProperty(), newPropertyString);
         try (X509Util tempX509Util = new ClientX509Util()) {
             assertEquals(X509Util.DEFAULT_HANDSHAKE_DETECTION_TIMEOUT_MILLIS
-                                        + 1, tempX509Util.getSslHandshakeTimeoutMillis());
+                    + 1, tempX509Util.getSslHandshakeTimeoutMillis());
         }
         // 0 value not allowed, will return the default
         System.setProperty(x509Util.getSslHandshakeDetectionTimeoutMillisProperty(), "0");

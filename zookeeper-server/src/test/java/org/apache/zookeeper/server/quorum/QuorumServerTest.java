@@ -19,7 +19,9 @@ package org.apache.zookeeper.server.quorum;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
@@ -86,7 +88,7 @@ public class QuorumServerTest extends ZKTestCase {
     }
 
     @Test
-    public void unbalancedIpv6LiteralsInServerConfigFailToBeParsed()  {
+    public void unbalancedIpv6LiteralsInServerConfigFailToBeParsed() {
         assertThrows(ConfigException.class, () -> {
             new QuorumServer(0, "[::1:1234:1236:participant");
         });
@@ -120,12 +122,12 @@ public class QuorumServerTest extends ZKTestCase {
         for (int i = 0; i < addrs.length; i++) {
             for (int j = i; j < addrs.length; j++) {
                 QuorumPeer.QuorumServer server1 = new QuorumPeer.QuorumServer(1, new InetSocketAddress(ipv6n1, 1234), // peer
-                                                                              new InetSocketAddress(ipv6n1, 1236), // election
-                                                                              new InetSocketAddress(addrs[i], 1237)  // client
+                        new InetSocketAddress(ipv6n1, 1236), // election
+                        new InetSocketAddress(addrs[i], 1237)  // client
                 );
                 QuorumPeer.QuorumServer server2 = new QuorumPeer.QuorumServer(2, new InetSocketAddress(ipv6n2, 1234), // peer
-                                                                              new InetSocketAddress(ipv6n2, 1236), // election
-                                                                              new InetSocketAddress(addrs[j], 1237)  // client
+                        new InetSocketAddress(ipv6n2, 1236), // election
+                        new InetSocketAddress(addrs[j], 1237)  // client
                 );
                 server1.checkAddressDuplicate(server2);
             }

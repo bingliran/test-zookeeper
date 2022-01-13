@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.server.quorum.Leader;
 import org.apache.zookeeper.server.quorum.LearnerHandler;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
@@ -31,26 +32,34 @@ import org.apache.zookeeper.server.quorum.SyncedLearnerTracker;
  * All quorum validators have to implement a method called
  * containsQuorum, which verifies if a HashSet of server
  * identifiers constitutes a quorum.
- *
  */
 
 public interface QuorumVerifier {
 
     long getWeight(long id);
+
     boolean containsQuorum(Set<Long> set);
+
     long getVersion();
+
     void setVersion(long ver);
+
     Map<Long, QuorumServer> getAllMembers();
+
     Map<Long, QuorumServer> getVotingMembers();
+
     Map<Long, QuorumServer> getObservingMembers();
+
     boolean equals(Object o);
+
     /*
-    * Only QuorumOracleMaj will implement these methods. Other class will raise warning if the methods are called and
-    * return false always.
-    * */
+     * Only QuorumOracleMaj will implement these methods. Other class will raise warning if the methods are called and
+     * return false always.
+     * */
     default boolean updateNeedOracle(List<LearnerHandler> forwardingFollowers) {
         return false;
     }
+
     default boolean getNeedOracle() {
         return false;
     }
@@ -73,7 +82,9 @@ public interface QuorumVerifier {
 
     default String getOraclePath() {
         return null;
-    };
+    }
+
+    ;
 
     String toString();
 

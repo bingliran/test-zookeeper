@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.management.JMException;
+
 import org.apache.jute.Record;
 import org.apache.zookeeper.jmx.MBeanRegistry;
 import org.apache.zookeeper.metrics.MetricsContext;
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * Just like the standard ZooKeeperServer. We just replace the request
  * processors: FollowerRequestProcessor -&gt; CommitProcessor -&gt;
  * FinalRequestProcessor
- *
+ * <p>
  * A SyncRequestProcessor is also spawned off to log proposals from the leader.
  */
 public class FollowerZooKeeperServer extends LearnerZooKeeperServer {
@@ -92,6 +93,7 @@ public class FollowerZooKeeperServer extends LearnerZooKeeperServer {
      * When a COMMIT message is received, eventually this method is called,
      * which matches up the zxid from the COMMIT with (hopefully) the head of
      * the pendingTxns queue and hands it to the commitProcessor to commit.
+     *
      * @param zxid - must correspond to the head of pendingTxns if it exists
      */
     public void commit(long zxid) {
@@ -102,7 +104,7 @@ public class FollowerZooKeeperServer extends LearnerZooKeeperServer {
         long firstElementZxid = pendingTxns.element().zxid;
         if (firstElementZxid != zxid) {
             LOG.error("Committing zxid 0x" + Long.toHexString(zxid)
-                      + " but next pending txn 0x" + Long.toHexString(firstElementZxid));
+                    + " but next pending txn 0x" + Long.toHexString(firstElementZxid));
             ServiceUtils.requestSystemExit(ExitCode.UNMATCHED_TXN_COMMIT.getValue());
         }
         Request request = pendingTxns.remove();

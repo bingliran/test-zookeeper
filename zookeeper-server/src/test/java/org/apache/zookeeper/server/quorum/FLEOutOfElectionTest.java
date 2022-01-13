@@ -20,10 +20,12 @@ package org.apache.zookeeper.server.quorum;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.server.quorum.FastLeaderElection.Notification;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;

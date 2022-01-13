@@ -23,12 +23,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.security.sasl.SaslException;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.zookeeper.AsyncCallback.StringCallback;
 import org.apache.zookeeper.CreateMode;
@@ -133,7 +135,7 @@ public class SessionUpgradeQuorumTest extends QuorumPeerTestBase {
         try {
             zk.create(node, new byte[2], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
             fail("expect to failed to upgrade session due to the "
-                 + "TestQPMainDropSessionUpgrading is being used");
+                    + "TestQPMainDropSessionUpgrading is being used");
         } catch (KeeperException e) {
             LOG.info("KeeperException when create ephemeral node.", e);
         }
@@ -231,7 +233,7 @@ public class SessionUpgradeQuorumTest extends QuorumPeerTestBase {
 
         // Create a client and an ephemeral node
         ZooKeeper zk = new ZooKeeper("127.0.0.1:" + clientPorts[sid],
-                    ClientBase.CONNECTION_TIMEOUT, this);
+                ClientBase.CONNECTION_TIMEOUT, this);
         waitForOne(zk, States.CONNECTED);
 
         final String node = "/node-1";
@@ -239,7 +241,8 @@ public class SessionUpgradeQuorumTest extends QuorumPeerTestBase {
                 CreateMode.EPHEMERAL, new StringCallback() {
                     @Override
                     public void processResult(int rc, String path, Object ctx,
-                            String name) {}
+                                              String name) {
+                    }
                 }, null);
 
         // close the client
@@ -273,14 +276,15 @@ public class SessionUpgradeQuorumTest extends QuorumPeerTestBase {
                 @Override
                 protected Leader makeLeader(FileTxnSnapLog logFactory) throws IOException {
                     return new Leader(this, new LeaderZooKeeperServer(
-                              logFactory, this, this.getZkDb()) {
+                            logFactory, this, this.getZkDb()) {
 
                         @Override
                         public void submitRequestNow(Request si) {
                             if (submitDelayMs > 0) {
                                 try {
                                     Thread.sleep(submitDelayMs);
-                                } catch (Exception e) {}
+                                } catch (Exception e) {
+                                }
                             }
                             super.submitRequestNow(si);
                         }
@@ -297,7 +301,8 @@ public class SessionUpgradeQuorumTest extends QuorumPeerTestBase {
                             if (submitDelayMs > 0) {
                                 try {
                                     Thread.sleep(submitDelayMs);
-                                } catch (Exception e) {}
+                                } catch (Exception e) {
+                                }
                             }
                             super.submitRequestNow(si);
                         }

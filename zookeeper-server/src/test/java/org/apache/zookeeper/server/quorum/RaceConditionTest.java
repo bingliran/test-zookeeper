@@ -21,10 +21,12 @@ package org.apache.zookeeper.server.quorum;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import javax.security.sasl.SaslException;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.common.X509Exception;
@@ -78,12 +80,12 @@ public class RaceConditionTest extends QuorumPeerTestBase {
          * </pre>
          */
         boolean leaderStateChanged = ClientBase
-            .waitForServerState(leader, 15000, QuorumStats.Provider.LOOKING_STATE, QuorumStats.Provider.FOLLOWING_STATE);
+                .waitForServerState(leader, 15000, QuorumStats.Provider.LOOKING_STATE, QuorumStats.Provider.FOLLOWING_STATE);
         // Wait for the old leader to start completely
         assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + leader.getClientPort(), CONNECTION_TIMEOUT),
-            "Failed to bring up the old leader server");
+                "Failed to bring up the old leader server");
         assertTrue(leaderStateChanged || (leader.getCurrentEpoch() > oldLeaderCurrentEpoch),
-            "Leader failed to transition to new state. Current state is " + leader.getServerState());
+                "Leader failed to transition to new state. Current state is " + leader.getServerState());
     }
 
     @AfterEach
@@ -110,7 +112,7 @@ public class RaceConditionTest extends QuorumPeerTestBase {
         for (int i = 0; i < SERVER_COUNT; i++) {
             clientPorts[i] = PortAssignment.unique();
             server = "server." + i + "=127.0.0.1:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                     + ":participant;127.0.0.1:" + clientPorts[i];
+                    + ":participant;127.0.0.1:" + clientPorts[i];
             sb.append(server + "\n");
         }
         String currentQuorumCfgSection = sb.toString();
@@ -130,8 +132,8 @@ public class RaceConditionTest extends QuorumPeerTestBase {
         // ensure all servers started
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(
-                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
+                    "waiting for server " + i + " being up");
         }
         return mt;
     }

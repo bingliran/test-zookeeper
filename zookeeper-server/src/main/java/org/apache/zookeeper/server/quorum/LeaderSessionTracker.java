@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentMap;
+
 import org.apache.zookeeper.KeeperException.SessionExpiredException;
 import org.apache.zookeeper.KeeperException.SessionMovedException;
 import org.apache.zookeeper.KeeperException.UnknownSessionException;
@@ -97,7 +98,7 @@ public class LeaderSessionTracker extends UpgradeableSessionTracker {
      * tracked on this server and leader.
      */
     public synchronized boolean commitSession(
-        long sessionId, int sessionTimeout) {
+            long sessionId, int sessionTimeout) {
         boolean added = globalSessionTracker.commitSession(sessionId, sessionTimeout);
 
         if (added) {

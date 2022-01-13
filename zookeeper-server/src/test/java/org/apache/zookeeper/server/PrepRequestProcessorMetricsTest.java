@@ -29,6 +29,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -37,6 +38,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.Record;
 import org.apache.zookeeper.CreateMode;
@@ -105,15 +107,15 @@ public class PrepRequestProcessorMetricsTest extends ZKTestCase {
     private Request createRequest(String path, int opCode) throws IOException {
         Record record;
         switch (opCode) {
-        case ZooDefs.OpCode.setData:
-            record = new SetDataRequest(path, new byte[0], -1);
-            break;
-        case ZooDefs.OpCode.delete:
-            record = new DeleteRequest(path, -1);
-            break;
-        default:
-            record = new DeleteRequest(path, -1);
-            break;
+            case ZooDefs.OpCode.setData:
+                record = new SetDataRequest(path, new byte[0], -1);
+                break;
+            case ZooDefs.OpCode.delete:
+                record = new DeleteRequest(path, -1);
+                break;
+            default:
+                record = new DeleteRequest(path, -1);
+                break;
         }
 
         return createRequest(record, opCode);
@@ -169,9 +171,11 @@ public class PrepRequestProcessorMetricsTest extends ZKTestCase {
     private class SimpleWatcher implements Watcher {
 
         CountDownLatch created;
+
         public SimpleWatcher(CountDownLatch latch) {
             this.created = latch;
         }
+
         @Override
         public void process(WatchedEvent e) {
             created.countDown();

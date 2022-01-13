@@ -19,6 +19,7 @@ package org.apache.zookeeper.server.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.auth.ProviderRegistry;
 import org.junit.jupiter.api.AfterAll;

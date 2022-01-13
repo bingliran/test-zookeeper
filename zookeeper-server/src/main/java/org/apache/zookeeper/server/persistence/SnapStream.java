@@ -35,6 +35,7 @@ import java.util.zip.CheckedInputStream;
 import java.util.zip.CheckedOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
 import org.apache.jute.InputArchive;
 import org.apache.jute.OutputArchive;
 import org.apache.zookeeper.common.AtomicFileOutputStream;
@@ -54,8 +55,8 @@ public class SnapStream {
     public static final String ZOOKEEPER_SHAPSHOT_STREAM_MODE = "zookeeper.snapshot.compression.method";
 
     private static StreamMode streamMode = StreamMode.fromString(
-        System.getProperty(ZOOKEEPER_SHAPSHOT_STREAM_MODE,
-                           StreamMode.DEFAULT_MODE.getName()));
+            System.getProperty(ZOOKEEPER_SHAPSHOT_STREAM_MODE,
+                    StreamMode.DEFAULT_MODE.getName()));
 
     static {
         LOG.info("{} = {}", ZOOKEEPER_SHAPSHOT_STREAM_MODE, streamMode);
@@ -124,7 +125,7 @@ public class SnapStream {
     /**
      * Return the OutputStream based on predefined stream mode.
      *
-     * @param file the file the OutputStream writes to
+     * @param file  the file the OutputStream writes to
      * @param fsync sync the file immediately after write
      * @return the specific OutputStream
      * @throws IOException
@@ -133,22 +134,22 @@ public class SnapStream {
         OutputStream fos = fsync ? new AtomicFileOutputStream(file) : new FileOutputStream(file);
         OutputStream os;
         switch (streamMode) {
-        case GZIP:
-            try {
-                os = new GZIPOutputStream(fos);
-            } catch (IOException e) {
-                fos.close();
-                throw e;
-            }
-            break;
-        case SNAPPY:
-            // Unlike SnappyInputStream, the SnappyOutputStream
-            // constructor cannot throw an IOException.
-            os = new SnappyOutputStream(fos);
-            break;
-        case CHECKED:
-        default:
-            os = new BufferedOutputStream(fos);
+            case GZIP:
+                try {
+                    os = new GZIPOutputStream(fos);
+                } catch (IOException e) {
+                    fos.close();
+                    throw e;
+                }
+                break;
+            case SNAPPY:
+                // Unlike SnappyInputStream, the SnappyOutputStream
+                // constructor cannot throw an IOException.
+                os = new SnappyOutputStream(fos);
+                break;
+            case CHECKED:
+            default:
+                os = new BufferedOutputStream(fos);
         }
         return new CheckedOutputStream(os, new Adler32());
     }
@@ -157,7 +158,6 @@ public class SnapStream {
      * Write specific seal to the OutputArchive and close the OutputStream.
      * Currently, only CheckedOutputStream will write it's checkSum to the
      * end of the stream.
-     *
      */
     public static void sealStream(CheckedOutputStream os, OutputArchive oa) throws IOException {
         long val = os.getChecksum().getValue();
@@ -168,7 +168,6 @@ public class SnapStream {
     /**
      * Verify the integrity of the seal, only CheckedInputStream will verify
      * the checkSum of the content.
-     *
      */
     static void checkSealIntegrity(CheckedInputStream is, InputArchive ia) throws IOException {
         long checkSum = is.getChecksum().getValue();
@@ -197,15 +196,15 @@ public class SnapStream {
 
         boolean isValid = false;
         switch (getStreamMode(file.getName())) {
-        case GZIP:
-            isValid = isValidGZipStream(file);
-            break;
-        case SNAPPY:
-            isValid = isValidSnappyStream(file);
-            break;
-        case CHECKED:
-        default:
-            isValid = isValidCheckedStream(file);
+            case GZIP:
+                isValid = isValidGZipStream(file);
+                break;
+            case SNAPPY:
+                isValid = isValidSnappyStream(file);
+                break;
+            case CHECKED:
+            default:
+                isValid = isValidCheckedStream(file);
         }
         return isValid;
     }

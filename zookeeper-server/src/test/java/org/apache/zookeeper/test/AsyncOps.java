@@ -24,12 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.AsyncCallback.ACLCallback;
 import org.apache.zookeeper.AsyncCallback.Children2Callback;
 import org.apache.zookeeper.AsyncCallback.ChildrenCallback;
@@ -54,7 +56,7 @@ public class AsyncOps {
     /**
      * This is the base class for all of the async callback classes. It will
      * verify the expected value against the actual value.
-     *
+     * <p>
      * Basic operation is that the subclasses will generate an "expected" value
      * which is defined by the "toString" method of the subclass. This is
      * passed through to the verify clause by specifying it as the ctx object
@@ -63,7 +65,7 @@ public class AsyncOps {
      * instance fields with matching parameter arguments to the processResult
      * method. The cb instance can then compare the expected to the
      * actual value by again calling toString and comparing the two.
-     *
+     * <p>
      * The format of each expected value differs (is defined) by subclass.
      * Generally the expected value starts with the result code (rc) and path
      * of the node being operated on, followed by the fields specific to
@@ -76,7 +78,9 @@ public class AsyncOps {
         protected final ZooKeeper zk;
         protected long defaultTimeoutMillis = 30000;
 
-        /** the latch is used to await the results from the server */
+        /**
+         * the latch is used to await the results from the server
+         */
         CountDownLatch latch;
 
         Code rc = Code.OK;
@@ -103,8 +107,10 @@ public class AsyncOps {
             latch.countDown();
         }
 
-        /** String format is rc:path:&lt;suffix&gt; where &lt;suffix&gt; is defined by each
-         * subclass individually. */
+        /**
+         * String format is rc:path:&lt;suffix&gt; where &lt;suffix&gt; is defined by each
+         * subclass individually.
+         */
         @Override
         public String toString() {
             return rc + ":" + path + ":";
@@ -268,13 +274,13 @@ public class AsyncOps {
         @Override
         public String toString() {
             return super.toString()
-                   + toString(acl) + ":"
-                   + ":" + version
-                   + ":" + new String(data)
-                   + ":" + (stat == null ? "null" : stat.getAversion()
-                                                    + ":" + stat.getCversion()
-                                                    + ":" + stat.getEphemeralOwner()
-                                                    + ":" + stat.getVersion());
+                    + toString(acl) + ":"
+                    + ":" + version
+                    + ":" + new String(data)
+                    + ":" + (stat == null ? "null" : stat.getAversion()
+                    + ":" + stat.getCversion()
+                    + ":" + stat.getEphemeralOwner()
+                    + ":" + stat.getVersion());
         }
 
     }
@@ -526,11 +532,11 @@ public class AsyncOps {
             return super.toString()
                     + name + ":"
                     + (stat == null
-                        ? "null"
-                        : stat.getAversion()
-                            + ":" + stat.getCversion()
-                            + ":" + stat.getEphemeralOwner()
-                            + ":" + stat.getVersion());
+                    ? "null"
+                    : stat.getAversion()
+                    + ":" + stat.getCversion()
+                    + ":" + stat.getEphemeralOwner()
+                    + ":" + stat.getVersion());
         }
 
     }
@@ -576,11 +582,11 @@ public class AsyncOps {
         @Override
         public String toString() {
             return super.toString()
-                   + ":" + (data == null ? "null" : new String(data))
-                   + ":" + (stat == null ? "null" : stat.getAversion()
-                                                    + ":" + stat.getCversion()
-                                                    + ":" + stat.getEphemeralOwner()
-                                                    + ":" + stat.getVersion());
+                    + ":" + (data == null ? "null" : new String(data))
+                    + ":" + (stat == null ? "null" : stat.getAversion()
+                    + ":" + stat.getCversion()
+                    + ":" + stat.getEphemeralOwner()
+                    + ":" + stat.getVersion());
         }
 
     }
@@ -680,11 +686,11 @@ public class AsyncOps {
         @Override
         public String toString() {
             return super.toString() + version
-                   + ":" + new String(data)
-                   + ":" + (stat == null ? "null" : stat.getAversion()
-                                                    + ":" + stat.getCversion()
-                                                    + ":" + stat.getEphemeralOwner()
-                                                    + ":" + stat.getVersion());
+                    + ":" + new String(data)
+                    + ":" + (stat == null ? "null" : stat.getAversion()
+                    + ":" + stat.getCversion()
+                    + ":" + stat.getEphemeralOwner()
+                    + ":" + stat.getVersion());
         }
 
     }
@@ -784,8 +790,8 @@ public class AsyncOps {
 
         public void verifyMulti() {
             List<Op> ops = Arrays.asList(
-                Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.delete("/multi", -1));
+                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                    Op.delete("/multi", -1));
             zk.multi(ops, this, null);
             latch_await();
 
@@ -796,8 +802,8 @@ public class AsyncOps {
 
         public void verifyMultiFailure_AllErrorResult() {
             List<Op> ops = Arrays.asList(
-                Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.delete("/nonexist1", -1), Op.setData("/multi", "test".getBytes(), -1));
+                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                    Op.delete("/nonexist1", -1), Op.setData("/multi", "test".getBytes(), -1));
             zk.multi(ops, this, null);
             latch_await();
 
@@ -808,8 +814,8 @@ public class AsyncOps {
 
         public void verifyMultiFailure_NoSideEffect() throws KeeperException, InterruptedException {
             List<Op> ops = Arrays.asList(
-                Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.delete("/nonexist1", -1));
+                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                    Op.delete("/nonexist1", -1));
             zk.multi(ops, this, null);
             latch_await();
 
@@ -827,8 +833,8 @@ public class AsyncOps {
             assertNotNull(zk.exists(path + "0000000001", false));
 
             List<Op> ops = Arrays.asList(
-                Op.create(path, new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL),
-                Op.delete("/nonexist", -1));
+                    Op.create(path, new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL),
+                    Op.delete("/nonexist", -1));
             zk.multi(ops, this, null);
             latch_await();
 

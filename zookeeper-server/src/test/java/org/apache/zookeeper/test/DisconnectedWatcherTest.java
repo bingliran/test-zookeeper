@@ -20,10 +20,12 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher.Event.EventType;
@@ -247,7 +249,7 @@ public class DisconnectedWatcherTest extends ClientBase {
                 assertEquals(EventType.NodeCreated, e.getType());
                 assertEquals(path + "/foo", e.getPath());
             } else if (i % 3 == 2) {
-                zk1.setData(path, new byte[] { 1, 2, 3 }, -1);
+                zk1.setData(path, new byte[]{1, 2, 3}, -1);
 
                 WatchedEvent e = childWatcher.events.poll(TIMEOUT, TimeUnit.MILLISECONDS);
                 assertNotNull(e);

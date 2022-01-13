@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -61,11 +61,11 @@ public class SessionsResource {
     }
 
     @PUT
-    @Produces( { MediaType.APPLICATION_JSON, "application/javascript",
-            MediaType.APPLICATION_XML })
+    @Produces({MediaType.APPLICATION_JSON, "application/javascript",
+            MediaType.APPLICATION_XML})
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     public Response keepAliveSession(@PathParam("session") String session,
-            @Context UriInfo ui, byte[] data) {
+                                     @Context UriInfo ui, byte[] data) {
 
         if (!ZooKeeperService.isConnected(contextPath, session)) {
             throwNotFound(session, ui);
@@ -76,11 +76,11 @@ public class SessionsResource {
     }
 
     @POST
-    @Produces( { MediaType.APPLICATION_JSON, "application/javascript",
-            MediaType.APPLICATION_XML })
+    @Produces({MediaType.APPLICATION_JSON, "application/javascript",
+            MediaType.APPLICATION_XML})
     public Response createSession(@QueryParam("op") String op,
-            @DefaultValue("5") @QueryParam("expire") String expire,
-            @Context UriInfo ui) {
+                                  @DefaultValue("5") @QueryParam("expire") String expire,
+                                  @Context UriInfo ui) {
         if (!op.equals("create")) {
             throw new WebApplicationException(Response.status(
                     Response.Status.BAD_REQUEST).entity(
@@ -112,15 +112,15 @@ public class SessionsResource {
 
         URI uri = ui.getAbsolutePathBuilder().path(uuid).build();
         return Response.created(uri).entity(
-                new JSONWithPadding(new ZSession(uuid, uri.toString())))
+                        new JSONWithPadding(new ZSession(uuid, uri.toString())))
                 .build();
     }
 
     @DELETE
-    @Produces( { MediaType.APPLICATION_JSON, "application/javascript",
-            MediaType.APPLICATION_XML, MediaType.APPLICATION_OCTET_STREAM })
+    @Produces({MediaType.APPLICATION_JSON, "application/javascript",
+            MediaType.APPLICATION_XML, MediaType.APPLICATION_OCTET_STREAM})
     public void deleteSession(@PathParam("session") String session,
-            @Context UriInfo ui) {
+                              @Context UriInfo ui) {
         ZooKeeperService.close(contextPath, session);
     }
 

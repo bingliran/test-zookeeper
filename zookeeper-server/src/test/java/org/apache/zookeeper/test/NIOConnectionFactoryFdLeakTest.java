@@ -19,7 +19,9 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.server.NIOServerCnxnFactory;

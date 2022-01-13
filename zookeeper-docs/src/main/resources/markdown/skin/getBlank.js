@@ -25,16 +25,18 @@
  * <input type="text" id="query" value="Search the site:" onFocus="getBlank (this, 'Search the site:');" onBlur="getBlank (this, 'Search the site:');"/>
  */
 <!--
-function getBlank (form, stdValue){
-if (form.value == stdValue){
-	form.value = '';
-	}
-return true;
+function getBlank(form, stdValue) {
+    if (form.value == stdValue) {
+        form.value = '';
+    }
+    return true;
 }
-function getPrompt (form, stdValue){
-if (form.value == ''){
-	form.value = stdValue;
-	}
-return true;
+
+function getPrompt(form, stdValue) {
+    if (form.value == '') {
+        form.value = stdValue;
+    }
+    return true;
 }
+
 //-->

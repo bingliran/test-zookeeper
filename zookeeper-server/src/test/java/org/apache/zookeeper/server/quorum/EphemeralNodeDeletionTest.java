@@ -23,11 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.security.sasl.SaslException;
+
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
@@ -202,7 +204,7 @@ public class EphemeralNodeDeletionTest extends QuorumPeerTestBase {
                     if (injectError && pp.getType() == Leader.PROPOSAL) {
                         String type = LearnerHandler.packetToString(pp);
                         throw new SocketTimeoutException("Socket timeout while reading the packet for operation "
-                                                                 + type);
+                                + type);
                     }
                 }
 

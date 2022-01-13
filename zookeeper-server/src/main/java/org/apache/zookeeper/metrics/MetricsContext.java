@@ -29,7 +29,6 @@ package org.apache.zookeeper.metrics;
  * <p>
  * Contexts are organized in a hierarchy.
  * </p>
- *
  */
 public interface MetricsContext {
 
@@ -37,7 +36,6 @@ public interface MetricsContext {
      * Returns a sub context.
      *
      * @param name the name of the subcontext
-     *
      * @return a new metrics context.
      */
     MetricsContext getContext(String name);
@@ -66,9 +64,8 @@ public interface MetricsContext {
      * take its place.
      * Registering a null callback is not allowed.
      *
-     * @param name unique name of the Gauge in this context
+     * @param name  unique name of the Gauge in this context
      * @param gauge the implementation of the Gauge
-     *
      */
     void registerGauge(String name, Gauge gauge);
 
@@ -76,7 +73,6 @@ public interface MetricsContext {
      * Unregisters the user provided {@link Gauge} bound to the given name.
      *
      * @param name unique name of the Gauge in this context
-     *
      */
     void unregisterGauge(String name);
 
@@ -86,18 +82,17 @@ public interface MetricsContext {
      * If another GaugeSet was already registered, the new one will take its place.
      * Registering with a null name or null callback is not allowed.
      *
-     * @param name unique name of the GaugeSet in this context
+     * @param name     unique name of the GaugeSet in this context
      * @param gaugeSet the implementation of the GaugeSet
-     *
      */
     void registerGaugeSet(String name, GaugeSet gaugeSet);
 
     /**
      * Unregisters the user provided {@link GaugeSet} bound to the given name.
-     *
+     * <p>
      * Unregistering with a null name is not allowed.
-     * @param name unique name of the GaugeSet in this context
      *
+     * @param name unique name of the GaugeSet in this context
      */
     void unregisterGaugeSet(String name);
 

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.management.JMException;
+
 import org.apache.yetus.audience.InterfaceAudience;
 import org.apache.zookeeper.audit.ZKAuditProvider;
 import org.apache.zookeeper.jmx.ManagedUtil;
@@ -117,6 +118,7 @@ public class ZooKeeperServerMain {
 
     /**
      * Run from a ServerConfig.
+     *
      * @param config ServerConfig to use.
      * @throws IOException
      * @throws AdminServerException
@@ -127,8 +129,8 @@ public class ZooKeeperServerMain {
         try {
             try {
                 metricsProvider = MetricsProviderBootstrap.startMetricsProvider(
-                    config.getMetricsProviderClassName(),
-                    config.getMetricsProviderConfiguration());
+                        config.getMetricsProviderClassName(),
+                        config.getMetricsProviderConfiguration());
             } catch (MetricsProviderLifeCycleException error) {
                 throw new IOException("Cannot boot MetricsProvider " + config.getMetricsProviderClassName(), error);
             }
@@ -171,11 +173,11 @@ public class ZooKeeperServerMain {
             }
 
             containerManager = new ContainerManager(
-                zkServer.getZKDatabase(),
-                zkServer.firstProcessor,
-                Integer.getInteger("znode.container.checkIntervalMs", (int) TimeUnit.MINUTES.toMillis(1)),
-                Integer.getInteger("znode.container.maxPerMinute", 10000),
-                Long.getLong("znode.container.maxNeverUsedIntervalMs", 0)
+                    zkServer.getZKDatabase(),
+                    zkServer.firstProcessor,
+                    Integer.getInteger("znode.container.checkIntervalMs", (int) TimeUnit.MINUTES.toMillis(1)),
+                    Integer.getInteger("znode.container.maxPerMinute", 10000),
+                    Long.getLong("znode.container.maxNeverUsedIntervalMs", 0)
             );
             containerManager.start();
             ZKAuditProvider.addZKStartStopAuditLog();

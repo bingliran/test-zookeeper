@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Set;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.TestableZooKeeper;
@@ -77,7 +79,7 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
 
     /**
      * See ZOOKEEPER-1319 - verify that a lagging follwer resyncs correctly
-     *
+     * <p>
      * 1) start with down quorum
      * 2) start leader/follower1, add some data
      * 3) restart leader/follower1
@@ -158,6 +160,7 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
      * Restart after sessions are expired, expect to get a snap file
      * Shut down, run some transactions through.
      * Restart to a diff while transactions are running in leader
+     *
      * @throws IOException
      * @throws InterruptedException
      * @throws KeeperException
@@ -339,13 +342,13 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
      * Restart after sessions have expired but less than 500 txns have taken place (get a diff)
      * Shut down immediately after restarting, start running separate thread with other transactions
      * Restart to a diff while transactions are running in leader
-     *
-     *
+     * <p>
+     * <p>
      * Before fixes for ZOOKEEPER-962, restarting off of diff could get an inconsistent view of data missing transactions that
      * completed during diff syncing. Follower would also be considered "restarted" before all forwarded transactions
      * were completely processed, so restarting would cause a snap file with a too-high zxid to be written, and transactions
      * would be missed
-     *
+     * <p>
      * This test should pretty reliably catch the failure of restarting the server before all diff messages have been processed,
      * however, due to the transient nature of the system it may not catch failures due to concurrent processing of transactions
      * during the leader's diff forwarding.
@@ -539,10 +542,10 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
             Thread.sleep(1000);
         }
         LOG.info(
-            "Timeout waiting for zxid to sync: leader 0x{} clean 0x{} restarted 0x{}",
-            Long.toHexString(leadZxid),
-            Long.toHexString(cleanZxid),
-            Long.toHexString(restartedZxid));
+                "Timeout waiting for zxid to sync: leader 0x{} clean 0x{} restarted 0x{}",
+                Long.toHexString(leadZxid),
+                Long.toHexString(cleanZxid),
+                Long.toHexString(restartedZxid));
         return false;
     }
 
@@ -566,7 +569,7 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
         long epochL = (leader.getEpoch() >> 32L);
         assertTrue(epochF == epochL,
                 "Zxid: " + qu.getPeer(index).peer.getActiveServer().getZKDatabase().getDataTreeLastProcessedZxid()
-                + "Current epoch: " + epochF);
+                        + "Current epoch: " + epochF);
         int leaderIndex = (index == 1) ? 2 : 1;
         Collection<Long> sessionsRestarted = qu.getPeer(index).peer.getActiveServer().getZKDatabase().getSessions();
         Collection<Long> sessionsNotRestarted = qu.getPeer(leaderIndex).peer.getActiveServer().getZKDatabase().getSessions();

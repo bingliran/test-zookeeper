@@ -22,6 +22,7 @@ import java.util.Enumeration;
 import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,8 +54,9 @@ public class ManagedUtil {
     /**
      * Register the log4j JMX mbeans. Set system property
      * "zookeeper.jmx.log4j.disable" to true to disable registration.
-     * @see <a href="http://logging.apache.org/log4j/1.2/apidocs/index.html?org/apache/log4j/jmx/package-summary.html">Log4J 1.2 API docs</a>
+     *
      * @throws JMException if registration fails
+     * @see <a href="http://logging.apache.org/log4j/1.2/apidocs/index.html?org/apache/log4j/jmx/package-summary.html">Log4J 1.2 API docs</a>
      */
     @SuppressWarnings("rawtypes")
     public static void registerLog4jMBeans() throws JMException {
@@ -75,13 +77,13 @@ public class ManagedUtil {
                 // org.apache.log4j.Logger rootLogger =
                 // org.apache.log4j.Logger.getRootLogger();
                 Object rootLogger = Class.forName("org.apache.log4j.Logger")
-                                         .getMethod("getRootLogger", (Class<?>[]) null)
-                                         .invoke(null, (Object[]) null);
+                        .getMethod("getRootLogger", (Class<?>[]) null)
+                        .invoke(null, (Object[]) null);
 
                 // hdm.addLoggerMBean(rootLogger.getName());
                 Object rootLoggerName = rootLogger.getClass()
-                                                  .getMethod("getName", (Class<?>[]) null)
-                                                  .invoke(rootLogger, (Object[]) null);
+                        .getMethod("getName", (Class<?>[]) null)
+                        .invoke(rootLogger, (Object[]) null);
                 hdm.getClass().getMethod("addLoggerMBean", String.class).invoke(hdm, rootLoggerName);
 
                 // Get each logger from the Log4J Repository and add it to the
@@ -89,20 +91,20 @@ public class ManagedUtil {
                 // org.apache.log4j.spi.LoggerRepository r =
                 // org.apache.log4j.LogManager.getLoggerRepository();
                 Object r = Class.forName("org.apache.log4j.LogManager")
-                                .getMethod("getLoggerRepository", (Class<?>[]) null)
-                                .invoke(null, (Object[]) null);
+                        .getMethod("getLoggerRepository", (Class<?>[]) null)
+                        .invoke(null, (Object[]) null);
 
                 // Enumeration enumer = r.getCurrentLoggers();
                 Enumeration enumer = (Enumeration) r.getClass()
-                                                    .getMethod("getCurrentLoggers", (Class<?>[]) null)
-                                                    .invoke(r, (Object[]) null);
+                        .getMethod("getCurrentLoggers", (Class<?>[]) null)
+                        .invoke(r, (Object[]) null);
 
                 while (enumer.hasMoreElements()) {
                     Object logger = enumer.nextElement();
                     // hdm.addLoggerMBean(logger.getName());
                     Object loggerName = logger.getClass()
-                                              .getMethod("getName", (Class<?>[]) null)
-                                              .invoke(logger, (Object[]) null);
+                            .getMethod("getName", (Class<?>[]) null)
+                            .invoke(logger, (Object[]) null);
                     hdm.getClass().getMethod("addLoggerMBean", String.class).invoke(hdm, loggerName);
                 }
             } catch (Exception e) {

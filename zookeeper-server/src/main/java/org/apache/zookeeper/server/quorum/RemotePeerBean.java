@@ -19,7 +19,9 @@
 package org.apache.zookeeper.server.quorum;
 
 import static org.apache.zookeeper.common.NetUtils.formatInetAddr;
+
 import java.util.stream.Collectors;
+
 import org.apache.zookeeper.common.NetUtils;
 import org.apache.zookeeper.jmx.ZKMBeanInfo;
 
@@ -44,18 +46,19 @@ public class RemotePeerBean implements RemotePeerMXBean, ZKMBeanInfo {
     public String getName() {
         return "replica." + peer.id;
     }
+
     public boolean isHidden() {
         return false;
     }
 
     public String getQuorumAddress() {
         return peer.addr.getAllAddresses().stream().map(NetUtils::formatInetAddr)
-            .collect(Collectors.joining("|"));
+                .collect(Collectors.joining("|"));
     }
 
     public String getElectionAddress() {
         return peer.electionAddr.getAllAddresses().stream().map(NetUtils::formatInetAddr)
-            .collect(Collectors.joining("|"));
+                .collect(Collectors.joining("|"));
     }
 
     public String getClientAddress() {

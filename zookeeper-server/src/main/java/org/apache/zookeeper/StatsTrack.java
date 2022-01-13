@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
 import org.apache.zookeeper.common.StringUtils;
 
 /**
@@ -50,7 +51,6 @@ public class StatsTrack {
     }
 
     /**
-     *
      * @param stat the byte[] stat to be initialized with
      */
     public StatsTrack(byte[] stat) {
@@ -61,6 +61,7 @@ public class StatsTrack {
      * the stat string should be of the form key1str=long,key2str=long,..
      * where either , or ; are valid separators
      * uninitialized values are returned as -1
+     *
      * @param stat the stat string to be initialized with
      */
     public StatsTrack(String stat) {
@@ -88,8 +89,7 @@ public class StatsTrack {
     /**
      * set the count for this stat tracker.
      *
-     * @param count
-     *            the count to set with
+     * @param count the count to set with
      */
     public void setCount(long count) {
         setValue(countStr, count);
@@ -125,8 +125,7 @@ public class StatsTrack {
     /**
      * set the bytes for this stat tracker.
      *
-     * @param bytes
-     *            the bytes to set with
+     * @param bytes the bytes to set with
      */
     public void setBytes(long bytes) {
         setValue(byteStr, bytes);

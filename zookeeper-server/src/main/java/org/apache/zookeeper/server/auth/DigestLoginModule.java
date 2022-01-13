@@ -36,10 +36,10 @@ public class DigestLoginModule implements LoginModule {
     }
 
     public void initialize(
-        Subject subject,
-        CallbackHandler callbackHandler,
-        Map<String, ?> sharedState,
-        Map<String, ?> options) {
+            Subject subject,
+            CallbackHandler callbackHandler,
+            Map<String, ?> sharedState,
+            Map<String, ?> options) {
         if (options.containsKey("username")) {
             // Zookeeper client: get username and password from JAAS conf (only used if using DIGEST-MD5).
             this.subject = subject;

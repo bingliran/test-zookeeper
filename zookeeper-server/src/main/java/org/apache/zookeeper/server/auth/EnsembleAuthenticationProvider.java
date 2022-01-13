@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.auth;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.server.ServerCnxn;
 import org.apache.zookeeper.server.ServerMetrics;

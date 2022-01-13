@@ -19,8 +19,10 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
+
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.ZooKeeper.States;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +36,7 @@ public class ClientRetryTest extends ClientBase {
         maxCnxns = 1;
         super.setUp();
     }
+
     /*
      * This is a simple test - try to connect two clients to a server
      * accepting a maximum of one connection from each address. Check that

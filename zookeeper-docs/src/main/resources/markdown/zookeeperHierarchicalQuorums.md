@@ -16,13 +16,12 @@ limitations under the License.
 
 # Introduction to hierarchical quorums
 
-This document gives an example of how to use hierarchical quorums. The basic idea is
-very simple. First, we split servers into groups, and add a line for each group listing
-the servers that form this group. Next we have to assign a weight to each server.
+This document gives an example of how to use hierarchical quorums. The basic idea is very simple. First, we split
+servers into groups, and add a line for each group listing the servers that form this group. Next we have to assign a
+weight to each server.
 
-The following example shows how to configure a system with three groups of three servers
-each, and we assign a weight of 1 to each server:
-
+The following example shows how to configure a system with three groups of three servers each, and we assign a weight of
+1 to each server:
 
     group.1=1:2:3
     group.2=4:5:6
@@ -38,10 +37,9 @@ each, and we assign a weight of 1 to each server:
     weight.8=1
     weight.9=1
 
-
-When running the system, we are able to form a quorum once we have a majority of votes from
-a majority of non-zero-weight groups. Groups that have zero weight are discarded and not
-considered when forming quorums. Looking at the example, we are able to form a quorum once
-we have votes from at least two servers from each of two different groups.
+When running the system, we are able to form a quorum once we have a majority of votes from a majority of
+non-zero-weight groups. Groups that have zero weight are discarded and not considered when forming quorums. Looking at
+the example, we are able to form a quorum once we have votes from at least two servers from each of two different
+groups.
 
 

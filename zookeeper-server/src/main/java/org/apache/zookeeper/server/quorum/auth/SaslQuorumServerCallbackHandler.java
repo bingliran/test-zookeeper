@@ -31,6 +31,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 import javax.security.sasl.AuthorizeCallback;
 import javax.security.sasl.RealmCallback;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +51,9 @@ public class SaslQuorumServerCallbackHandler implements CallbackHandler {
     private final Set<String> authzHosts;
 
     public SaslQuorumServerCallbackHandler(
-        Configuration configuration,
-        String serverSection,
-        Set<String> authzHosts) throws IOException {
+            Configuration configuration,
+            String serverSection,
+            Set<String> authzHosts) throws IOException {
         AppConfigurationEntry[] configurationEntries = configuration.getAppConfigurationEntry(serverSection);
 
         if (configurationEntries == null) {
@@ -141,7 +142,7 @@ public class SaslQuorumServerCallbackHandler implements CallbackHandler {
         if (ac.isAuthorized()) {
             ac.setAuthorizedID(authorizationID);
             LOG.info("Successfully authenticated learner: authenticationID={};  authorizationID={}.",
-                     authenticationID, authorizationID);
+                    authenticationID, authorizationID);
         }
         LOG.debug("SASL authorization completed, authorized flag set to {}", ac.isAuthorized());
     }

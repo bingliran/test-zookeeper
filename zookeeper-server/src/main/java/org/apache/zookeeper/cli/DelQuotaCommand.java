@@ -19,6 +19,7 @@
 package org.apache.zookeeper.cli;
 
 import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
@@ -105,8 +106,8 @@ public class DelQuotaCommand extends CliCommand {
     /**
      * this method deletes quota for a node.
      *
-     * @param zk the zookeeper client
-     * @param path the path to delete quota for
+     * @param zk    the zookeeper client
+     * @param path  the path to delete quota for
      * @param quota the quotas to delete (set to 1), null to delete all
      * @return true if quota deletion is successful
      * @throws KeeperException
@@ -164,9 +165,9 @@ public class DelQuotaCommand extends CliCommand {
     /**
      * trim the quota tree to recover unwanted tree elements in the quota's tree
      *
-     * @param zk the zookeeper client
+     * @param zk   the zookeeper client
      * @param path the path to start from and go up and see if their is any
-     * unwanted parent in the path.
+     *             unwanted parent in the path.
      * @return true if successful
      * @throws KeeperException
      * @throws InterruptedException

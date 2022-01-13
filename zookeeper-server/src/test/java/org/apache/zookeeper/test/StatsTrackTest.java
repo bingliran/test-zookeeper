@@ -37,10 +37,12 @@ public class StatsTrackTest {
         public OldStatsTrack() {
             this(null);
         }
+
         /**
          * the stat string should be of the form count=int,bytes=long
          * if stats is called with null the count and bytes are initialized
          * to -1.
+         *
          * @param stats the stat string to be intialized with
          */
         public OldStatsTrack(String stats) {
@@ -68,8 +70,7 @@ public class StatsTrackTest {
         /**
          * set the count for this stat tracker.
          *
-         * @param count
-         *            the count to set with
+         * @param count the count to set with
          */
         public void setCount(int count) {
             this.count = count;
@@ -87,8 +88,7 @@ public class StatsTrackTest {
         /**
          * set teh bytes for this stat tracker.
          *
-         * @param bytes
-         *            the bytes to set with
+         * @param bytes the bytes to set with
          */
         public void setBytes(long bytes) {
             this.bytes = bytes;

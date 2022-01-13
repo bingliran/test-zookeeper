@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.quorum.auth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+
 import java.io.File;
 import java.security.Principal;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import javax.security.auth.kerberos.KerberosPrincipal;
 import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 import javax.security.auth.login.LoginContext;
+
 import org.apache.kerby.kerberos.kerb.keytab.Keytab;
 import org.apache.kerby.kerberos.kerb.type.base.PrincipalName;
 import org.junit.jupiter.api.Test;
@@ -71,7 +73,7 @@ public class MiniKdcTest extends KerberosSecurityTestcase {
         }
 
         assertEquals(new HashSet<>(Arrays.asList("foo/bar@" + kdc.getRealm(), "bar/foo@" + kdc.getRealm())),
-            principals);
+                principals);
     }
 
     private static class KerberosConfiguration extends Configuration {
@@ -96,8 +98,8 @@ public class MiniKdcTest extends KerberosSecurityTestcase {
 
         private static String getKrb5LoginModuleName() {
             return System.getProperty("java.vendor").contains("IBM")
-                ? "com.ibm.security.auth.module.Krb5LoginModule"
-                : "com.sun.security.auth.module.Krb5LoginModule";
+                    ? "com.ibm.security.auth.module.Krb5LoginModule"
+                    : "com.sun.security.auth.module.Krb5LoginModule";
         }
 
         @Override
@@ -164,8 +166,8 @@ public class MiniKdcTest extends KerberosSecurityTestcase {
 
         } finally {
             if (loginContext != null
-                && loginContext.getSubject() != null
-                && !loginContext.getSubject().getPrincipals().isEmpty()) {
+                    && loginContext.getSubject() != null
+                    && !loginContext.getSubject().getPrincipals().isEmpty()) {
                 loginContext.logout();
             }
         }

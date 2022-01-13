@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.metric;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.zookeeper.metrics.SummarySet;
 
 /**
@@ -39,7 +40,7 @@ public class AvgMinMaxCounterSet extends Metric implements SummarySet {
     }
 
     private AvgMinMaxCounter getCounterForKey(String key) {
-        return counters.computeIfAbsent(key, k-> new AvgMinMaxCounter(k + "_" + name));
+        return counters.computeIfAbsent(key, k -> new AvgMinMaxCounter(k + "_" + name));
     }
 
     public void addDataPoint(String key, long value) {

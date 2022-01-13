@@ -24,11 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.PortAssignment;
@@ -55,7 +57,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Test stand-alone server.
- *
  */
 public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
 
@@ -76,7 +77,7 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
         }
 
         public MainThread(int clientPort, Integer secureClientPort, boolean preCreateDirs, String configs)
-                throws  IOException {
+                throws IOException {
             this(clientPort, secureClientPort,
                     preCreateDirs, ClientBase.createTmpDir(), configs);
         }
@@ -158,7 +159,7 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
             return main.getCnxnFactory();
         }
 
-        public ServerCnxnFactory getSecureCnxnFactory(){
+        public ServerCnxnFactory getSecureCnxnFactory() {
             return main.getSecureCnxnFactory();
         }
 
@@ -225,7 +226,7 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
     /**
      * Tests that the ZooKeeper server will fail to start if the
      * snapshot directory is read only.
-     *
+     * <p>
      * This test will fail if it is executed as root user.
      */
     @Test
@@ -264,7 +265,7 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
     /**
      * Tests that the ZooKeeper server will fail to start if the
      * transaction log directory is read only.
-     *
+     * <p>
      * This test will fail if it is executed as root user.
      */
     @Test
@@ -344,11 +345,11 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
         final int minSessionTimeout = 20 * tickTime + 1000; // min is higher
         final int maxSessionTimeout = tickTime * 2 - 100; // max is lower
         final String configs = "maxSessionTimeout="
-                                       + maxSessionTimeout
-                                       + "\n"
-                                       + "minSessionTimeout="
-                                       + minSessionTimeout
-                                       + "\n";
+                + maxSessionTimeout
+                + "\n"
+                + "minSessionTimeout="
+                + minSessionTimeout
+                + "\n";
         MainThread main = new MainThread(CLIENT_PORT, true, configs);
         String[] args = new String[1];
         args[0] = main.confFile.toString();
@@ -409,8 +410,8 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
 
         final int CLIENT_PORT = PortAssignment.unique();
         final String configs = "metricsProvider.className="
-                                       + MetricsProviderWithErrorInConfigure.class.getName()
-                                       + "\n";
+                + MetricsProviderWithErrorInConfigure.class.getName()
+                + "\n";
         MainThread main = new MainThread(CLIENT_PORT, true, configs);
         String[] args = new String[1];
         args[0] = main.confFile.toString();
@@ -465,9 +466,9 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
         final int CLIENT_PORT = PortAssignment.unique();
         MetricsProviderWithConfiguration.httpPort.set(0);
         final String configs = "metricsProvider.className="
-                                       + MetricsProviderWithConfiguration.class.getName()
-                                       + "\n"
-                                       + "metricsProvider.httpPort=1234\n";
+                + MetricsProviderWithConfiguration.class.getName()
+                + "\n"
+                + "metricsProvider.httpPort=1234\n";
         MainThread main = new MainThread(CLIENT_PORT, true, configs);
         main.start();
 
@@ -501,9 +502,9 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
 
         final int CLIENT_PORT = PortAssignment.unique();
         final String configs = "metricsProvider.className="
-                                       + MetricsProviderCapturingLifecycle.class.getName()
-                                       + "\n"
-                                       + "metricsProvider.httpPort=1234\n";
+                + MetricsProviderCapturingLifecycle.class.getName()
+                + "\n"
+                + "metricsProvider.httpPort=1234\n";
         MainThread main = new MainThread(CLIENT_PORT, true, configs);
         main.start();
 
@@ -570,11 +571,11 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
         final int minSessionTimeout = tickTime * 2 - 100;
         final int maxSessionTimeout = 20 * tickTime + 1000;
         final String configs = "maxSessionTimeout="
-                                       + maxSessionTimeout
-                                       + "\n"
-                                       + "minSessionTimeout="
-                                       + minSessionTimeout
-                                       + "\n";
+                + maxSessionTimeout
+                + "\n"
+                + "minSessionTimeout="
+                + minSessionTimeout
+                + "\n";
         MainThread main = new MainThread(CLIENT_PORT, true, configs);
         main.start();
 
@@ -647,7 +648,7 @@ public class ZooKeeperServerMainTest extends ZKTestCase implements Watcher {
             }
         }
         if (!f.delete()) {
-        // double check for the file existence
+            // double check for the file existence
 
             if (f.exists()) {
                 throw new IOException("Failed to delete file: " + f);

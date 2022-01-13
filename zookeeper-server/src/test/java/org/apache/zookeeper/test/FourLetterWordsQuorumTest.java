@@ -20,7 +20,9 @@ package org.apache.zookeeper.test;
 
 import static org.apache.zookeeper.client.FourLetterWordMain.send4LetterWord;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
 import org.apache.zookeeper.TestableZooKeeper;
 import org.apache.zookeeper.common.X509Exception.SSLContextException;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,9 @@ public class FourLetterWordsQuorumTest extends QuorumBase {
 
     protected static final Logger LOG = LoggerFactory.getLogger(FourLetterWordsQuorumTest.class);
 
-    /** Test the various four letter words */
+    /**
+     * Test the various four letter words
+     */
     @Test
     public void testFourLetterWords() throws Exception {
         String[] servers = hostPort.split(",");

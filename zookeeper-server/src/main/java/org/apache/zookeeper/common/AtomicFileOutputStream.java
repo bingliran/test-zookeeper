@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * A FileOutputStream that has the property that it will only show up at its
  * destination once it has been entirely written and flushed to disk. While
  * being written, it will use a .tmp suffix.
- *
+ * <p>
  * When the output stream is closed, it is flushed, fsynced, and will be moved
  * into place, overwriting any file that already exists at that location.
  *

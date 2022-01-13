@@ -21,6 +21,7 @@ package org.apache.zookeeper.server;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+
 import org.apache.zookeeper.server.NIOServerCnxnFactory.SelectorThread;
 
 public class MockNIOServerCnxn extends NIOServerCnxn {

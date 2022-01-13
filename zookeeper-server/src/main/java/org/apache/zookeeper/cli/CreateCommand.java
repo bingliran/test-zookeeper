@@ -19,7 +19,9 @@
 package org.apache.zookeeper.cli;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
@@ -121,8 +123,8 @@ public class CreateCommand extends CliCommand {
         }
         try {
             String newPath = hasT
-                ? zk.create(path, data, acl, flags, new Stat(), ttl)
-                : zk.create(path, data, acl, flags);
+                    ? zk.create(path, data, acl, flags, new Stat(), ttl)
+                    : zk.create(path, data, acl, flags);
             err.println("Created " + newPath);
         } catch (IllegalArgumentException ex) {
             throw new MalformedPathException(ex.getMessage());

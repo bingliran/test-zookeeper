@@ -19,7 +19,9 @@
 package org.apache.zookeeper.metrics.prometheus;
 
 import io.prometheus.client.CollectorRegistry;
+
 import java.util.Properties;
+
 import org.apache.zookeeper.metrics.MetricsProviderLifeCycleException;
 import org.junit.Assert;
 import org.junit.Test;

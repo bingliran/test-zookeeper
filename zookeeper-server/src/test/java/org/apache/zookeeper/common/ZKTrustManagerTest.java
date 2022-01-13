@@ -22,6 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -35,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.net.ssl.X509ExtendedTrustManager;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;

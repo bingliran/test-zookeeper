@@ -19,9 +19,11 @@
 package org.apache.zookeeper.common;
 
 import static java.util.Objects.requireNonNull;
+
 import io.netty.handler.ssl.IdentityCipherSuiteFilter;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -32,6 +34,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLParameters;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSocket;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +60,9 @@ public class SSLContextAndOptions {
     /**
      * Note: constructor is intentionally package-private, only the X509Util class should be creating instances of this
      * class.
-     * @param x509Util the X509Util that created this object.
-     * @param config a ZKConfig that holds config properties.
+     *
+     * @param x509Util   the X509Util that created this object.
+     * @param config     a ZKConfig that holds config properties.
      * @param sslContext the SSLContext.
      */
     SSLContextAndOptions(final X509Util x509Util, final ZKConfig config, final SSLContext sslContext) {
@@ -84,7 +88,7 @@ public class SSLContextAndOptions {
         SSLSocket sslSocket;
         if (pushbackBytes != null && pushbackBytes.length > 0) {
             sslSocket = (SSLSocket) sslContext.getSocketFactory()
-                                              .createSocket(socket, new ByteArrayInputStream(pushbackBytes), true);
+                    .createSocket(socket, new ByteArrayInputStream(pushbackBytes), true);
         } else {
             sslSocket = (SSLSocket) sslContext.getSocketFactory().createSocket(socket, null, socket.getPort(), true);
         }
@@ -138,31 +142,31 @@ public class SSLContextAndOptions {
     private void configureSslParameters(SSLParameters sslParameters, boolean isClientSocket) {
         if (cipherSuites != null) {
             LOG.debug(
-                "Setup cipher suites for {} socket: {}",
-                isClientSocket ? "client" : "server",
-                Arrays.toString(cipherSuites));
+                    "Setup cipher suites for {} socket: {}",
+                    isClientSocket ? "client" : "server",
+                    Arrays.toString(cipherSuites));
             sslParameters.setCipherSuites(cipherSuites);
         }
 
         if (enabledProtocols != null) {
             LOG.debug(
-                "Setup enabled protocols for {} socket: {}",
-                isClientSocket ? "client" : "server",
-                Arrays.toString(enabledProtocols));
+                    "Setup enabled protocols for {} socket: {}",
+                    isClientSocket ? "client" : "server",
+                    Arrays.toString(enabledProtocols));
             sslParameters.setProtocols(enabledProtocols);
         }
 
         if (!isClientSocket) {
             switch (clientAuth) {
-            case NEED:
-                sslParameters.setNeedClientAuth(true);
-                break;
-            case WANT:
-                sslParameters.setWantClientAuth(true);
-                break;
-            default:
-                sslParameters.setNeedClientAuth(false); // also clears the wantClientAuth flag according to docs
-                break;
+                case NEED:
+                    sslParameters.setNeedClientAuth(true);
+                    break;
+                case WANT:
+                    sslParameters.setWantClientAuth(true);
+                    break;
+                default:
+                    sslParameters.setNeedClientAuth(false); // also clears the wantClientAuth flag according to docs
+                    break;
             }
         }
     }
@@ -199,10 +203,10 @@ public class SSLContextAndOptions {
                 // Timeout of 0 is not allowed, since an infinite timeout can permanently lock up an
                 // accept() thread.
                 LOG.warn(
-                    "Invalid value for {}: {}, using the default value of {}",
-                    x509Util.getSslHandshakeDetectionTimeoutMillisProperty(),
-                    result,
-                    X509Util.DEFAULT_HANDSHAKE_DETECTION_TIMEOUT_MILLIS);
+                        "Invalid value for {}: {}, using the default value of {}",
+                        x509Util.getSslHandshakeDetectionTimeoutMillisProperty(),
+                        result,
+                        X509Util.DEFAULT_HANDSHAKE_DETECTION_TIMEOUT_MILLIS);
                 result = X509Util.DEFAULT_HANDSHAKE_DETECTION_TIMEOUT_MILLIS;
             }
         }

@@ -43,7 +43,7 @@ abstract class StandardTypeFileKeyStoreLoader extends FileKeyStoreLoader {
 
 
     StandardTypeFileKeyStoreLoader(String keyStorePath, String trustStorePath, String keyStorePassword,
-        String trustStorePassword, SupportedStandardKeyFormat format) {
+                                   String trustStorePassword, SupportedStandardKeyFormat format) {
         super(keyStorePath, trustStorePath, keyStorePassword, trustStorePassword);
         this.format = format;
     }

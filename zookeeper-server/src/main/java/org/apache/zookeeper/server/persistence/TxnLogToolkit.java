@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server.persistence;
 
 import static org.apache.zookeeper.server.persistence.FileTxnLog.TXNLOG_MAGIC;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.zip.Adler32;
 import java.util.zip.Checksum;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -133,10 +135,10 @@ public class TxnLogToolkit implements Closeable {
     }
 
     public TxnLogToolkit(
-        boolean recoveryMode,
-        boolean verbose,
-        String txnLogFileName,
-        boolean force) throws FileNotFoundException, TxnLogToolkitException {
+            boolean recoveryMode,
+            boolean verbose,
+            String txnLogFileName,
+            boolean force) throws FileNotFoundException, TxnLogToolkitException {
         this.recoveryMode = recoveryMode;
         this.verbose = verbose;
         this.force = force;
@@ -145,9 +147,9 @@ public class TxnLogToolkit implements Closeable {
             recoveryLogFile = new File(txnLogFile.toString() + ".fixed");
             if (recoveryLogFile.exists()) {
                 throw new TxnLogToolkitException(
-                    ExitCode.UNEXPECTED_ERROR.getValue(),
-                    "Recovery file %s already exists or not writable",
-                    recoveryLogFile);
+                        ExitCode.UNEXPECTED_ERROR.getValue(),
+                        "Recovery file %s already exists or not writable",
+                        recoveryLogFile);
             }
         }
 
@@ -166,9 +168,9 @@ public class TxnLogToolkit implements Closeable {
         File logFile = new File(txnLogFileName);
         if (!logFile.exists() || !logFile.canRead()) {
             throw new TxnLogToolkitException(
-                ExitCode.UNEXPECTED_ERROR.getValue(),
-                "File doesn't exist or not readable: %s",
-                logFile);
+                    ExitCode.UNEXPECTED_ERROR.getValue(),
+                    "File doesn't exist or not readable: %s",
+                    logFile);
         }
         return logFile;
     }
@@ -180,12 +182,12 @@ public class TxnLogToolkit implements Closeable {
         fhdr.deserialize(logStream, "fileheader");
         if (fhdr.getMagic() != TXNLOG_MAGIC) {
             throw new TxnLogToolkitException(
-                ExitCode.INVALID_INVOCATION.getValue(),
-                "Invalid magic number for %s",
-                txnLogFile.getName());
+                    ExitCode.INVALID_INVOCATION.getValue(),
+                    "Invalid magic number for %s",
+                    txnLogFile.getName());
         }
         System.out.println("ZooKeeper Transactional Log File with dbid " + fhdr.getDbid()
-                           + " txnlog format version " + fhdr.getVersion());
+                + " txnlog format version " + fhdr.getVersion());
 
         if (recoveryMode) {
             fhdr.serialize(recoveryOa, "fileheader");
@@ -251,9 +253,9 @@ public class TxnLogToolkit implements Closeable {
              OutputStream os = new BufferedOutputStream(new FileOutputStream(targetFile))) {
             if (!LogChopper.chop(is, os, zxid)) {
                 throw new TxnLogToolkitException(
-                    ExitCode.INVALID_INVOCATION.getValue(),
-                    "Failed to chop %s",
-                    txnLogFile.getName());
+                        ExitCode.INVALID_INVOCATION.getValue(),
+                        "Failed to chop %s",
+                        txnLogFile.getName());
             }
         } catch (Exception e) {
             System.out.println("Got exception: " + e.getMessage());
@@ -269,12 +271,12 @@ public class TxnLogToolkit implements Closeable {
             System.out.print("Would you like to fix it (Yes/No/Abort) ? ");
             char answer = Character.toUpperCase(scanner.next().charAt(0));
             switch (answer) {
-            case 'Y':
-                return true;
-            case 'N':
-                return false;
-            case 'A':
-                throw new TxnLogToolkitException(ExitCode.EXECUTION_FINISHED.getValue(), "Recovery aborted.");
+                case 'Y':
+                    return true;
+                case 'N':
+                    return false;
+                case 'A':
+                    throw new TxnLogToolkitException(ExitCode.EXECUTION_FINISHED.getValue(), "Recovery aborted.");
             }
         }
     }
@@ -289,13 +291,13 @@ public class TxnLogToolkit implements Closeable {
         Record txn = logEntry.getTxn();
         String txnStr = getFormattedTxnStr(txn);
         String txns = String.format(
-            "%s session 0x%s cxid 0x%s zxid 0x%s %s %s",
-            DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(new Date(hdr.getTime())),
-            Long.toHexString(hdr.getClientId()),
-            Long.toHexString(hdr.getCxid()),
-            Long.toHexString(hdr.getZxid()),
+                "%s session 0x%s cxid 0x%s zxid 0x%s %s %s",
+                DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG).format(new Date(hdr.getTime())),
+                Long.toHexString(hdr.getClientId()),
+                Long.toHexString(hdr.getCxid()),
+                Long.toHexString(hdr.getZxid()),
                 Request.op2String(hdr.getType()),
-            txnStr);
+                txnStr);
         if (prefix != null && !"".equals(prefix.trim())) {
             System.out.print(prefix + " - ");
         }
@@ -308,6 +310,7 @@ public class TxnLogToolkit implements Closeable {
 
     /**
      * get the formatted string from the txn.
+     *
      * @param txn transaction log data
      * @return the formatted string
      */
@@ -319,21 +322,21 @@ public class TxnLogToolkit implements Closeable {
         if (txn instanceof CreateTxn) {
             CreateTxn createTxn = ((CreateTxn) txn);
             txnData.append(createTxn.getPath() + "," + checkNullToEmpty(createTxn.getData()))
-                   .append("," + createTxn.getAcl() + "," + createTxn.getEphemeral())
-                   .append("," + createTxn.getParentCVersion());
+                    .append("," + createTxn.getAcl() + "," + createTxn.getEphemeral())
+                    .append("," + createTxn.getParentCVersion());
         } else if (txn instanceof SetDataTxn) {
             SetDataTxn setDataTxn = ((SetDataTxn) txn);
             txnData.append(setDataTxn.getPath() + "," + checkNullToEmpty(setDataTxn.getData()))
-                   .append("," + setDataTxn.getVersion());
+                    .append("," + setDataTxn.getVersion());
         } else if (txn instanceof CreateContainerTxn) {
             CreateContainerTxn createContainerTxn = ((CreateContainerTxn) txn);
             txnData.append(createContainerTxn.getPath() + "," + checkNullToEmpty(createContainerTxn.getData()))
-                   .append("," + createContainerTxn.getAcl() + "," + createContainerTxn.getParentCVersion());
+                    .append("," + createContainerTxn.getAcl() + "," + createContainerTxn.getParentCVersion());
         } else if (txn instanceof CreateTTLTxn) {
             CreateTTLTxn createTTLTxn = ((CreateTTLTxn) txn);
             txnData.append(createTTLTxn.getPath() + "," + checkNullToEmpty(createTTLTxn.getData()))
-                   .append("," + createTTLTxn.getAcl() + "," + createTTLTxn.getParentCVersion())
-                   .append("," + createTTLTxn.getTtl());
+                    .append("," + createTTLTxn.getAcl() + "," + createTTLTxn.getParentCVersion())
+                    .append("," + createTTLTxn.getTtl());
         } else if (txn instanceof MultiTxn) {
             MultiTxn multiTxn = ((MultiTxn) txn);
             List<Txn> txnList = multiTxn.getTxns();

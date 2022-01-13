@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -37,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.InputArchive;
@@ -105,7 +107,7 @@ public class DataTreeTest extends ZKTestCase {
     private void createEphemeralNode(long session, final DataTree dataTree, int count) throws NoNodeException, NodeExistsException {
         for (int i = 0; i < count; i++) {
             dataTree.createNode("/test" + i, new byte[0], null, session + i, dataTree.getNode("/").stat.getCversion()
-                                                                                     + 1, 1, 1);
+                    + 1, 1, 1);
         }
     }
 
@@ -147,8 +149,8 @@ public class DataTreeTest extends ZKTestCase {
             int newCversion = zk.stat.getCversion();
             long newPzxid = zk.stat.getPzxid();
             assertTrue((newCversion == prevCversion + 1 && newPzxid == prevPzxid + 1),
-                "<cversion, pzxid> verification failed. Expected: <" + (prevCversion + 1) + ", "
-                    + (prevPzxid + 1) + ">, found: <" + newCversion + ", " + newPzxid + ">");
+                    "<cversion, pzxid> verification failed. Expected: <" + (prevCversion + 1) + ", "
+                            + (prevPzxid + 1) + ">, found: <" + newCversion + ", " + newPzxid + ">");
             assertNotEquals(digestBefore, dt.getTreeDigest());
         } finally {
             ZooKeeperServer.setDigestEnabled(false);
@@ -167,15 +169,15 @@ public class DataTreeTest extends ZKTestCase {
         int newCversion = parent.stat.getCversion();
         long newPzxid = parent.stat.getPzxid();
         assertTrue((newCversion >= currentCversion && newPzxid >= currentPzxid),
-            "<cversion, pzxid> verification failed. Expected: <"
-                                  + currentCversion
-                                  + ", "
-                                  + currentPzxid
-                                  + ">, found: <"
-                                  + newCversion
-                                  + ", "
-                                  + newPzxid
-                                  + ">");
+                "<cversion, pzxid> verification failed. Expected: <"
+                        + currentCversion
+                        + ", "
+                        + currentPzxid
+                        + ">, found: <"
+                        + newCversion
+                        + ", "
+                        + newPzxid
+                        + ">");
     }
 
     @Test
@@ -263,12 +265,12 @@ public class DataTreeTest extends ZKTestCase {
      * could get stuck at OutputArchieve.writeInt due to potential network/disk issues.
      * This can cause the system experiences hanging issues similar to ZooKeeper-2201.
      * This test verifies the fix that we should not hold ACL cache during dumping aclcache to snapshots
-    */
+     */
     @Test
     @Timeout(value = 60)
     public void testSerializeDoesntLockACLCacheWhileWriting() throws Exception {
         DataTree tree = new DataTree();
-        tree.createNode("/marker", new byte[] { 42 }, null, -1, 1, 1, 1);
+        tree.createNode("/marker", new byte[]{42}, null, -1, 1, 1, 1);
         final AtomicBoolean ranTestCase = new AtomicBoolean();
         DataOutputStream out = new DataOutputStream(new ByteArrayOutputStream());
         BinaryOutputArchive oa = new BinaryOutputArchive(out) {
@@ -308,12 +310,12 @@ public class DataTreeTest extends ZKTestCase {
     }
 
     /* ZOOKEEPER-3531 - similarly for aclCache.deserialize, we should not hold lock either
-    */
+     */
     @Test
     @Timeout(value = 60)
     public void testDeserializeDoesntLockACLCacheWhileReading() throws Exception {
         DataTree tree = new DataTree();
-        tree.createNode("/marker", new byte[] { 42 }, null, -1, 1, 1, 1);
+        tree.createNode("/marker", new byte[]{42}, null, -1, 1, 1, 1);
         final AtomicBoolean ranTestCase = new AtomicBoolean();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(baos);
@@ -371,7 +373,7 @@ public class DataTreeTest extends ZKTestCase {
     @Timeout(value = 60)
     public void testSerializeDoesntLockDataNodeWhileWriting() throws Exception {
         DataTree tree = new DataTree();
-        tree.createNode("/marker", new byte[] { 42 }, null, -1, 1, 1, 1);
+        tree.createNode("/marker", new byte[]{42}, null, -1, 1, 1, 1);
         final DataNode markerNode = tree.getNode("/marker");
         final AtomicBoolean ranTestCase = new AtomicBoolean();
         DataOutputStream out = new DataOutputStream(new ByteArrayOutputStream());

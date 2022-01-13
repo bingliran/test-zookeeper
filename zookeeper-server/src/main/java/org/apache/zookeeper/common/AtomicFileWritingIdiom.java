@@ -55,9 +55,9 @@ public class AtomicFileWritingIdiom {
     }
 
     private AtomicFileWritingIdiom(
-        File targetFile,
-        OutputStreamStatement osStmt,
-        WriterStatement wStmt) throws IOException {
+            File targetFile,
+            OutputStreamStatement osStmt,
+            WriterStatement wStmt) throws IOException {
         AtomicFileOutputStream out = null;
         boolean triedToClose = false;
         try {

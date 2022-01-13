@@ -21,6 +21,7 @@ package org.apache.zookeeper.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -30,6 +31,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.server.persistence.FileTxnLog;
 import org.apache.zookeeper.server.persistence.TxnLog;
@@ -42,13 +44,16 @@ class Pair<V1, V2> {
 
     private V1 v1;
     private V2 v2;
+
     Pair(V1 v1, V2 v2) {
         this.v1 = v1;
         this.v2 = v2;
     }
+
     public V1 getFirst() {
         return v1;
     }
+
     public V2 getSecond() {
         return v2;
     }

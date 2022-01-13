@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -42,6 +43,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.InputArchive;
@@ -135,6 +137,7 @@ public class Zab1_0Test extends ZKTestCase {
         }
 
     }
+
     @Test
     public void testLeaderInConnectingFollowers() throws Exception {
         File tmpDir = File.createTempFile("test", "dir", testData);
@@ -182,9 +185,8 @@ public class Zab1_0Test extends ZKTestCase {
      * lastAcceptedEpoch == epoch, then the call from the subsequent
      * follower with lastAcceptedEpoch = 6 doesn't change the value
      * of epoch, and the test fails. It passes with the fix to predicate.
-     *
+     * <p>
      * https://issues.apache.org/jira/browse/ZOOKEEPER-1343
-     *
      *
      * @throws Exception
      */
@@ -269,6 +271,7 @@ public class Zab1_0Test extends ZKTestCase {
         Socket s = new Socket(endPoint.getAddress(), endPoint.getPort());
         return new Socket[]{s, ss.accept()};
     }
+
     static void readPacketSkippingPing(InputArchive ia, QuorumPacket qp) throws IOException {
         while (true) {
             ia.readRecord(qp, null);
@@ -547,11 +550,13 @@ public class Zab1_0Test extends ZKTestCase {
     class TrackerWatcher implements Watcher {
 
         boolean changed;
+
         synchronized void waitForChange() throws InterruptedException {
             while (!changed) {
                 wait();
             }
         }
+
         @Override
         public void process(WatchedEvent event) {
             if (event.getType() == EventType.NodeDataChanged) {
@@ -561,6 +566,7 @@ public class Zab1_0Test extends ZKTestCase {
                 }
             }
         }
+
         public synchronized boolean changed() {
             return changed;
         }
@@ -783,7 +789,7 @@ public class Zab1_0Test extends ZKTestCase {
                     // does not send anything back when it is done.
                     long start = System.currentTimeMillis();
                     while (createSessionZxid != f.fzk.getLastProcessedZxid()
-                                   && (System.currentTimeMillis() - start) < 50) {
+                            && (System.currentTimeMillis() - start) < 50) {
                         Thread.sleep(1);
                     }
 
@@ -1105,6 +1111,7 @@ public class Zab1_0Test extends ZKTestCase {
      * Tests that when a quorum of followers send LearnerInfo but do not ack the epoch (which is sent
      * by the leader upon receipt of LearnerInfo from a quorum), the leader does not start using this epoch
      * as it would in the normal case (when a quorum do ack the epoch). This tests ZK-1192
+     *
      * @throws Exception
      */
     @Test
@@ -1136,6 +1143,7 @@ public class Zab1_0Test extends ZKTestCase {
         }
 
         QuorumServer leaderQuorumServer;
+
         public void setLeaderQuorumServer(QuorumServer quorumServer) {
             leaderQuorumServer = quorumServer;
         }
@@ -1146,6 +1154,7 @@ public class Zab1_0Test extends ZKTestCase {
         }
 
     }
+
     private ConversableFollower createFollower(File tmpDir, QuorumPeer peer) throws IOException {
         FileTxnSnapLog logFactory = new FileTxnSnapLog(tmpDir, tmpDir);
         peer.setTxnFactory(logFactory);
@@ -1162,6 +1171,7 @@ public class Zab1_0Test extends ZKTestCase {
         }
 
         QuorumServer leaderQuorumServer;
+
         public void setLeaderQuorumServer(QuorumServer quorumServer) {
             leaderQuorumServer = quorumServer;
         }

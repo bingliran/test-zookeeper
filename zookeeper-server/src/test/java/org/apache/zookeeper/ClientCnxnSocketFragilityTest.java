@@ -21,12 +21,14 @@ package org.apache.zookeeper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Queue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.ClientCnxn.Packet;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -280,22 +282,22 @@ public class ClientCnxnSocketFragilityTest extends QuorumPeerTestBase {
         private volatile boolean hitUnsafeRegion = false;
 
         public CustomClientCnxn(
-            String chrootPath,
-            HostProvider hostProvider,
-            int sessionTimeout,
-            ZKClientConfig zkClientConfig,
-            Watcher defaultWatcher,
-            ClientCnxnSocket clientCnxnSocket,
-            boolean canBeReadOnly
+                String chrootPath,
+                HostProvider hostProvider,
+                int sessionTimeout,
+                ZKClientConfig zkClientConfig,
+                Watcher defaultWatcher,
+                ClientCnxnSocket clientCnxnSocket,
+                boolean canBeReadOnly
         ) throws IOException {
             super(
-                chrootPath,
-                hostProvider,
-                sessionTimeout,
-                zkClientConfig,
-                defaultWatcher,
-                clientCnxnSocket,
-                canBeReadOnly);
+                    chrootPath,
+                    hostProvider,
+                    sessionTimeout,
+                    zkClientConfig,
+                    defaultWatcher,
+                    clientCnxnSocket,
+                    canBeReadOnly);
         }
 
         void attemptClose() {
@@ -352,24 +354,24 @@ public class ClientCnxnSocketFragilityTest extends QuorumPeerTestBase {
         }
 
         ClientCnxn createConnection(
-            String chrootPath,
-            HostProvider hostProvider,
-            int sessionTimeout,
-            ZKClientConfig clientConfig,
-            Watcher defaultWatcher,
-            ClientCnxnSocket clientCnxnSocket,
-            boolean canBeReadOnly
+                String chrootPath,
+                HostProvider hostProvider,
+                int sessionTimeout,
+                ZKClientConfig clientConfig,
+                Watcher defaultWatcher,
+                ClientCnxnSocket clientCnxnSocket,
+                boolean canBeReadOnly
         ) throws IOException {
             assertTrue(clientCnxnSocket instanceof FragileClientCnxnSocketNIO);
             socket = (FragileClientCnxnSocketNIO) clientCnxnSocket;
             ClientCnxnSocketFragilityTest.this.cnxn = new CustomClientCnxn(
-                chrootPath,
-                hostProvider,
-                sessionTimeout,
-                clientConfig,
-                defaultWatcher,
-                clientCnxnSocket,
-                canBeReadOnly);
+                    chrootPath,
+                    hostProvider,
+                    sessionTimeout,
+                    clientConfig,
+                    defaultWatcher,
+                    clientCnxnSocket,
+                    canBeReadOnly);
             return ClientCnxnSocketFragilityTest.this.cnxn;
         }
     }

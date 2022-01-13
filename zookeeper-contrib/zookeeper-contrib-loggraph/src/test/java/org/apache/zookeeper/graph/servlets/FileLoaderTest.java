@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,7 @@ package org.apache.zookeeper.graph.servlets;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import org.apache.zookeeper.graph.FilterException;
 import org.apache.zookeeper.graph.FilterOp;
 import org.apache.zookeeper.graph.LogIterator;
@@ -26,6 +27,7 @@ import org.apache.zookeeper.graph.LogSource;
 import org.apache.zookeeper.graph.MergedLogSource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -61,25 +63,28 @@ public class FileLoaderTest {
         public MyMergedLogSource(String[] files) throws IOException {
             super(files);
         }
+
         public void addSource(String f) throws IOException {
             if ("/tmp3".equals(f)) throw new IOException("Message");
             sources.add(new MySource(f));
         }
-        public List<LogSource> getSources(){
+
+        public List<LogSource> getSources() {
             return sources;
         }
     }
 
-    private class MySource implements LogSource{
+    private class MySource implements LogSource {
         private String file = null;
+
         public MySource(String file) throws IOException {
-            this.file=file;
+            this.file = file;
         }
 
-        public boolean equals(Object o){
-            if(!(o instanceof MySource)) return false;
-            if(((MySource)o).file == null) return this.file==null;
-            return ((MySource)o).file.equals(this.file);
+        public boolean equals(Object o) {
+            if (!(o instanceof MySource)) return false;
+            if (((MySource) o).file == null) return this.file == null;
+            return ((MySource) o).file.equals(this.file);
         }
 
         @Override

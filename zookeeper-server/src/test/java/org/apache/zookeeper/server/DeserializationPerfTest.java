@@ -19,9 +19,11 @@
 package org.apache.zookeeper.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.zookeeper.KeeperException;
@@ -63,13 +65,13 @@ public class DeserializationPerfTest extends ZKTestCase {
         assertEquals(count, dserTree.getNodeCount());
 
         LOG.info(
-            "Deserialized {} nodes in {} ms ({}us/node), depth={} width={} datalen={}",
-            count,
-            durationms,
-            pernodeus,
-            depth,
-            width,
-            len);
+                "Deserialized {} nodes in {} ms ({}us/node), depth={} width={} datalen={}",
+                count,
+                durationms,
+                pernodeus,
+                depth,
+                width,
+                len);
     }
 
     @Test

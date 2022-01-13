@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.watch;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
+
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.ZKTestCase;
@@ -56,8 +58,8 @@ public class WatchManagerTest extends ZKTestCase {
 
     public static Stream<Arguments> data() {
         return Stream.of(
-            Arguments.of(WatchManager.class.getName()),
-            Arguments.of(WatchManagerOptimized.class.getName()));
+                Arguments.of(WatchManager.class.getName()),
+                Arguments.of(WatchManagerOptimized.class.getName()));
     }
 
     @BeforeEach

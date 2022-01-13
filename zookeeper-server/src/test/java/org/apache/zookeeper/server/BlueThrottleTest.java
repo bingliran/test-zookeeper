@@ -21,8 +21,10 @@ package org.apache.zookeeper.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.test.ClientBase;
@@ -177,7 +179,7 @@ public class BlueThrottleTest extends ZKTestCase {
 
         zks = new ZooKeeper[n];
         watchers = new ClientBase.CountdownWatcher[n];
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             watchers[i] = new ClientBase.CountdownWatcher();
             zks[i] = new ZooKeeper(connStr, 3000, watchers[i]);
             try {
@@ -192,7 +194,7 @@ public class BlueThrottleTest extends ZKTestCase {
         return connected;
     }
 
-    private void shutdownQuorum() throws Exception{
+    private void shutdownQuorum() throws Exception {
         for (ZooKeeper zk : zks) {
             if (zk != null) {
                 zk.close();
@@ -282,7 +284,7 @@ public class BlueThrottleTest extends ZKTestCase {
         quorumUtil.getPeer(1).peer.getActiveServer().connThrottle().setMaxTokens(3);
         quorumUtil.getPeer(1).peer.getActiveServer().connThrottle().setFillCount(0);
         int reconnected = 0;
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 2; i++) {
             try {
                 watchers[i].waitForConnected(RAPID_TIMEOUT);
                 reconnected++;

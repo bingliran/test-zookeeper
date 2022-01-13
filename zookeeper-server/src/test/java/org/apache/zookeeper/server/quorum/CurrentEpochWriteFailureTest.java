@@ -20,8 +20,10 @@ package org.apache.zookeeper.server.quorum;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -72,7 +74,7 @@ public class CurrentEpochWriteFailureTest extends QuorumPeerTestBase {
         File snapDir = firstServer.getQuorumPeer().getTxnFactory().getSnapDir();
         File currentEpochFile = new File(snapDir, QuorumPeer.CURRENT_EPOCH_FILENAME);
         File currentEpochTempFile = new File(snapDir,
-            QuorumPeer.CURRENT_EPOCH_FILENAME + AtomicFileOutputStream.TMP_EXTENSION);
+                QuorumPeer.CURRENT_EPOCH_FILENAME + AtomicFileOutputStream.TMP_EXTENSION);
 
         // Shutdown servers
         servers.shutDownAllServers();
@@ -88,10 +90,10 @@ public class CurrentEpochWriteFailureTest extends QuorumPeerTestBase {
 
         // Check the first server where problem was injected.
         assertTrue(ClientBase
-                .waitForServerUp("127.0.0.1:" + firstServer.getClientPort(), CONNECTION_TIMEOUT),
-            "server " + firstServer.getMyid()
-                + " is not up as file currentEpoch.tmp rename to currentEpoch file was failed"
-                + " which lead current epoch inconsistent state.");
+                        .waitForServerUp("127.0.0.1:" + firstServer.getClientPort(), CONNECTION_TIMEOUT),
+                "server " + firstServer.getMyid()
+                        + " is not up as file currentEpoch.tmp rename to currentEpoch file was failed"
+                        + " which lead current epoch inconsistent state.");
     }
 
     private void restartServers() throws InterruptedException, IOException {

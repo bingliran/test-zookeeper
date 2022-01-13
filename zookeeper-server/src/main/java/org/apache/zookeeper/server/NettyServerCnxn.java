@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.CompositeByteBuf;
@@ -28,6 +29,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,6 +41,7 @@ import java.nio.channels.SelectionKey;
 import java.security.cert.Certificate;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.Record;
 import org.apache.zookeeper.ClientCnxn;
@@ -163,9 +166,9 @@ public class NettyServerCnxn extends ServerCnxn {
         ReplyHeader h = new ReplyHeader(ClientCnxn.NOTIFICATION_XID, -1L, 0);
         if (LOG.isTraceEnabled()) {
             ZooTrace.logTraceMessage(
-                LOG,
-                ZooTrace.EVENT_DELIVERY_TRACE_MASK,
-                "Deliver event " + event + " to 0x" + Long.toHexString(this.sessionId) + " through " + this);
+                    LOG,
+                    ZooTrace.EVENT_DELIVERY_TRACE_MASK,
+                    "Deliver event " + event + " to 0x" + Long.toHexString(this.sessionId) + " through " + this);
         }
 
         // Convert WatchedEvent to a type that can be sent over the wire
@@ -182,7 +185,7 @@ public class NettyServerCnxn extends ServerCnxn {
 
     @Override
     public int sendResponse(ReplyHeader h, Record r, String tag,
-                             String cacheKey, Stat stat, int opCode) throws IOException {
+                            String cacheKey, Stat stat, int opCode) throws IOException {
         // cacheKey and stat are used in caching, which is not
         // implemented here. Implementation example can be found in NIOServerCnxn.
         if (closingChannel || !channel.isOpen()) {
@@ -230,6 +233,7 @@ public class NettyServerCnxn extends ServerCnxn {
 
         /**
          * Check if we are ready to send another chunk.
+         *
          * @param force force sending, even if not a full chunk
          */
         private void checkFlush(boolean force) {
@@ -262,7 +266,9 @@ public class NettyServerCnxn extends ServerCnxn {
 
     }
 
-    /** Return if four letter word found and responded to, otw false **/
+    /**
+     * Return if four letter word found and responded to, otw false
+     **/
     private boolean checkFourLetterWord(final Channel channel, ByteBuf message, final int len) {
         // We take advantage of the limited size of the length to look
         // for cmds. They are all 4-bytes which fits inside of an int
@@ -284,9 +290,9 @@ public class NettyServerCnxn extends ServerCnxn {
         if (!FourLetterCommands.isEnabled(cmd)) {
             LOG.debug("Command {} is not executed because it is not in the whitelist.", cmd);
             NopCommand nopCmd = new NopCommand(
-                pwriter,
-                this,
-                cmd + " is not executed because it is not in the whitelist.");
+                    pwriter,
+                    this,
+                    cmd + " is not executed because it is not in the whitelist.");
             nopCmd.start();
             return true;
         }
@@ -311,6 +317,7 @@ public class NettyServerCnxn extends ServerCnxn {
     /**
      * Helper that throws an IllegalStateException if the current thread is not
      * executing in the channel's event loop thread.
+     *
      * @param callerMethodName the name of the calling method to add to the exception message.
      */
     private void checkIsInEventLoop(String callerMethodName) {
@@ -324,8 +331,9 @@ public class NettyServerCnxn extends ServerCnxn {
      * or call any flavor of {@link ByteBuf#retain()}. Caller must ensure that <code>buf</code>
      * is not owned by anyone else, as this call transfers ownership of <code>buf</code> to the
      * <code>queuedBuffer</code>.
-     *
+     * <p>
      * This method should only be called from the event loop thread.
+     *
      * @param buf the buffer to append to the queue.
      */
     private void appendToQueuedBuffer(ByteBuf buf) {
@@ -344,6 +352,7 @@ public class NettyServerCnxn extends ServerCnxn {
      * Note that this method does not call <code>buf.release()</code>. The caller
      * is responsible for making sure the buf is released after this method
      * returns.
+     *
      * @param buf the message bytes to process.
      */
     void processMessage(ByteBuf buf) {
@@ -439,6 +448,7 @@ public class NettyServerCnxn extends ServerCnxn {
      * Note that this method does not call <code>message.release()</code>. The
      * caller is responsible for making sure the message is released after this
      * method returns.
+     *
      * @param message the message bytes to process.
      */
     private void receiveMessage(ByteBuf message) {
@@ -465,8 +475,8 @@ public class NettyServerCnxn extends ServerCnxn {
                         ByteBuffer dat = bb.duplicate();
                         dat.flip();
                         LOG.trace("after readbytes 0x{} bb {}",
-                                  Long.toHexString(sessionId),
-                                  ByteBufUtil.hexDump(Unpooled.wrappedBuffer(dat)));
+                                Long.toHexString(sessionId),
+                                ByteBufUtil.hexDump(Unpooled.wrappedBuffer(dat)));
                     }
                     if (bb.remaining() == 0) {
                         bb.flip();
@@ -555,6 +565,7 @@ public class NettyServerCnxn extends ServerCnxn {
     /**
      * Note that the netty implementation ignores the <code>waitDisableRecv</code>
      * parameter and is always asynchronous.
+     *
      * @param waitDisableRecv ignored by this implementation.
      */
     @Override
@@ -602,7 +613,8 @@ public class NettyServerCnxn extends ServerCnxn {
         return (InetSocketAddress) channel.remoteAddress();
     }
 
-    /** Send close connection packet to the client.
+    /**
+     * Send close connection packet to the client.
      */
     @Override
     public void sendCloseSession() {

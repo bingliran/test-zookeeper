@@ -21,9 +21,11 @@ package org.apache.zookeeper.test;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
@@ -45,15 +47,14 @@ public class ACLCountTest extends ZKTestCase {
     private static final String HOSTPORT = "127.0.0.1:" + PortAssignment.unique();
 
     /**
-     *
      * Create a node and add 4 ACL values to it, but there are only 2 unique ACL values,
      * and each is repeated once:
-     *
-     *   ACL(ZooDefs.Perms.READ,ZooDefs.Ids.ANYONE_ID_UNSAFE);
-     *   ACL(ZooDefs.Perms.ALL,ZooDefs.Ids.AUTH_IDS);
-     *   ACL(ZooDefs.Perms.READ,ZooDefs.Ids.ANYONE_ID_UNSAFE);
-     *   ACL(ZooDefs.Perms.ALL,ZooDefs.Ids.AUTH_IDS);
-     *
+     * <p>
+     * ACL(ZooDefs.Perms.READ,ZooDefs.Ids.ANYONE_ID_UNSAFE);
+     * ACL(ZooDefs.Perms.ALL,ZooDefs.Ids.AUTH_IDS);
+     * ACL(ZooDefs.Perms.READ,ZooDefs.Ids.ANYONE_ID_UNSAFE);
+     * ACL(ZooDefs.Perms.ALL,ZooDefs.Ids.AUTH_IDS);
+     * <p>
      * Even though we've added 4 ACL values, there should only be 2 ACLs for that node,
      * since there are only 2 *unique* ACL values.
      */

@@ -21,9 +21,11 @@ package org.apache.zookeeper.server;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZKTestCase;
@@ -35,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Test stand-alone server.
- *
  */
 public class InvalidSnapCountTest extends ZKTestCase implements Watcher {
 

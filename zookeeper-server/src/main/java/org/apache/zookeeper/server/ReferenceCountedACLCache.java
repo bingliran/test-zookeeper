@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.jute.Index;
 import org.apache.jute.InputArchive;
 import org.apache.jute.OutputArchive;
@@ -53,6 +54,7 @@ public class ReferenceCountedACLCache {
     /**
      * converts the list of acls to a long.
      * Increments the reference counter for this ACL.
+     *
      * @param acls
      * @return a long that map to the acls
      */

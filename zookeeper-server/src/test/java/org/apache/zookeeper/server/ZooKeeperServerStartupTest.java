@@ -23,10 +23,12 @@ import static org.apache.zookeeper.server.command.AbstractFourLetterCommand.ZK_N
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooKeeper;
@@ -90,7 +92,7 @@ public class ZooKeeperServerStartupTest extends ZKTestCase {
         ZooKeeper zkClient = new ZooKeeper(HOSTPORT, ClientBase.CONNECTION_TIMEOUT, watcher);
 
         assertFalse(simplezks.waitForSessionCreation(5),
-            "Since server is not fully started, zks#createSession() shouldn't be invoked");
+                "Since server is not fully started, zks#createSession() shouldn't be invoked");
 
         LOG.info("Decrements the count of the latch, so that server will proceed with startup");
         startupDelayLatch.countDown();
@@ -98,7 +100,7 @@ public class ZooKeeperServerStartupTest extends ZKTestCase {
         assertTrue(ClientBase.waitForServerUp(HOSTPORT, ClientBase.CONNECTION_TIMEOUT), "waiting for server being up ");
 
         assertTrue(simplezks.waitForSessionCreation(5),
-            "Failed to invoke zks#createSession() method during client session creation");
+                "Failed to invoke zks#createSession() method during client session creation");
         watcher.waitForConnected(ClientBase.CONNECTION_TIMEOUT);
         zkClient.close();
     }

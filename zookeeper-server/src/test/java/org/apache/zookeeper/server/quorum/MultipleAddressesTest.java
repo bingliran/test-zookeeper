@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NoRouteToHostException;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.zookeeper.PortAssignment;
 import org.junit.jupiter.api.Test;
@@ -163,14 +165,14 @@ public class MultipleAddressesTest {
     }
 
     @Test
-    public void testAlwaysGetReachableAddress() throws Exception{
+    public void testAlwaysGetReachableAddress() throws Exception {
         InetSocketAddress reachableHost = new InetSocketAddress("127.0.0.1", 1234);
         InetSocketAddress unreachableHost1 = new InetSocketAddress("unreachable1.address.zookeeper.apache.com", 1234);
         InetSocketAddress unreachableHost2 = new InetSocketAddress("unreachable2.address.zookeeper.apache.com", 1234);
         InetSocketAddress unreachableHost3 = new InetSocketAddress("unreachable3.address.zookeeper.apache.com", 1234);
 
         MultipleAddresses multipleAddresses = new MultipleAddresses(
-          Arrays.asList(unreachableHost1, unreachableHost2, unreachableHost3, reachableHost));
+                Arrays.asList(unreachableHost1, unreachableHost2, unreachableHost3, reachableHost));
 
         // we call the getReachableAddress() function multiple times, to make sure we
         // always got back a reachable address and not just a random one
@@ -187,7 +189,7 @@ public class MultipleAddressesTest {
         InetSocketAddress unreachableHost2 = new InetSocketAddress("unreachable2.address.zookeeper.apache.com", 1234);
 
         MultipleAddresses multipleAddresses = new MultipleAddresses(
-          Arrays.asList(unreachableHost1, unreachableHost2, reachableHost1, reachableHost2));
+                Arrays.asList(unreachableHost1, unreachableHost2, reachableHost1, reachableHost2));
 
         Set<InetSocketAddress> reachableHosts = new HashSet<>(Arrays.asList(reachableHost1, reachableHost2));
         assertEquals(reachableHosts, multipleAddresses.getAllReachableAddresses());
@@ -201,7 +203,7 @@ public class MultipleAddressesTest {
         InetSocketAddress unreachableHost2 = new InetSocketAddress("unreachable2.address.zookeeper.apache.com", 1234);
 
         MultipleAddresses multipleAddresses = new MultipleAddresses(
-          Arrays.asList(unreachableHost1, unreachableHost2, reachableHost1, reachableHost2));
+                Arrays.asList(unreachableHost1, unreachableHost2, reachableHost1, reachableHost2));
 
         Set<InetSocketAddress> reachableHosts = new HashSet<>(Arrays.asList(reachableHost1, reachableHost2));
         assertEquals(reachableHosts, multipleAddresses.getAllReachableAddressesOrAll());

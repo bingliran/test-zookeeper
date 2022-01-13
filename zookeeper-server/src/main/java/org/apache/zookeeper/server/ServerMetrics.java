@@ -508,7 +508,7 @@ public final class ServerMetrics {
     public final Counter REQUESTS_NOT_FORWARDED_TO_COMMIT_PROCESSOR;
 
     /**
-     *  Number of response/watch bytes written to clients.
+     * Number of response/watch bytes written to clients.
      */
     public final Counter RESPONSE_BYTES;
     public final Counter WATCH_BYTES;

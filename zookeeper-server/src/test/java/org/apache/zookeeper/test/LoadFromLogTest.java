@@ -21,8 +21,10 @@ package org.apache.zookeeper.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -58,6 +60,7 @@ public class LoadFromLogTest extends ClientBase {
 
     /**
      * test that all transactions from the Log are loaded, and only once
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test
@@ -101,6 +104,7 @@ public class LoadFromLogTest extends ClientBase {
     /**
      * test that we fail to load txnlog of a request zxid that is older
      * than what exist on disk
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test

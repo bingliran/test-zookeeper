@@ -18,9 +18,11 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
+
 import org.apache.zookeeper.AddWatchMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.Watcher;

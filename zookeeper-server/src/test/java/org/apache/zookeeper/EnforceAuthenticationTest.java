@@ -20,11 +20,13 @@ package org.apache.zookeeper;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.client.ZKClientConfig;
 import org.apache.zookeeper.server.AuthenticationHelper;
@@ -85,11 +87,11 @@ public class EnforceAuthenticationTest extends QuorumPeerTestBase {
         ZKClientConfig config = new ZKClientConfig();
         if (netty) {
             config.setProperty(ZKClientConfig.ZOOKEEPER_CLIENT_CNXN_SOCKET,
-                "org.apache.zookeeper.ClientCnxnSocketNetty");
+                    "org.apache.zookeeper.ClientCnxnSocketNetty");
         }
         ZooKeeper client = ClientBase
-            .createZKClient("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, CONNECTION_TIMEOUT,
-                config);
+                .createZKClient("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, CONNECTION_TIMEOUT,
+                        config);
         String path = "/defaultAuth" + System.currentTimeMillis();
         String data = "someData";
         client.create(path, data.getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
@@ -123,7 +125,7 @@ public class EnforceAuthenticationTest extends QuorumPeerTestBase {
     }
 
     private void testServerCannotStart(Map<String, String> prop)
-        throws Exception {
+            throws Exception {
         File confFile = getConfFile(prop);
         ServerConfig config = new ServerConfig();
         config.parse(confFile.toString());
@@ -164,12 +166,12 @@ public class EnforceAuthenticationTest extends QuorumPeerTestBase {
         ZKClientConfig config = new ZKClientConfig();
         if (netty) {
             config.setProperty(ZKClientConfig.ZOOKEEPER_CLIENT_CNXN_SOCKET,
-                "org.apache.zookeeper.ClientCnxnSocketNetty");
+                    "org.apache.zookeeper.ClientCnxnSocketNetty");
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         ZooKeeper client =
-            new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
-                config);
+                new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
+                        config);
         countDownLatch.await();
         String path = "/newAuth" + System.currentTimeMillis();
         String data = "someData";
@@ -184,8 +186,8 @@ public class EnforceAuthenticationTest extends QuorumPeerTestBase {
         client.close();
         countDownLatch = new CountDownLatch(1);
         client =
-            new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
-                config);
+                new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
+                        config);
         countDownLatch.await();
 
         // try operations after authentication
@@ -206,8 +208,8 @@ public class EnforceAuthenticationTest extends QuorumPeerTestBase {
         ZKClientConfig config = new ZKClientConfig();
         CountDownLatch countDownLatch = new CountDownLatch(1);
         ZooKeeper client =
-            new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
-                config);
+                new ZooKeeper("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT, getWatcher(countDownLatch),
+                        config);
         countDownLatch.await();
         // try operation without adding auth info, it should be success as ip auth info is
         // added automatically by server

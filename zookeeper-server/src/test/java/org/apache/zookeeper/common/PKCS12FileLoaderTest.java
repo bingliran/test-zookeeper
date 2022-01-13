@@ -20,8 +20,10 @@ package org.apache.zookeeper.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.security.KeyStore;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -35,10 +37,10 @@ public class PKCS12FileLoaderTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         String path = x509TestContext.getKeyStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath();
         KeyStore ks = new PKCS12FileLoader.Builder()
-            .setKeyStorePath(path)
-            .setKeyStorePassword(x509TestContext.getKeyStorePassword())
-            .build()
-            .loadKeyStore();
+                .setKeyStorePath(path)
+                .setKeyStorePassword(x509TestContext.getKeyStorePassword())
+                .build()
+                .loadKeyStore();
         assertEquals(1, ks.size());
     }
 
@@ -113,10 +115,10 @@ public class PKCS12FileLoaderTest extends BaseX509ParameterizedTestCase {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         String path = x509TestContext.getTrustStoreFile(KeyStoreFileType.PKCS12).getAbsolutePath();
         KeyStore ts = new PKCS12FileLoader.Builder()
-            .setTrustStorePath(path)
-            .setTrustStorePassword(x509TestContext.getTrustStorePassword())
-            .build()
-            .loadTrustStore();
+                .setTrustStorePath(path)
+                .setTrustStorePassword(x509TestContext.getTrustStorePassword())
+                .build()
+                .loadTrustStore();
         assertEquals(1, ts.size());
     }
 

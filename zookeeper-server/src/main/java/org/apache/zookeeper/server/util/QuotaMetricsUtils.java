@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.zookeeper.Quotas;
 import org.apache.zookeeper.StatsTrack;
 import org.apache.zookeeper.common.PathUtils;
@@ -34,6 +35,7 @@ public final class QuotaMetricsUtils {
     public static final String QUOTA_EXCEEDED_ERROR_PER_NAMESPACE = "quota_exceeded_error_per_namespace";
 
     enum QUOTA_LIMIT_USAGE_METRIC_TYPE {QUOTA_COUNT_LIMIT, QUOTA_BYTES_LIMIT, QUOTA_COUNT_USAGE, QUOTA_BYTES_USAGE}
+
     static final String LIMIT_END_STRING = "/" + Quotas.limitNode;
     static final String STATS_END_STRING = "/" + Quotas.statNode;
 
@@ -45,7 +47,6 @@ public final class QuotaMetricsUtils {
      *
      * @param dataTree dataTree that contains the quota limit and usage data
      * @return a map with top namespace as the key and quota count limit as the value
-     *
      */
     public static Map<String, Number> getQuotaCountLimit(final DataTree dataTree) {
         return getQuotaLimitOrUsage(dataTree, QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_COUNT_LIMIT);
@@ -53,10 +54,10 @@ public final class QuotaMetricsUtils {
 
     /**
      * Traverse the quota subtree and return per namespace quota bytes limit
-     *`
+     * `
+     *
      * @param dataTree dataTree that contains the quota limit and usage data
      * @return a map with top namespace as the key and quota bytes limit as the value
-     *
      */
     public static Map<String, Number> getQuotaBytesLimit(final DataTree dataTree) {
         return getQuotaLimitOrUsage(dataTree, QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_BYTES_LIMIT);
@@ -67,7 +68,6 @@ public final class QuotaMetricsUtils {
      *
      * @param dataTree dataTree that contains the quota limit and usage data
      * @return a map with top namespace as the key and quota count usage as the value
-     *
      */
     public static Map<String, Number> getQuotaCountUsage(final DataTree dataTree) {
         return getQuotaLimitOrUsage(dataTree, QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_COUNT_USAGE);
@@ -77,8 +77,7 @@ public final class QuotaMetricsUtils {
      * Traverse the quota subtree and return per namespace quota bytes usage
      *
      * @param dataTree dataTree that contains the quota limit and usage data
-     * @return  a map with top namespace as the key and quota bytes usage as the value
-     *
+     * @return a map with top namespace as the key and quota bytes usage as the value
      */
     public static Map<String, Number> getQuotaBytesUsage(final DataTree dataTree) {
         return getQuotaLimitOrUsage(dataTree, QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_BYTES_USAGE);
@@ -95,9 +94,9 @@ public final class QuotaMetricsUtils {
     }
 
     private static void getQuotaLimitOrUsage(final String path,
-                                     final Map<String, Number> metricsMap,
-                                     final QUOTA_LIMIT_USAGE_METRIC_TYPE type,
-                                     final DataTree dataTree) {
+                                             final Map<String, Number> metricsMap,
+                                             final QUOTA_LIMIT_USAGE_METRIC_TYPE type,
+                                             final DataTree dataTree) {
         final DataNode node = dataTree.getNode(path);
         if (node == null) {
             return;
@@ -160,8 +159,8 @@ public final class QuotaMetricsUtils {
     }
 
     private static void aggregateQuotaLimitOrUsage(final String namespace,
-                                           final Map<String, Number> metricsMap,
-                                           final long limitOrUsage) {
+                                                   final Map<String, Number> metricsMap,
+                                                   final long limitOrUsage) {
         metricsMap.put(namespace, metricsMap.getOrDefault(namespace, 0).longValue() + limitOrUsage);
     }
 }

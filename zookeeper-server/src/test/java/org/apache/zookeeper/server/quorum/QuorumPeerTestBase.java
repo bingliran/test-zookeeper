@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -474,7 +475,7 @@ public class QuorumPeerTestBase extends ZKTestCase implements Watcher {
     }
 
     protected Servers LaunchServers(int numServers, Map<String, String> otherConfigs)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
         return LaunchServers(numServers, 0, null, otherConfigs);
     }
 
@@ -483,7 +484,7 @@ public class QuorumPeerTestBase extends ZKTestCase implements Watcher {
     }
 
     protected Servers LaunchServers(int numServers, int numObservers, Integer tickTime)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
         return LaunchServers(numServers, numObservers, tickTime, new HashMap<>());
     }
 
@@ -498,7 +499,7 @@ public class QuorumPeerTestBase extends ZKTestCase implements Watcher {
      * @throws InterruptedException
      */
     protected Servers LaunchServers(int numServers, int numObservers, Integer tickTime,
-        Map<String, String> otherConfigs) throws IOException, InterruptedException {
+                                    Map<String, String> otherConfigs) throws IOException, InterruptedException {
         int SERVER_COUNT = numServers + numObservers;
         QuorumPeerMainTest.Servers svrs = new QuorumPeerMainTest.Servers();
         svrs.clientPorts = new int[SERVER_COUNT];

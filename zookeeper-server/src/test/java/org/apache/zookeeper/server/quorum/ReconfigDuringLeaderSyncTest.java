@@ -22,10 +22,12 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Map;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZooDefs;
@@ -73,7 +75,7 @@ public class ReconfigDuringLeaderSyncTest extends QuorumPeerTestBase {
      * Test case for https://issues.apache.org/jira/browse/ZOOKEEPER-2172.
      * Cluster crashes when reconfig a new node as a participant.
      * </pre>
-     *
+     * <p>
      * This issue occurs when reconfig's PROPOSAL and COMMITANDACTIVATE come in
      * between the snapshot and the UPTODATE. In this case processReconfig was
      * not invoked on the newly added node, and zoo.cfg.dynamic.next wasn't
@@ -91,7 +93,7 @@ public class ReconfigDuringLeaderSyncTest extends QuorumPeerTestBase {
         for (int i = 0; i < SERVER_COUNT; i++) {
             clientPorts[i] = PortAssignment.unique();
             serverConfig[i] = "server." + i + "=127.0.0.1:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                              + ":participant;127.0.0.1:" + clientPorts[i];
+                    + ":participant;127.0.0.1:" + clientPorts[i];
             sb.append(serverConfig[i] + "\n");
         }
         String currentQuorumCfgSection = sb.toString();
@@ -110,9 +112,9 @@ public class ReconfigDuringLeaderSyncTest extends QuorumPeerTestBase {
         }
         CountdownWatcher watch = new CountdownWatcher();
         ZooKeeperAdmin preReconfigClient = new ZooKeeperAdmin(
-            "127.0.0.1:" + clientPorts[0],
-            ClientBase.CONNECTION_TIMEOUT,
-            watch);
+                "127.0.0.1:" + clientPorts[0],
+                ClientBase.CONNECTION_TIMEOUT,
+                watch);
         preReconfigClient.addAuthInfo("digest", "super:test".getBytes());
         watch.waitForConnected(ClientBase.CONNECTION_TIMEOUT);
 
@@ -120,7 +122,7 @@ public class ReconfigDuringLeaderSyncTest extends QuorumPeerTestBase {
         int joinerId = SERVER_COUNT;
         clientPorts[joinerId] = PortAssignment.unique();
         serverConfig[joinerId] = "server." + joinerId + "=127.0.0.1:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                                 + ":participant;127.0.0.1:" + clientPorts[joinerId];
+                + ":participant;127.0.0.1:" + clientPorts[joinerId];
 
         // Find leader id.
         int leaderId = -1;

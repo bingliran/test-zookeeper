@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
+
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.slf4j.Logger;
@@ -92,7 +93,7 @@ public class CommandClient {
      * @param commandParameter The command parameter, in the form of command/action/parameter.
      * @return true if we received a good (200) response and false otherwise.
      */
-    public boolean trySendCommand(ControlCommand.Action action, String commandParameter)  {
+    public boolean trySendCommand(ControlCommand.Action action, String commandParameter) {
         try {
             if (!started) {
                 client.start();
@@ -121,9 +122,9 @@ public class CommandClient {
     public ContentResponse sendCommand(ControlCommand.Action action,
                                        String commandParameter) throws Exception {
         String command = String.format("%s%s:%s/%s", "http://",
-            this.hostName, this.hostPort, ControlCommand.createCommandUri(action, commandParameter));
+                this.hostName, this.hostPort, ControlCommand.createCommandUri(action, commandParameter));
         ContentResponse response = this.client.newRequest(command).timeout(this.requestTimeoutInMs,
-            TimeUnit.MILLISECONDS).send();
+                TimeUnit.MILLISECONDS).send();
         LOG.info("Sent command {}", command);
         LOG.info("Response body {}", new String(response.getContent(), StandardCharsets.UTF_8));
         return response;

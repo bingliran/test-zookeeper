@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map.Entry;
 import java.util.Properties;
+
 import org.apache.zookeeper.server.quorum.QuorumPeer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 
@@ -69,9 +70,10 @@ public class ConfigUtils {
     /**
      * Gets host and port by splitting server config
      * with support for IPv6 literals
-     * @return String[] first element being the
-     *  IP address and the next being the port
+     *
      * @param s server config, server:port
+     * @return String[] first element being the
+     * IP address and the next being the port
      */
     public static String[] getHostAndPort(String s) throws ConfigException {
         if (s.startsWith("[")) {

@@ -19,13 +19,13 @@
 package org.apache.zookeeper.server;
 
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.server.quorum.Observer;
 import org.apache.zookeeper.server.quorum.ObserverMXBean;
 import org.apache.zookeeper.server.quorum.QuorumPeer;
 
 /**
  * ObserverBean
- *
  */
 public class ObserverBean extends ZooKeeperServerBean implements ObserverMXBean {
 

@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.metric;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.zookeeper.metrics.Counter;
 
 public class SimpleCounter extends Metric implements Counter {

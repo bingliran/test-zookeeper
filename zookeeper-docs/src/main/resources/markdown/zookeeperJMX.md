@@ -25,16 +25,15 @@ limitations under the License.
 
 ## JMX
 
-Apache ZooKeeper has extensive support for JMX, allowing you
-to view and manage a ZooKeeper serving ensemble.
+Apache ZooKeeper has extensive support for JMX, allowing you to view and manage a ZooKeeper serving ensemble.
 
-This document assumes that you have basic knowledge of
-JMX. See [Sun JMX Technology](http://java.sun.com/javase/technologies/core/mntr-mgmt/javamanagement/) page to get started with JMX.
+This document assumes that you have basic knowledge of JMX.
+See [Sun JMX Technology](http://java.sun.com/javase/technologies/core/mntr-mgmt/javamanagement/) page to get started
+with JMX.
 
-See the [JMX Management Guide](http://java.sun.com/javase/6/docs/technotes/guides/management/agent.html) for details on setting up local and
-remote management of VM instances. By default the included
-_zkServer.sh_ supports only local management -
-review the linked document to enable support for remote management
+See the [JMX Management Guide](http://java.sun.com/javase/6/docs/technotes/guides/management/agent.html) for details on
+setting up local and remote management of VM instances. By default the included
+_zkServer.sh_ supports only local management - review the linked document to enable support for remote management
 (beyond the scope of this document).
 
 <a name="ch_starting"></a>
@@ -43,58 +42,45 @@ review the linked document to enable support for remote management
 
 The class
 _org.apache.zookeeper.server.quorum.QuorumPeerMain_
-will start a JMX manageable ZooKeeper server. This class
-registers the proper MBeans during initialization to support JMX
-monitoring and management of the
-instance. See _bin/zkServer.sh_ for one
-example of starting ZooKeeper using QuorumPeerMain.
+will start a JMX manageable ZooKeeper server. This class registers the proper MBeans during initialization to support
+JMX monitoring and management of the instance. See _bin/zkServer.sh_ for one example of starting ZooKeeper using
+QuorumPeerMain.
 
 <a name="ch_console"></a>
 
 ## Run a JMX console
 
-There are a number of JMX consoles available which can connect
-to the running server. For this example we will use Sun's
+There are a number of JMX consoles available which can connect to the running server. For this example we will use Sun's
 _jconsole_.
 
 The Java JDK ships with a simple JMX console
 named [jconsole](http://java.sun.com/developer/technicalArticles/J2SE/jconsole.html)
-which can be used to connect to ZooKeeper and inspect a running
-server. Once you've started ZooKeeper using QuorumPeerMain
-start _jconsole_, which typically resides in
+which can be used to connect to ZooKeeper and inspect a running server. Once you've started ZooKeeper using
+QuorumPeerMain start _jconsole_, which typically resides in
 _JDK_HOME/bin/jconsole_
 
-When the "new connection" window is displayed either connect
-to local process (if jconsole started on the same host as Server) or
-use the remote process connection.
+When the "new connection" window is displayed either connect to local process (if jconsole started on the same host as
+Server) or use the remote process connection.
 
-By default the "overview" tab for the VM is displayed (this
-is a great way to get insight into the VM btw). Select
-the "MBeans" tab.
+By default the "overview" tab for the VM is displayed (this is a great way to get insight into the VM btw). Select the "
+MBeans" tab.
 
 You should now see _org.apache.ZooKeeperService_
-on the left hand side. Expand this item and depending on how you've
-started the server you will be able to monitor and manage various
-service related features.
+on the left hand side. Expand this item and depending on how you've started the server you will be able to monitor and
+manage various service related features.
 
-Also note that ZooKeeper will register log4j MBeans as
-well. In the same section along the left hand side you will see
-"log4j". Expand that to manage log4j through JMX. Of particular
-interest is the ability to dynamically change the logging levels
-used by editing the appender and root thresholds. Log4j MBean
-registration can be disabled by passing
-_-Dzookeeper.jmx.log4j.disable=true_ to the JVM
-when starting ZooKeeper. In addition, we can specify the name of
-the MBean with the _-Dzookeeper.jmx.log4j.mbean=log4j:hierarchy=default_
-option, in case we need to upgrade an integrated system
-using the old MBean name (`log4j:hierarchy = default`).
+Also note that ZooKeeper will register log4j MBeans as well. In the same section along the left hand side you will see
+"log4j". Expand that to manage log4j through JMX. Of particular interest is the ability to dynamically change the
+logging levels used by editing the appender and root thresholds. Log4j MBean registration can be disabled by passing
+_-Dzookeeper.jmx.log4j.disable=true_ to the JVM when starting ZooKeeper. In addition, we can specify the name of the
+MBean with the _-Dzookeeper.jmx.log4j.mbean=log4j:hierarchy=default_
+option, in case we need to upgrade an integrated system using the old MBean name (`log4j:hierarchy = default`).
 
 <a name="ch_reference"></a>
 
 ## ZooKeeper MBean Reference
 
-This table details JMX for a server participating in a
-replicated ZooKeeper ensemble (ie not standalone). This is the
+This table details JMX for a server participating in a replicated ZooKeeper ensemble (ie not standalone). This is the
 typical case for a production environment.
 
 ### MBeans, their names and description
@@ -109,8 +95,7 @@ typical case for a production environment.
 | DataTree | InMemoryDataTree | Statistics on the in memory znode database, also operations to access finer (and more computationally intensive) statistics on the data (such as ephemeral count). InMemoryDataTrees are children of ZooKeeperServer nodes. |
 | ServerCnxn | <session_id> | Statistics on each client connection, also operations on those connections (such as termination). Note the object name is the session id of the connection in hex form. |
 
-This table details JMX for a standalone server. Typically
-standalone is only used in development situations.
+This table details JMX for a standalone server. Typically standalone is only used in development situations.
 
 ### MBeans, their names and description
 

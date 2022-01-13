@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,6 +37,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.AsyncCallback.MultiCallback;
 import org.apache.zookeeper.ClientCnxn;
@@ -434,9 +436,9 @@ public class MultiOperationTest extends ClientBase {
     @ValueSource(booleans = {true, false})
     public void testCreate(boolean useAsync) throws Exception {
         multi(zk, Arrays.asList(
-                Op.create("/multi0", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.create("/multi1", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.create("/multi2", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT)),
+                        Op.create("/multi0", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                        Op.create("/multi1", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                        Op.create("/multi2", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT)),
                 useAsync);
         zk.getData("/multi0", false, null);
         zk.getData("/multi1", false, null);
@@ -453,8 +455,8 @@ public class MultiOperationTest extends ClientBase {
     @ValueSource(booleans = {true, false})
     public void testCreateDelete(boolean useAsync) throws Exception {
         multi(zk, Arrays.asList(
-                Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.delete("/multi", 0)),
+                        Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                        Op.delete("/multi", 0)),
                 useAsync);
 
         // '/multi' should have been deleted
@@ -467,8 +469,8 @@ public class MultiOperationTest extends ClientBase {
 
         try {
             multi(zk, Arrays.asList(
-                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                    Op.delete("/multi", 1)),
+                            Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                            Op.delete("/multi", 1)),
                     useAsync);
             fail("delete /multi should have failed");
         } catch (KeeperException e) {
@@ -521,9 +523,9 @@ public class MultiOperationTest extends ClientBase {
 
         try {
             multi(zk, Arrays.asList(
-                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                    Op.setData("/multi", "X".getBytes(), 0),
-                    Op.setData("/multi", "Y".getBytes(), 0)),
+                            Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                            Op.setData("/multi", "X".getBytes(), 0),
+                            Op.setData("/multi", "Y".getBytes(), 0)),
                     useAsync);
             fail("Should have thrown a KeeperException for invalid version");
         } catch (KeeperException e) {
@@ -535,9 +537,9 @@ public class MultiOperationTest extends ClientBase {
 
         //Updating version solves conflict -- order matters
         multi(zk, Arrays.asList(
-                Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.setData("/multi", "X".getBytes(), 0),
-                Op.setData("/multi", "Y".getBytes(), 1)),
+                        Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                        Op.setData("/multi", "X".getBytes(), 0),
+                        Op.setData("/multi", "Y".getBytes(), 1)),
                 useAsync);
 
         assertArrayEquals(zk.getData("/multi", false, null), "Y".getBytes());
@@ -550,9 +552,9 @@ public class MultiOperationTest extends ClientBase {
         /* Delete of a node folowed by an update of the (now) deleted node */
         try {
             multi(zk, Arrays.asList(
-                    Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                    Op.delete("/multi", 0),
-                    Op.setData("/multi", "Y".getBytes(), 0)),
+                            Op.create("/multi", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                            Op.delete("/multi", 0),
+                            Op.setData("/multi", "Y".getBytes(), 0)),
                     useAsync);
             fail("/multi should have been deleted so setData should have failed");
         } catch (KeeperException e) {
@@ -655,8 +657,8 @@ public class MultiOperationTest extends ClientBase {
         HasTriggeredWatcher watcher = new HasTriggeredWatcher();
         zk.getChildren("/", watcher);
         multi(zk, Arrays.asList(
-                Op.create("/t", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                Op.delete("/t", -1)),
+                        Op.create("/t", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                        Op.delete("/t", -1)),
                 useAsync);
         assertTrue(watcher.triggered.await(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS));
     }
@@ -668,8 +670,8 @@ public class MultiOperationTest extends ClientBase {
         zk.getChildren("/", watcher);
         try {
             multi(zk, Arrays.asList(
-                    Op.create("/t", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
-                    Op.delete("/nonexisting", -1)),
+                            Op.create("/t", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT),
+                            Op.delete("/nonexisting", -1)),
                     useAsync);
             fail("expected previous multi op to fail!");
         } catch (KeeperException.NoNodeException e) {
@@ -790,8 +792,8 @@ public class MultiOperationTest extends ClientBase {
 
         // Check for getting the children of the same node twice.
         List<OpResult> sameChildrenList = multi(zk, Arrays.asList(
-                Op.getChildren(topLevelNode),
-                Op.getChildren(topLevelNode)),
+                        Op.getChildren(topLevelNode),
+                        Op.getChildren(topLevelNode)),
                 useAsync);
         // The response should contain two elements which are the same.
         assertEquals(sameChildrenList.size(), 2);
@@ -897,10 +899,10 @@ public class MultiOperationTest extends ClientBase {
         zk.create("/node1/node2", "data12".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
 
         List<OpResult> multiRead = multi(zk, Arrays.asList(
-                Op.getChildren("/node1"),
-                Op.getData("/node1"),
-                Op.getChildren("/node2"),
-                Op.getData("/node2")),
+                        Op.getChildren("/node1"),
+                        Op.getData("/node1"),
+                        Op.getChildren("/node2"),
+                        Op.getData("/node2")),
                 useAsync);
         assertEquals(multiRead.size(), 4);
         assertTrue(multiRead.get(0) instanceof OpResult.GetChildrenResult);
@@ -942,8 +944,8 @@ public class MultiOperationTest extends ClientBase {
         zk.create("/node", null, Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         try {
             List<OpResult> multiRead = multi(zk, Arrays.asList(
-                    Op.setData("/node1", "data1".getBytes(), -1),
-                    Op.getData("/node1")),
+                            Op.setData("/node1", "data1".getBytes(), -1),
+                            Op.getData("/node1")),
                     useAsync);
             fail("Mixed kind of operations are not allowed");
         } catch (IllegalArgumentException e) {

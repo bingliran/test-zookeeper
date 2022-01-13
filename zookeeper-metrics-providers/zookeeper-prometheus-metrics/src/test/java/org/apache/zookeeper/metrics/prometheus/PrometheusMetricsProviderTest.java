@@ -27,7 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import io.prometheus.client.CollectorRegistry;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -42,6 +44,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.zookeeper.metrics.Counter;
 import org.apache.zookeeper.metrics.CounterSet;
 import org.apache.zookeeper.metrics.Gauge;
@@ -90,10 +93,10 @@ public class PrometheusMetricsProviderTest {
         counter.add(10);
         int[] count = {0};
         provider.dump((k, v) -> {
-            assertEquals("cc", k);
-            assertEquals(10, ((Number) v).intValue());
-            count[0]++;
-        }
+                    assertEquals("cc", k);
+                    assertEquals(10, ((Number) v).intValue());
+                    count[0]++;
+                }
         );
         assertEquals(1, count[0]);
         count[0] = 0;
@@ -102,10 +105,10 @@ public class PrometheusMetricsProviderTest {
         counter.add(-1);
 
         provider.dump((k, v) -> {
-            assertEquals("cc", k);
-            assertEquals(10, ((Number) v).intValue());
-            count[0]++;
-        }
+                    assertEquals("cc", k);
+                    assertEquals(10, ((Number) v).intValue());
+                    count[0]++;
+                }
         );
         assertEquals(1, count[0]);
 
@@ -156,7 +159,7 @@ public class PrometheusMetricsProviderTest {
 
         final String[] names = new String[]{name + "_1", name + "_2"};
         final String[] keys = new String[]{"ns21", "ns22"};
-        final int[] counts = new int[] {3, 5};
+        final int[] counts = new int[]{3, 5};
 
         final int length = names.length;
         final CounterSet[] counterSets = new CounterSet[length];
@@ -185,7 +188,7 @@ public class PrometheusMetricsProviderTest {
         final List<String> expectedMetrics = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             expectedNames.add(String.format("# TYPE %s count", names[i]));
-            expectedMetrics.add(String.format("%s{key=\"%s\",} %s", names[i], keys[i], counts[i]  * 1.0));
+            expectedMetrics.add(String.format("%s{key=\"%s\",} %s", names[i], keys[i], counts[i] * 1.0));
         }
         validateWithServletCall(expectedNames, expectedMetrics);
     }
@@ -233,10 +236,10 @@ public class PrometheusMetricsProviderTest {
 
         int[] count = {0};
         provider.dump((k, v) -> {
-            assertEquals("gg", k);
-            assertEquals(values[0], ((Number) v).intValue());
-            count[0]++;
-        }
+                    assertEquals("gg", k);
+                    assertEquals(values[0], ((Number) v).intValue());
+                    count[0]++;
+                }
         );
         assertEquals(1, callCounts[0]);
         assertEquals(0, callCounts[1]);
@@ -248,8 +251,8 @@ public class PrometheusMetricsProviderTest {
 
         provider.getRootContext().unregisterGauge("gg");
         provider.dump((k, v) -> {
-            count[0]++;
-        }
+                    count[0]++;
+                }
         );
         assertEquals(2, callCounts[0]);
         assertEquals(0, callCounts[1]);
@@ -260,10 +263,10 @@ public class PrometheusMetricsProviderTest {
         provider.getRootContext().registerGauge("gg", gauge1);
 
         provider.dump((k, v) -> {
-            assertEquals("gg", k);
-            assertEquals(values[1], ((Number) v).intValue());
-            count[0]++;
-        }
+                    assertEquals("gg", k);
+                    assertEquals(values[1], ((Number) v).intValue());
+                    count[0]++;
+                }
         );
         assertEquals(2, callCounts[0]);
         assertEquals(1, callCounts[1]);
@@ -281,8 +284,8 @@ public class PrometheusMetricsProviderTest {
         provider.getRootContext().registerGauge("gg", gauge0);
 
         provider.dump((k, v) -> {
-            count[0]++;
-        }
+                    count[0]++;
+                }
         );
         assertEquals(1, count[0]);
         assertEquals(3, callCounts[0]);
@@ -297,24 +300,24 @@ public class PrometheusMetricsProviderTest {
         summary.add(10);
         int[] count = {0};
         provider.dump((k, v) -> {
-            count[0]++;
-            int value = ((Number) v).intValue();
+                    count[0]++;
+                    int value = ((Number) v).intValue();
 
-            switch (k) {
-                case "cc{quantile=\"0.5\"}":
-                    assertEquals(10, value);
-                    break;
-                case "cc_count":
-                    assertEquals(2, value);
-                    break;
-                case "cc_sum":
-                    assertEquals(20, value);
-                    break;
-                default:
-                    fail("unespected key " + k);
-                    break;
-            }
-        }
+                    switch (k) {
+                        case "cc{quantile=\"0.5\"}":
+                            assertEquals(10, value);
+                            break;
+                        case "cc_count":
+                            assertEquals(2, value);
+                            break;
+                        case "cc_sum":
+                            assertEquals(20, value);
+                            break;
+                        default:
+                            fail("unespected key " + k);
+                            break;
+                    }
+                }
         );
         assertEquals(3, count[0]);
         count[0] = 0;
@@ -346,30 +349,30 @@ public class PrometheusMetricsProviderTest {
         summary.add(10);
         int[] count = {0};
         provider.dump((k, v) -> {
-            count[0]++;
-            int value = ((Number) v).intValue();
+                    count[0]++;
+                    int value = ((Number) v).intValue();
 
-            switch (k) {
-                case "cc{quantile=\"0.5\"}":
-                    assertEquals(10, value);
-                    break;
-                case "cc{quantile=\"0.9\"}":
-                    assertEquals(10, value);
-                    break;
-                case "cc{quantile=\"0.99\"}":
-                    assertEquals(10, value);
-                    break;
-                case "cc_count":
-                    assertEquals(2, value);
-                    break;
-                case "cc_sum":
-                    assertEquals(20, value);
-                    break;
-                default:
-                    fail("unespected key " + k);
-                    break;
-            }
-        }
+                    switch (k) {
+                        case "cc{quantile=\"0.5\"}":
+                            assertEquals(10, value);
+                            break;
+                        case "cc{quantile=\"0.9\"}":
+                            assertEquals(10, value);
+                            break;
+                        case "cc{quantile=\"0.99\"}":
+                            assertEquals(10, value);
+                            break;
+                        case "cc_count":
+                            assertEquals(2, value);
+                            break;
+                        case "cc_sum":
+                            assertEquals(20, value);
+                            break;
+                        default:
+                            fail("unespected key " + k);
+                            break;
+                    }
+                }
         );
         assertEquals(5, count[0]);
         count[0] = 0;
@@ -417,7 +420,7 @@ public class PrometheusMetricsProviderTest {
             }
         } finally {
             if (metricsProvider != null) {
-               metricsProvider.stop();
+                metricsProvider.stop();
             }
         }
     }
@@ -528,12 +531,12 @@ public class PrometheusMetricsProviderTest {
 
     @Test
     public void testGaugeSet_multipleGaugeSets() throws Exception {
-        final String[] names = new String[] {
+        final String[] names = new String[]{
                 QuotaMetricsUtils.QUOTA_COUNT_LIMIT_PER_NAMESPACE,
                 QuotaMetricsUtils.QUOTA_COUNT_USAGE_PER_NAMESPACE
         };
 
-        final Number[] values = new Number[] {20.0, 200.0};
+        final Number[] values = new Number[]{20.0, 200.0};
         final String[] keys = new String[]{"ns21", "ns22"};
         final int count = names.length;
         final AtomicInteger[] callCounts = new AtomicInteger[count];
@@ -589,14 +592,14 @@ public class PrometheusMetricsProviderTest {
 
     @Test
     public void testGaugeSet_overwriteRegister() {
-        final String[] names = new String[] {
+        final String[] names = new String[]{
                 QuotaMetricsUtils.QUOTA_COUNT_LIMIT_PER_NAMESPACE,
                 QuotaMetricsUtils.QUOTA_COUNT_USAGE_PER_NAMESPACE
         };
 
         final int count = names.length;
         final Number[] values = new Number[]{30.0, 300.0};
-        final String[] keys = new String[] {"ns31", "ns32"};
+        final String[] keys = new String[]{"ns31", "ns32"};
         final AtomicInteger[] callCounts = new AtomicInteger[count];
 
         // create and register the GaugeSets

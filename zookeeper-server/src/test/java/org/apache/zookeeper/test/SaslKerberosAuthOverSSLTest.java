@@ -24,6 +24,7 @@ import static org.apache.zookeeper.client.ZKClientConfig.ZK_SASL_CLIENT_USERNAME
 import static org.apache.zookeeper.client.ZKClientConfig.ZOOKEEPER_SERVER_PRINCIPAL;
 import static org.apache.zookeeper.client.ZKClientConfig.ZOOKEEPER_SERVER_REALM;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.util.Properties;
 import javax.security.auth.login.Configuration;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Environment;
@@ -60,7 +62,6 @@ public class SaslKerberosAuthOverSSLTest extends ClientBase {
     private static Properties conf;
 
 
-
     @BeforeAll
     public static void setupKdc() {
         startMiniKdc();
@@ -71,7 +72,6 @@ public class SaslKerberosAuthOverSSLTest extends ClientBase {
         stopMiniKdc();
         FileUtils.deleteQuietly(kdcWorkDir);
     }
-
 
 
     @BeforeEach
@@ -220,7 +220,6 @@ public class SaslKerberosAuthOverSSLTest extends ClientBase {
         System.clearProperty("zookeeper.ssl.quorum.clientAuth");
         clientX509Util.close();
     }
-
 
 
     public static void startMiniKdc() {

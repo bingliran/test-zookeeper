@@ -20,8 +20,10 @@ package org.apache.zookeeper;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.time.LocalDateTime;
+
 import org.apache.zookeeper.util.ServiceUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Base class for a non-parameterized ZK test.
- *
+ * <p>
  * Basic utilities shared by all tests. Also logging of various events during
  * the test execution (start/stop/success/failure/etc...)
  */
@@ -56,12 +58,12 @@ public class ZKTestCase {
     public static void before() {
         if (!testBaseDir.exists()) {
             assertTrue(testBaseDir.mkdirs(),
-                "Cannot properly create test base directory " + testBaseDir.getAbsolutePath());
+                    "Cannot properly create test base directory " + testBaseDir.getAbsolutePath());
         } else if (!testBaseDir.isDirectory()) {
             assertTrue(testBaseDir.delete(),
-                "Cannot properly delete file with duplicate name of test base directory " + testBaseDir.getAbsolutePath());
+                    "Cannot properly delete file with duplicate name of test base directory " + testBaseDir.getAbsolutePath());
             assertTrue(testBaseDir.mkdirs(),
-                "Cannot properly create test base directory " + testBaseDir.getAbsolutePath());
+                    "Cannot properly create test base directory " + testBaseDir.getAbsolutePath());
         }
     }
 
@@ -94,6 +96,7 @@ public class ZKTestCase {
     /**
      * Wait for condition to be true; otherwise fail the test if it exceed
      * timeout
+     *
      * @param msg       error message to print when fail
      * @param condition condition to evaluate
      * @param timeout   timeout in seconds

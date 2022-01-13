@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.server.quorum.FastLeaderElection;
@@ -364,9 +366,11 @@ public class FLETest extends ZKTestCase {
 
         private volatile boolean success = false;
         private QuorumPeer peer;
+
         public VerifyState(QuorumPeer peer) {
             this.peer = peer;
         }
+
         public void run() {
             setName("VerifyState-" + peer.getId());
             while (true) {
@@ -386,6 +390,7 @@ public class FLETest extends ZKTestCase {
                 }
             }
         }
+
         public boolean isSuccess() {
             return success;
         }

@@ -20,10 +20,12 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+
 import org.apache.jute.Record;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
@@ -56,8 +58,7 @@ public class GetProposalFromTxnTest extends ZKTestCase {
     /**
      * Test loading proposal from txnlog
      *
-     * @throws Exception
-     *             an exception might be thrown here
+     * @throws Exception an exception might be thrown here
      */
     @Test
     public void testGetProposalFromTxn() throws Exception {

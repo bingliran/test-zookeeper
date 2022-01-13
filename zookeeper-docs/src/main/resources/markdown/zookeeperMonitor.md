@@ -30,25 +30,31 @@ limitations under the License.
 <a name="Metrics-System"></a>
 
 ## New Metrics System
-The feature:`New Metrics System` has been available since 3.6.0 which provides the abundant metrics
-to help users monitor the ZooKeeper on the topic: znode, network, disk, quorum, leader election,
-client, security, failures, watch/session, requestProcessor, and so forth.
+
+The feature:`New Metrics System` has been available since 3.6.0 which provides the abundant metrics to help users
+monitor the ZooKeeper on the topic: znode, network, disk, quorum, leader election, client, security, failures,
+watch/session, requestProcessor, and so forth.
 
 <a name="Metrics"></a>
 
 ### Metrics
+
 All the metrics are included in the `ServerMetrics.java`.
 
 <a name="Prometheus"></a>
 
 ### Prometheus
-- Running a [Prometheus](https://prometheus.io/) monitoring service is the easiest way to ingest and record ZooKeeper's metrics.
+
+- Running a [Prometheus](https://prometheus.io/) monitoring service is the easiest way to ingest and record ZooKeeper's
+  metrics.
 - Pre-requisites:
-  - enable the `Prometheus MetricsProvider` by setting `metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider` in the zoo.cfg.
-  - the Port is also configurable by setting `metricsProvider.httpPort`（the default value:7000）
+    - enable the `Prometheus MetricsProvider` by
+      setting `metricsProvider.className=org.apache.zookeeper.metrics.prometheus.PrometheusMetricsProvider` in the
+      zoo.cfg.
+    - the Port is also configurable by setting `metricsProvider.httpPort`（the default value:7000）
 - Install Prometheus:
   Go to the official website download [page](https://prometheus.io/download/), download the latest release.
-  
+
 - Set Prometheus's scraper to target the ZooKeeper cluster endpoints:
 
     ```bash
@@ -77,15 +83,15 @@ All the metrics are included in the `ServerMetrics.java`.
 <a name="Alerting"></a>
 
 ### Alerting with Prometheus
-- We recommend that you read [Prometheus Official Alerting Page](https://prometheus.io/docs/practices/alerting/) to explore
-  some principles of alerting
 
-- We recommend that you use [Prometheus Alertmanager](https://www.prometheus.io/docs/alerting/latest/alertmanager/) which can
-  help users to receive alerting email or instant message(by webhook) in a more convenient way
+- We recommend that you read [Prometheus Official Alerting Page](https://prometheus.io/docs/practices/alerting/) to
+  explore some principles of alerting
 
-- We provide an alerting example where these metrics should be taken a special attention. Note: this is for your reference only,
-  and you need to adjust them according to your actual situation and resource environment
+- We recommend that you use [Prometheus Alertmanager](https://www.prometheus.io/docs/alerting/latest/alertmanager/)
+  which can help users to receive alerting email or instant message(by webhook) in a more convenient way
 
+- We provide an alerting example where these metrics should be taken a special attention. Note: this is for your
+  reference only, and you need to adjust them according to your actual situation and resource environment
 
         use ./promtool check rules rules/zk.yml to check the correctness of the config file
         cat rules/zk.yml
@@ -192,10 +198,10 @@ All the metrics are included in the `ServerMetrics.java`.
               summary: "JVM memory filling up (instance {{ $labels.instance }})"
               description: "JVM memory is filling up (> 80%)\n labels: {{ $labels }}  value = {{ $value }}\n"
 
-
 <a name="Grafana"></a>
 
 ### Grafana
+
 - Grafana has built-in Prometheus support; just add a Prometheus data source:
 
     ```bash
@@ -204,28 +210,32 @@ All the metrics are included in the `ServerMetrics.java`.
     Url:    http://localhost:9090
     Access: proxy
     ```
-- Then download and import the default ZooKeeper dashboard [template](https://grafana.com/dashboards/10465) and customize.
-- Users can ask for Grafana dashboard account if having any good improvements by writing a email to **dev@zookeeper.apache.org**.
+- Then download and import the default ZooKeeper dashboard [template](https://grafana.com/dashboards/10465) and
+  customize.
+- Users can ask for Grafana dashboard account if having any good improvements by writing a email to **
+  dev@zookeeper.apache.org**.
 
 <a name="influxdb"></a>
 
 ### InfluxDB
 
-InfluxDB is an open source time series data that is often used to store metrics
-from Zookeeper. You can [download](https://portal.influxdata.com/downloads/) the
-open source version or create a [free](https://cloud2.influxdata.com/signup)
-account on InfluxDB Cloud. In either case, configure the [Apache Zookeeper
-Telegraf plugin](https://www.influxdata.com/integration/apache-zookeeper/) to
-start collecting and storing metrics from your Zookeeper clusters into your
-InfluxDB instance. There is also an [Apache Zookeeper InfluxDB
-template](https://www.influxdata.com/influxdb-templates/zookeeper-monitor/) that
-includes the Telegraf configurations and a dashboard to get you set up right
-away.
+InfluxDB is an open source time series data that is often used to store metrics from Zookeeper. You
+can [download](https://portal.influxdata.com/downloads/) the open source version or create
+a [free](https://cloud2.influxdata.com/signup)
+account on InfluxDB Cloud. In either case, configure
+the [Apache Zookeeper Telegraf plugin](https://www.influxdata.com/integration/apache-zookeeper/) to start collecting and
+storing metrics from your Zookeeper clusters into your InfluxDB instance. There is also
+an [Apache Zookeeper InfluxDB template](https://www.influxdata.com/influxdb-templates/zookeeper-monitor/) that includes
+the Telegraf configurations and a dashboard to get you set up right away.
 
 <a name="JMX"></a>
+
 ## JMX
+
 More details can be found in [here](http://zookeeper.apache.org/doc/current/zookeeperJMX.html)
 
 <a name="four-letter-words"></a>
+
 ## Four letter words
+
 More details can be found in [here](http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_zkCommands)

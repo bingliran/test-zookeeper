@@ -20,9 +20,11 @@ package org.apache.zookeeper.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Op;
 import org.apache.zookeeper.ZooDefs;
@@ -119,7 +121,7 @@ public class SnapshotDigestTest extends ClientBase {
     /**
      * Make sure the code will skip digest check when it's comparing
      * digest with different version.
-     *
+     * <p>
      * This enables us to smoonthly add new fields into digest or using
      * new digest calculation.
      */

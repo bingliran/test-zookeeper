@@ -19,9 +19,11 @@
 package org.apache.zookeeper.common;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooDefs;
@@ -60,8 +62,8 @@ public class TimeTest extends ClientBase {
         zk.create("/ephemeral", new byte[]{1, 2, 3}, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
         while (Time.currentElapsedTime() - nt0 < 100000) {
             System.out.printf("%d\t%s\n",
-                              discrepancy(),
-                              zk.exists("/ephemeral", watchCount.get() == 0 ? createWatcher() : null) != null);
+                    discrepancy(),
+                    zk.exists("/ephemeral", watchCount.get() == 0 ? createWatcher() : null) != null);
             waitByYielding(500);
         }
     }

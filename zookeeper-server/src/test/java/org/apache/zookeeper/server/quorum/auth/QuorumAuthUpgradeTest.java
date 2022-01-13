@@ -20,10 +20,12 @@ package org.apache.zookeeper.server.quorum.auth;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeoutException;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -39,15 +41,15 @@ import org.junit.jupiter.api.Timeout;
 
 /**
  * Rolling upgrade should do in three steps:
- *
+ * <p>
  * step-1) Stop the server and set the flags and restart the server.
  * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=false and quorum.auth.serverRequireSasl=false
  * Ensure that all the servers should complete this step. Now, move to next step.
- *
+ * <p>
  * step-2) Stop the server one by one and change the flags and restart the server.
  * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=true and quorum.auth.serverRequireSasl=false
  * Ensure that all the servers should complete this step. Now, move to next step.
- *
+ * <p>
  * step-3) Stop the server one by one and change the flags and restart the server.
  * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=true and quorum.auth.serverRequireSasl=true
  * Now, all the servers are fully upgraded and running in secured mode.
@@ -56,14 +58,14 @@ public class QuorumAuthUpgradeTest extends QuorumAuthTestBase {
 
     static {
         String jaasEntries = "QuorumServer {\n"
-                             + "       org.apache.zookeeper.server.auth.DigestLoginModule required\n"
-                             + "       user_test=\"mypassword\";\n"
-                             + "};\n"
-                             + "QuorumLearner {\n"
-                             + "       org.apache.zookeeper.server.auth.DigestLoginModule required\n"
-                             + "       username=\"test\"\n"
-                             + "       password=\"mypassword\";\n"
-                             + "};\n";
+                + "       org.apache.zookeeper.server.auth.DigestLoginModule required\n"
+                + "       user_test=\"mypassword\";\n"
+                + "};\n"
+                + "QuorumLearner {\n"
+                + "       org.apache.zookeeper.server.auth.DigestLoginModule required\n"
+                + "       username=\"test\"\n"
+                + "       password=\"mypassword\";\n"
+                + "};\n";
         setupJaasConfig(jaasEntries);
     }
 
@@ -159,15 +161,15 @@ public class QuorumAuthUpgradeTest extends QuorumAuthTestBase {
 
     /**
      * Rolling upgrade should do in three steps:
-     *
+     * <p>
      * step-1) Stop the server and set the flags and restart the server.
      * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=false and quorum.auth.serverRequireSasl=false
      * Ensure that all the servers should complete this step. Now, move to next step.
-     *
+     * <p>
      * step-2) Stop the server one by one and change the flags and restart the server.
      * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=true and quorum.auth.serverRequireSasl=false
      * Ensure that all the servers should complete this step. Now, move to next step.
-     *
+     * <p>
      * step-3) Stop the server one by one and change the flags and restart the server.
      * quorum.auth.enableSasl=true, quorum.auth.learnerRequireSasl=true and quorum.auth.serverRequireSasl=true
      * Now, all the servers are fully upgraded and running in secured mode.
@@ -221,21 +223,21 @@ public class QuorumAuthUpgradeTest extends QuorumAuthTestBase {
         MainThread m = shutdown(2);
         startServer(m, authConfigs);
         assertFalse(ClientBase.waitForServerUp("127.0.0.1:" + m.getClientPort(), 5000),
-            "waiting for server 2 being up");
+                "waiting for server 2 being up");
     }
 
     private void restartServer(
-        Map<String, String> authConfigs,
-        int index,
-        ZooKeeper zk,
-        CountdownWatcher watcher) throws IOException, KeeperException, InterruptedException, TimeoutException {
-            LOG.info("Restarting server myid={}", index);
-            MainThread m = shutdown(index);
-            startServer(m, authConfigs);
-            assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + m.getClientPort(), ClientBase.CONNECTION_TIMEOUT),
+            Map<String, String> authConfigs,
+            int index,
+            ZooKeeper zk,
+            CountdownWatcher watcher) throws IOException, KeeperException, InterruptedException, TimeoutException {
+        LOG.info("Restarting server myid={}", index);
+        MainThread m = shutdown(index);
+        startServer(m, authConfigs);
+        assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + m.getClientPort(), ClientBase.CONNECTION_TIMEOUT),
                 "waiting for server" + index + "being up");
-            watcher.waitForConnected(ClientTest.CONNECTION_TIMEOUT);
-            zk.create("/foo", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
+        watcher.waitForConnected(ClientTest.CONNECTION_TIMEOUT);
+        zk.create("/foo", new byte[0], Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_SEQUENTIAL);
     }
 
 }

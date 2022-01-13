@@ -19,8 +19,10 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.Collection;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
@@ -34,8 +36,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** After a replica starts, it should load commits in its committedLog list.
- *  This test checks if committedLog != 0 after replica restarted.
+/**
+ * After a replica starts, it should load commits in its committedLog list.
+ * This test checks if committedLog != 0 after replica restarted.
  */
 public class RestoreCommittedLogTest extends ZKTestCase {
 
@@ -89,6 +92,7 @@ public class RestoreCommittedLogTest extends ZKTestCase {
 
     /**
      * test the purge
+     *
      * @throws Exception an exception might be thrown here
      */
     private void testRestoreCommittedLog(int totalTransactions, byte[] data, int minExpectedSnapshots) throws Exception {

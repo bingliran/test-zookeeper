@@ -19,8 +19,10 @@
 package org.apache.zookeeper.test;
 
 import io.netty.buffer.ByteBufAllocator;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
 import org.apache.zookeeper.ClientCnxnSocketNetty;
 import org.apache.zookeeper.server.NettyServerCnxnFactory;
 

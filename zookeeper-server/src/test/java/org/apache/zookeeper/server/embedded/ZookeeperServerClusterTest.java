@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,10 +19,12 @@ package org.apache.zookeeper.server.embedded;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.test.ClientBase;
 import org.junit.jupiter.api.AfterAll;
@@ -83,7 +85,7 @@ public class ZookeeperServerClusterTest {
         configZookeeper2.putAll(config);
         configZookeeper2.put("clientPort", clientport2 + "");
 
-        final Properties configZookeeper3 =  new Properties();
+        final Properties configZookeeper3 = new Properties();
         configZookeeper3.putAll(config);
         configZookeeper3.put("clientPort", clientport3 + "");
 
@@ -95,8 +97,8 @@ public class ZookeeperServerClusterTest {
         Files.write(baseDir3.resolve("data").resolve("myid"), "3".getBytes("ASCII"));
 
         try (ZooKeeperServerEmbedded zkServer1 = ZooKeeperServerEmbedded.builder().configuration(configZookeeper1).baseDir(baseDir1).exitHandler(ExitHandler.LOG_ONLY).build();
-                ZooKeeperServerEmbedded zkServer2 = ZooKeeperServerEmbedded.builder().configuration(configZookeeper2).baseDir(baseDir2).exitHandler(ExitHandler.LOG_ONLY).build();
-                ZooKeeperServerEmbedded zkServer3 = ZooKeeperServerEmbedded.builder().configuration(configZookeeper3).baseDir(baseDir3).exitHandler(ExitHandler.LOG_ONLY).build();) {
+             ZooKeeperServerEmbedded zkServer2 = ZooKeeperServerEmbedded.builder().configuration(configZookeeper2).baseDir(baseDir2).exitHandler(ExitHandler.LOG_ONLY).build();
+             ZooKeeperServerEmbedded zkServer3 = ZooKeeperServerEmbedded.builder().configuration(configZookeeper3).baseDir(baseDir3).exitHandler(ExitHandler.LOG_ONLY).build();) {
             zkServer1.start();
             zkServer2.start();
             zkServer3.start();

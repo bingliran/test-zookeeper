@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+
 import org.apache.zookeeper.server.quorum.QuorumPeer.LearnerType;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
@@ -32,7 +33,6 @@ import org.slf4j.LoggerFactory;
 /**
  * This class implements a validator for majority quorums. The implementation is
  * straightforward.
- *
  */
 public class QuorumMaj implements QuorumVerifier {
 
@@ -71,7 +71,6 @@ public class QuorumMaj implements QuorumVerifier {
 
     /**
      * Defines a majority to avoid computing it every time.
-     *
      */
     public QuorumMaj(Map<Long, QuorumServer> allMembers) {
         this.allMembers = allMembers;

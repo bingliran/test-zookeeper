@@ -30,6 +30,7 @@ import javax.security.auth.login.AppConfigurationEntry;
 import javax.security.auth.login.Configuration;
 import javax.security.sasl.AuthorizeCallback;
 import javax.security.sasl.RealmCallback;
+
 import org.apache.zookeeper.server.ZooKeeperSaslServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +48,8 @@ public class SaslServerCallbackHandler implements CallbackHandler {
 
     public SaslServerCallbackHandler(Configuration configuration) throws IOException {
         String serverSection = System.getProperty(
-            ZooKeeperSaslServer.LOGIN_CONTEXT_NAME_KEY,
-            ZooKeeperSaslServer.DEFAULT_LOGIN_CONTEXT_NAME);
+                ZooKeeperSaslServer.LOGIN_CONTEXT_NAME_KEY,
+                ZooKeeperSaslServer.DEFAULT_LOGIN_CONTEXT_NAME);
 
         AppConfigurationEntry[] configurationEntries = configuration.getAppConfigurationEntry(serverSection);
 
@@ -117,7 +118,7 @@ public class SaslServerCallbackHandler implements CallbackHandler {
         String authorizationID = ac.getAuthorizationID();
 
         LOG.info("Successfully authenticated client: authenticationID={};  authorizationID={}.",
-                 authenticationID, authorizationID);
+                authenticationID, authorizationID);
         ac.setAuthorized(true);
 
         // canonicalize authorization id according to system properties:

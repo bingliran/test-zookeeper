@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.quorum;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
+
 import org.apache.zookeeper.server.FinalRequestProcessor;
 import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.RequestProcessor;
@@ -33,7 +34,6 @@ import org.slf4j.LoggerFactory;
 /**
  * A ZooKeeperServer for the Observer node type. Not much is different, but
  * we anticipate specializing the request processors in the future.
- *
  */
 public class ObserverZooKeeperServer extends LearnerZooKeeperServer {
 

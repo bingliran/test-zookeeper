@@ -42,6 +42,7 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
 import javax.security.auth.x500.X500Principal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -161,14 +162,14 @@ final class ZKHostnameVerifier implements HostnameVerifier {
         final List<SubjectName> subjectAlts = getSubjectAltNames(cert);
         if (subjectAlts != null && !subjectAlts.isEmpty()) {
             switch (hostType) {
-            case IPv4:
-                matchIPAddress(host, subjectAlts);
-                break;
-            case IPv6:
-                matchIPv6Address(host, subjectAlts);
-                break;
-            default:
-                matchDNSName(host, subjectAlts);
+                case IPv4:
+                    matchIPAddress(host, subjectAlts);
+                    break;
+                case IPv6:
+                    matchIPv6Address(host, subjectAlts);
+                    break;
+                default:
+                    matchDNSName(host, subjectAlts);
             }
         } else {
             // CN matching has been deprecated by rfc2818 and can be used
@@ -177,9 +178,9 @@ final class ZKHostnameVerifier implements HostnameVerifier {
             final String cn = extractCN(subjectPrincipal.getName(X500Principal.RFC2253));
             if (cn == null) {
                 throw new SSLException("Certificate subject for <"
-                                       + host
-                                       + "> doesn't contain "
-                                       + "a common name and does not have alternative names");
+                        + host
+                        + "> doesn't contain "
+                        + "a common name and does not have alternative names");
             }
             matchCN(host, cn);
         }
@@ -195,7 +196,7 @@ final class ZKHostnameVerifier implements HostnameVerifier {
             }
         }
         throw new SSLPeerUnverifiedException("Certificate for <" + host + "> doesn't match any "
-                                             + "of the subject alternative names: " + subjectAlts);
+                + "of the subject alternative names: " + subjectAlts);
     }
 
     private static void matchIPv6Address(final String host, final List<SubjectName> subjectAlts) throws SSLException {
@@ -210,10 +211,10 @@ final class ZKHostnameVerifier implements HostnameVerifier {
             }
         }
         throw new SSLPeerUnverifiedException("Certificate for <"
-                                             + host
-                                             + "> doesn't match any "
-                                             + "of the subject alternative names: "
-                                             + subjectAlts);
+                + host
+                + "> doesn't match any "
+                + "of the subject alternative names: "
+                + subjectAlts);
     }
 
     private static void matchDNSName(final String host, final List<SubjectName> subjectAlts) throws SSLException {
@@ -228,7 +229,7 @@ final class ZKHostnameVerifier implements HostnameVerifier {
             }
         }
         throw new SSLPeerUnverifiedException("Certificate for <" + host + "> doesn't match any "
-                                             + "of the subject alternative names: " + subjectAlts);
+                + "of the subject alternative names: " + subjectAlts);
     }
 
     private static void matchCN(final String host, final String cn) throws SSLException {
@@ -236,7 +237,7 @@ final class ZKHostnameVerifier implements HostnameVerifier {
         final String normalizedCn = cn.toLowerCase(Locale.ROOT);
         if (!matchIdentityStrict(normalizedHost, normalizedCn)) {
             throw new SSLPeerUnverifiedException("Certificate for <" + host + "> doesn't match "
-                                                 + "common name of the certificate subject: " + cn);
+                    + "common name of the certificate subject: " + cn);
         }
     }
 

@@ -23,10 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Properties;
+
 import org.apache.zookeeper.common.ClientX509Util;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
@@ -52,7 +54,6 @@ public class QuorumPeerConfigTest {
     }
 
     /**
-     *
      * Test case for https://issues.apache.org/jira/browse/ZOOKEEPER-2264
      */
     @Test

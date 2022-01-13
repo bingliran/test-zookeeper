@@ -21,10 +21,12 @@ package org.apache.zookeeper.test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.Code;
@@ -290,12 +292,12 @@ public class ZooKeeperTestClient extends ZKTestCase implements Watcher {
                 event.getType() == EventType.NodeDeleted
                         && event.getPath().equalsIgnoreCase(nodeName)))) {
             System.out.print(parentName
-                                     + " "
-                                     + EventType.NodeChildrenChanged
-                                     + " "
-                                     + nodeName
-                                     + " "
-                                     + EventType.NodeDeleted);
+                    + " "
+                    + EventType.NodeChildrenChanged
+                    + " "
+                    + nodeName
+                    + " "
+                    + EventType.NodeDeleted);
             fail("Unexpected first event was delivered: " + event.toString());
         }
 
@@ -308,12 +310,12 @@ public class ZooKeeperTestClient extends ZKTestCase implements Watcher {
                 event.getType() == EventType.NodeDeleted
                         && event.getPath().equalsIgnoreCase(nodeName)))) {
             System.out.print(parentName
-                                     + " "
-                                     + EventType.NodeChildrenChanged
-                                     + " "
-                                     + nodeName
-                                     + " "
-                                     + EventType.NodeDeleted);
+                    + " "
+                    + EventType.NodeChildrenChanged
+                    + " "
+                    + nodeName
+                    + " "
+                    + EventType.NodeDeleted);
             fail("Unexpected second event was delivered: " + event.toString());
         }
 

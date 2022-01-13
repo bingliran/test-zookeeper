@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,9 +19,11 @@
 package org.apache.zookeeper.server.controller;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
+
 import org.apache.zookeeper.server.NIOServerCnxn;
 import org.apache.zookeeper.server.NIOServerCnxnFactory;
 import org.slf4j.Logger;
@@ -49,7 +51,7 @@ public class ControllableConnectionFactory extends NIOServerCnxnFactory {
 
     /**
      * Called by the connection to delay processing requests from the client.
-    */
+     */
     public synchronized void delayRequestIfNeeded() {
         try {
             if (responseDelayInMs > 0) {
@@ -63,7 +65,7 @@ public class ControllableConnectionFactory extends NIOServerCnxnFactory {
     /**
      * Check if we should fail the next incoming request.
      * If so, decrement the remaining requests to fail.
-    */
+     */
     public synchronized boolean shouldFailNextRequest() {
         if (remainingRequestsToFail == 0) {
             return false;
@@ -81,7 +83,7 @@ public class ControllableConnectionFactory extends NIOServerCnxnFactory {
      * Check if we should send a response to the latest processed request (true),
      * or eat the response to mess with the client (false).
      * If so, decrement the remaining requests to eat.
-    */
+     */
     public synchronized boolean shouldSendResponse() {
         if (remainingResponsesToHold == 0) {
             return true;

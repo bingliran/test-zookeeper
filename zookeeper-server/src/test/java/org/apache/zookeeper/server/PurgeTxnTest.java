@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,6 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.CheckedOutputStream;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.OutputArchive;
 import org.apache.zookeeper.CreateMode;
@@ -77,6 +79,7 @@ public class PurgeTxnTest extends ZKTestCase {
 
     /**
      * test the purge
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test
@@ -117,7 +120,7 @@ public class PurgeTxnTest extends ZKTestCase {
     /**
      * Tests purge when logs are rolling or a new snapshot is created, then
      * these newer files should alse be excluded in the current cycle.
-     *
+     * <p>
      * For frequent snapshotting, configured SnapCount to 30. There are three
      * threads which will create 1000 znodes each and simultaneously do purge
      * call
@@ -410,6 +413,7 @@ public class PurgeTxnTest extends ZKTestCase {
     /**
      * Verifies that purge does not delete any log files which started before the oldest retained
      * snapshot but which might extend beyond it.
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test

@@ -22,8 +22,10 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZooKeeper;
@@ -156,7 +158,7 @@ public class StandaloneDisabledTest extends QuorumPeerTestBase {
         for (int i = 0; i < NUM_SERVERS; i++) {
             clientPorts[i] = PortAssignment.unique();
             String server = "server." + i + "=localhost:" + PortAssignment.unique() + ":" + PortAssignment.unique() + ":participant;"
-                            + "localhost:" + clientPorts[i];
+                    + "localhost:" + clientPorts[i];
             serverStrings.add(server);
         }
         return serverStrings;
@@ -171,8 +173,8 @@ public class StandaloneDisabledTest extends QuorumPeerTestBase {
         peers[id] = new MainThread(id, clientPorts[id], config);
         peers[id].start();
         assertTrue(
-            ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[id], CONNECTION_TIMEOUT),
-            "Server " + id + " is not up");
+                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[id], CONNECTION_TIMEOUT),
+                "Server " + id + " is not up");
         assertTrue(peers[id].isQuorumPeerRunning(), "Error- Server started in Standalone Mode!");
         zkHandles[id] = ClientBase.createZKClient("127.0.0.1:" + clientPorts[id]);
         zkAdminHandles[id] = new ZooKeeperAdmin("127.0.0.1:" + clientPorts[id], CONNECTION_TIMEOUT, this);
@@ -201,15 +203,16 @@ public class StandaloneDisabledTest extends QuorumPeerTestBase {
         reconfigServers.clear();
         for (int i = 1; i <= 2; i++) {
             String config = serverStrings.get(leaderId)
-                                    + "\n"
-                                    + serverStrings.get(i)
-                                    + "\n"
-                                    + serverStrings.get(i % 2 + 1)
-                                    + "\n";
+                    + "\n"
+                    + serverStrings.get(i)
+                    + "\n"
+                    + serverStrings.get(i % 2 + 1)
+                    + "\n";
             startServer(i, config);
             reconfigServers.add(serverStrings.get(i));
         }
     }
+
     /**
      * Starts servers 1 and 2 as participants,
      * adds them to the list to be reconfigured
@@ -254,12 +257,12 @@ public class StandaloneDisabledTest extends QuorumPeerTestBase {
     public void startObserver() throws Exception {
         int clientPort = PortAssignment.unique();
         String config = "server." + observer1 + "=localhost:" + PortAssignment.unique() + ":" + clientPort
-                        + ":observer;" + "localhost:" + PortAssignment.unique();
+                + ":observer;" + "localhost:" + PortAssignment.unique();
         MainThread observer = new MainThread(observer1, clientPort, config);
         observer.start();
         assertFalse(
-            ClientBase.waitForServerUp("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT),
-            "Observer was able to start by itself!");
+                ClientBase.waitForServerUp("127.0.0.1:" + clientPort, CONNECTION_TIMEOUT),
+                "Observer was able to start by itself!");
     }
 
 }

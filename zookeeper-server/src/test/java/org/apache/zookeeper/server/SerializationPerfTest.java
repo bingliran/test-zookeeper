@@ -20,6 +20,7 @@ package org.apache.zookeeper.server;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZKTestCase;
@@ -70,13 +71,13 @@ public class SerializationPerfTest extends ZKTestCase {
         long durationms = (end - start) / 1000000L;
         long pernodeus = ((end - start) / 1000L) / count;
         LOG.info(
-            "Serialized {} nodes in {} ms ({}us/node), depth={} width={} datalen={}",
-            count,
-            durationms,
-            pernodeus,
-            depth,
-            width,
-            len);
+                "Serialized {} nodes in {} ms ({}us/node), depth={} width={} datalen={}",
+                count,
+                durationms,
+                pernodeus,
+                depth,
+                width,
+                len);
     }
 
     @Test

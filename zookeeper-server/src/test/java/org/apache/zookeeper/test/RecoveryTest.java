@@ -21,9 +21,11 @@ package org.apache.zookeeper.test;
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.WatchedEvent;
@@ -52,7 +54,7 @@ public class RecoveryTest extends ZKTestCase implements Watcher {
      * Verify that if a server goes down that clients will reconnect
      * automatically after the server is restarted. Note that this requires the
      * server to restart within the connection timeout period.
-     *
+     * <p>
      * Also note that the client latches are used to eliminate any chance
      * of spurrious connectionloss exceptions on the read ops. Specifically
      * a sync operation will throw this exception if the server goes down
@@ -92,7 +94,7 @@ public class RecoveryTest extends ZKTestCase implements Watcher {
                     for (int k = 0; k < 20; k++) {
                         String subsubpath = subpath + "/" + k;
                         zk.create(subsubpath, (subsubpath
-                                                       + "!").getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+                                + "!").getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
                     }
                 }
             }

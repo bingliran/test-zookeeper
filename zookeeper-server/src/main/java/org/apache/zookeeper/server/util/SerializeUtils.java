@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.InputArchive;
 import org.apache.jute.OutputArchive;
@@ -64,44 +65,44 @@ public class SerializeUtils {
         bais.mark(bais.available());
         Record txn = null;
         switch (hdr.getType()) {
-        case OpCode.createSession:
-            // This isn't really an error txn; it just has the same
-            // format. The error represents the timeout
-            txn = new CreateSessionTxn();
-            break;
-        case OpCode.closeSession:
-            txn = ZooKeeperServer.isCloseSessionTxnEnabled()
-                    ?  new CloseSessionTxn() : null;
-            break;
-        case OpCode.create:
-        case OpCode.create2:
-            txn = new CreateTxn();
-            break;
-        case OpCode.createTTL:
-            txn = new CreateTTLTxn();
-            break;
-        case OpCode.createContainer:
-            txn = new CreateContainerTxn();
-            break;
-        case OpCode.delete:
-        case OpCode.deleteContainer:
-            txn = new DeleteTxn();
-            break;
-        case OpCode.reconfig:
-        case OpCode.setData:
-            txn = new SetDataTxn();
-            break;
-        case OpCode.setACL:
-            txn = new SetACLTxn();
-            break;
-        case OpCode.error:
-            txn = new ErrorTxn();
-            break;
-        case OpCode.multi:
-            txn = new MultiTxn();
-            break;
-        default:
-            throw new IOException("Unsupported Txn with type=%d" + hdr.getType());
+            case OpCode.createSession:
+                // This isn't really an error txn; it just has the same
+                // format. The error represents the timeout
+                txn = new CreateSessionTxn();
+                break;
+            case OpCode.closeSession:
+                txn = ZooKeeperServer.isCloseSessionTxnEnabled()
+                        ? new CloseSessionTxn() : null;
+                break;
+            case OpCode.create:
+            case OpCode.create2:
+                txn = new CreateTxn();
+                break;
+            case OpCode.createTTL:
+                txn = new CreateTTLTxn();
+                break;
+            case OpCode.createContainer:
+                txn = new CreateContainerTxn();
+                break;
+            case OpCode.delete:
+            case OpCode.deleteContainer:
+                txn = new DeleteTxn();
+                break;
+            case OpCode.reconfig:
+            case OpCode.setData:
+                txn = new SetDataTxn();
+                break;
+            case OpCode.setACL:
+                txn = new SetACLTxn();
+                break;
+            case OpCode.error:
+                txn = new ErrorTxn();
+                break;
+            case OpCode.multi:
+                txn = new MultiTxn();
+                break;
+            default:
+                throw new IOException("Unsupported Txn with type=%d" + hdr.getType());
         }
         if (txn != null) {
             try {
@@ -152,9 +153,9 @@ public class SerializeUtils {
             sessions.put(id, to);
             if (LOG.isTraceEnabled()) {
                 ZooTrace.logTraceMessage(
-                    LOG,
-                    ZooTrace.SESSION_TRACE_MASK,
-                    "loadData --- session in archive: " + id + " with timeout: " + to);
+                        LOG,
+                        ZooTrace.SESSION_TRACE_MASK,
+                        "loadData --- session in archive: " + id + " with timeout: " + to);
             }
             count--;
         }

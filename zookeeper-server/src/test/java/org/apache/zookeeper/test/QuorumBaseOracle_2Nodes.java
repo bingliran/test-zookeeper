@@ -21,6 +21,7 @@ package org.apache.zookeeper.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.TestableZooKeeper;
 import org.apache.zookeeper.server.quorum.Election;
@@ -41,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class QuorumBaseOracle_2Nodes extends ClientBase{
+public class QuorumBaseOracle_2Nodes extends ClientBase {
 
     private static final Logger LOG = LoggerFactory.getLogger(QuorumBase.class);
 
@@ -66,7 +68,6 @@ public class QuorumBaseOracle_2Nodes extends ClientBase{
 
     protected boolean localSessionsEnabled = false;
     protected boolean localSessionsUpgradingEnabled = false;
-
 
 
     @BeforeEach
@@ -311,6 +312,7 @@ public class QuorumBaseOracle_2Nodes extends ClientBase{
 
         JMXEnv.tearDown();
     }
+
     public void shutdownServers() {
         shutdown(s1);
         shutdown(s2);

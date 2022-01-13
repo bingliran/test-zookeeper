@@ -21,8 +21,10 @@ package org.apache.zookeeper.server.quorum;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 import org.junit.jupiter.api.AfterEach;
@@ -51,7 +53,9 @@ public class QuorumCanonicalizeTest extends ZKTestCase {
         }
 
         return addr.getAddress();
-    };
+    }
+
+    ;
 
     @AfterEach
     public void cleanUpEnvironment() {
@@ -67,7 +71,7 @@ public class QuorumCanonicalizeTest extends ZKTestCase {
         QuorumPeer.QuorumServer qps = createQuorumServer(ZK1_ALIAS);
 
         assertEquals(ZK1_ALIAS, qps.hostname,
-           "The host name has been \"changed\" (canonicalized?) despite default settings");
+                "The host name has been \"changed\" (canonicalized?) despite default settings");
     }
 
     @Test
@@ -77,7 +81,7 @@ public class QuorumCanonicalizeTest extends ZKTestCase {
         QuorumPeer.QuorumServer qps = createQuorumServer(ZK1_ALIAS);
 
         assertEquals(ZK1_ALIAS, qps.hostname,
-           "The host name has been \"changed\" (canonicalized?) despite default settings");
+                "The host name has been \"changed\" (canonicalized?) despite default settings");
     }
 
     @Test
@@ -87,7 +91,7 @@ public class QuorumCanonicalizeTest extends ZKTestCase {
         QuorumPeer.QuorumServer qps = createQuorumServer(ZK1_ALIAS);
 
         assertEquals(ZK1_FQDN, qps.hostname,
-            "The host name hasn't been correctly canonicalized");
+                "The host name hasn't been correctly canonicalized");
     }
 
     @Test
@@ -97,6 +101,6 @@ public class QuorumCanonicalizeTest extends ZKTestCase {
         QuorumPeer.QuorumServer qps = createQuorumServer(ZK1_IP);
 
         assertEquals(ZK1_FQDN, qps.hostname,
-            "The host name hasn't been correctly canonicalized");
+                "The host name hasn't been correctly canonicalized");
     }
 }

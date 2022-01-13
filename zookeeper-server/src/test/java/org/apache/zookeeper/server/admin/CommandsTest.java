@@ -25,11 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.zookeeper.metrics.MetricsUtils;
 import org.apache.zookeeper.server.ServerCnxnFactory;
 import org.apache.zookeeper.server.ServerStats;
@@ -46,12 +48,9 @@ public class CommandsTest extends ClientBase {
      * that all specified keys are present with values of the specified types
      * and that there are no extra entries.
      *
-     * @param cmdName
-     *            - the primary name of the command
-     * @param kwargs
-     *            - keyword arguments to the command
-     * @param fields
-     *            - the fields that are expected in the returned Map
+     * @param cmdName - the primary name of the command
+     * @param kwargs  - keyword arguments to the command
+     * @param fields  - the fields that are expected in the returned Map
      * @throws IOException
      * @throws InterruptedException
      */
@@ -87,6 +86,7 @@ public class CommandsTest extends ClientBase {
 
         String key;
         Class<?> type;
+
         Field(String key, Class<?> type) {
             this.key = key;
             this.type = type;
@@ -214,13 +214,13 @@ public class CommandsTest extends ClientBase {
     @Test
     public void testStat() throws IOException, InterruptedException {
         testCommand("stats",
-                    new Field("version", String.class),
-                    new Field("read_only", Boolean.class),
-                    new Field("server_stats", ServerStats.class),
-                    new Field("node_count", Integer.class),
-                    new Field("connections", Iterable.class),
-                    new Field("secure_connections", Iterable.class),
-                    new Field("client_response", BufferStats.class));
+                new Field("version", String.class),
+                new Field("read_only", Boolean.class),
+                new Field("server_stats", ServerStats.class),
+                new Field("node_count", Integer.class),
+                new Field("connections", Iterable.class),
+                new Field("secure_connections", Iterable.class),
+                new Field("client_response", BufferStats.class));
     }
 
     @Test
@@ -246,7 +246,7 @@ public class CommandsTest extends ClientBase {
     @Test
     public void testVotingViewCommand() throws IOException, InterruptedException {
         testCommand("voting_view",
-                    new Field("current_config", Map.class));
+                new Field("current_config", Map.class));
     }
 
     @Test

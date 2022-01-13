@@ -22,11 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.List;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.WatchedEvent;
@@ -42,9 +44,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** If snapshots are corrupted to the empty file or deleted, Zookeeper should
- *  not proceed to read its transaction log files
- *  Test that zxid == -1 in the presence of emptied/deleted snapshots
+/**
+ * If snapshots are corrupted to the empty file or deleted, Zookeeper should
+ * not proceed to read its transaction log files
+ * Test that zxid == -1 in the presence of emptied/deleted snapshots
  */
 public class EmptiedSnapshotRecoveryTest extends ZKTestCase implements Watcher {
 
@@ -124,6 +127,7 @@ public class EmptiedSnapshotRecoveryTest extends ZKTestCase implements Watcher {
 
     /**
      * Test resilience to empty Snapshots
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test
@@ -133,6 +137,7 @@ public class EmptiedSnapshotRecoveryTest extends ZKTestCase implements Watcher {
 
     /**
      * Test resilience to deletion of Snapshots
+     *
      * @throws Exception an exception might be thrown here
      */
     @Test

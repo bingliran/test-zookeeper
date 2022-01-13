@@ -20,12 +20,14 @@ package org.apache.zookeeper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.test.ClientBase;
@@ -238,21 +240,21 @@ public class RemoveWatchesCmdTest extends ClientBase {
             @Override
             public void process(WatchedEvent event) {
                 switch (event.getType()) {
-                case ChildWatchRemoved:
-                case DataWatchRemoved:
-                    addWatchNotifications(pathVsEvent, event);
-                    watcherLatch.countDown();
-                    break;
-                case NodeChildrenChanged:
-                case NodeDataChanged:
-                    addWatchNotifications(pathVsEvent, event);
-                    break;
+                    case ChildWatchRemoved:
+                    case DataWatchRemoved:
+                        addWatchNotifications(pathVsEvent, event);
+                        watcherLatch.countDown();
+                        break;
+                    case NodeChildrenChanged:
+                    case NodeDataChanged:
+                        addWatchNotifications(pathVsEvent, event);
+                        break;
                 }
             }
 
             private void addWatchNotifications(Map<String, List<EventType>> pathVsEvent, WatchedEvent event) {
                 pathVsEvent.computeIfAbsent(event.getPath(), k -> new ArrayList<>())
-                           .add(event.getType());
+                        .add(event.getType());
             }
         };
         zk.create("/testnode1", "data".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);

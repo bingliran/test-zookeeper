@@ -61,7 +61,7 @@ public enum CreateMode {
      * Given this property, you should be prepared to get
      * {@link org.apache.zookeeper.KeeperException.NoNodeException}
      * when creating children inside of this container node.
-     *
+     * <p>
      * 容器节点
      * 在无子节点时删除(非及时)
      */
@@ -70,7 +70,7 @@ public enum CreateMode {
      * The znode will not be automatically deleted upon client's disconnect.
      * However if the znode has not been modified within the given TTL, it
      * will be deleted once it has no children.
-     *
+     * <p>
      * 临时目录节点
      * session失效时使用ttl时间
      * ttl失效时并且没有子节点时被删除
@@ -128,31 +128,31 @@ public enum CreateMode {
      */
     public static CreateMode fromFlag(int flag) throws KeeperException {
         switch (flag) {
-        case 0:
-            return CreateMode.PERSISTENT;
+            case 0:
+                return CreateMode.PERSISTENT;
 
-        case 1:
-            return CreateMode.EPHEMERAL;
+            case 1:
+                return CreateMode.EPHEMERAL;
 
-        case 2:
-            return CreateMode.PERSISTENT_SEQUENTIAL;
+            case 2:
+                return CreateMode.PERSISTENT_SEQUENTIAL;
 
-        case 3:
-            return CreateMode.EPHEMERAL_SEQUENTIAL;
+            case 3:
+                return CreateMode.EPHEMERAL_SEQUENTIAL;
 
-        case 4:
-            return CreateMode.CONTAINER;
+            case 4:
+                return CreateMode.CONTAINER;
 
-        case 5:
-            return CreateMode.PERSISTENT_WITH_TTL;
+            case 5:
+                return CreateMode.PERSISTENT_WITH_TTL;
 
-        case 6:
-            return CreateMode.PERSISTENT_SEQUENTIAL_WITH_TTL;
+            case 6:
+                return CreateMode.PERSISTENT_SEQUENTIAL_WITH_TTL;
 
-        default:
-            String errMsg = "Received an invalid flag value: " + flag + " to convert to a CreateMode";
-            LOG.error(errMsg);
-            throw new KeeperException.BadArgumentsException(errMsg);
+            default:
+                String errMsg = "Received an invalid flag value: " + flag + " to convert to a CreateMode";
+                LOG.error(errMsg);
+                throw new KeeperException.BadArgumentsException(errMsg);
         }
     }
 
@@ -161,29 +161,29 @@ public enum CreateMode {
      */
     public static CreateMode fromFlag(int flag, CreateMode defaultMode) {
         switch (flag) {
-        case 0:
-            return CreateMode.PERSISTENT;
+            case 0:
+                return CreateMode.PERSISTENT;
 
-        case 1:
-            return CreateMode.EPHEMERAL;
+            case 1:
+                return CreateMode.EPHEMERAL;
 
-        case 2:
-            return CreateMode.PERSISTENT_SEQUENTIAL;
+            case 2:
+                return CreateMode.PERSISTENT_SEQUENTIAL;
 
-        case 3:
-            return CreateMode.EPHEMERAL_SEQUENTIAL;
+            case 3:
+                return CreateMode.EPHEMERAL_SEQUENTIAL;
 
-        case 4:
-            return CreateMode.CONTAINER;
+            case 4:
+                return CreateMode.CONTAINER;
 
-        case 5:
-            return CreateMode.PERSISTENT_WITH_TTL;
+            case 5:
+                return CreateMode.PERSISTENT_WITH_TTL;
 
-        case 6:
-            return CreateMode.PERSISTENT_SEQUENTIAL_WITH_TTL;
+            case 6:
+                return CreateMode.PERSISTENT_SEQUENTIAL_WITH_TTL;
 
-        default:
-            return defaultMode;
+            default:
+                return defaultMode;
         }
     }
 }

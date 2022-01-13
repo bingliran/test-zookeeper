@@ -19,6 +19,7 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -29,7 +30,8 @@ import org.junit.jupiter.api.Test;
 
 public class RepeatStartupTest extends ZKTestCase {
 
-    /** bring up 5 quorum peers and then shut them down
+    /**
+     * bring up 5 quorum peers and then shut them down
      * and then bring one of the nodes as server
      *
      * @throws Exception might be thrown here

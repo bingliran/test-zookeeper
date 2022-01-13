@@ -24,7 +24,9 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -56,7 +58,7 @@ public class NIOServerCnxnTest extends ClientBase {
             // Defaults ServerCnxnFactory would be instantiated with
             // NIOServerCnxnFactory
             assertTrue(serverFactory instanceof NIOServerCnxnFactory,
-                "Didn't instantiate ServerCnxnFactory with NIOServerCnxnFactory!");
+                    "Didn't instantiate ServerCnxnFactory with NIOServerCnxnFactory!");
             Iterable<ServerCnxn> connections = serverFactory.getConnections();
             for (ServerCnxn serverCnxn : connections) {
                 serverCnxn.close(ServerCnxn.DisconnectReason.CHANNEL_CLOSED_EXCEPTION);

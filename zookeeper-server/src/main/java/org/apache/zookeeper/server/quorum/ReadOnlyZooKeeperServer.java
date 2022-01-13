@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.jmx.MBeanRegistry;
 import org.apache.zookeeper.server.DataTreeBean;
@@ -50,14 +51,14 @@ public class ReadOnlyZooKeeperServer extends ZooKeeperServer {
 
     ReadOnlyZooKeeperServer(FileTxnSnapLog logFactory, QuorumPeer self, ZKDatabase zkDb) {
         super(
-            logFactory,
-            self.tickTime,
-            self.minSessionTimeout,
-            self.maxSessionTimeout,
-            self.clientPortListenBacklog,
-            zkDb,
-            self.getInitialConfig(),
-            self.isReconfigEnabled());
+                logFactory,
+                self.tickTime,
+                self.minSessionTimeout,
+                self.maxSessionTimeout,
+                self.clientPortListenBacklog,
+                zkDb,
+                self.getInitialConfig(),
+                self.isReconfigEnabled());
         this.self = self;
     }
 

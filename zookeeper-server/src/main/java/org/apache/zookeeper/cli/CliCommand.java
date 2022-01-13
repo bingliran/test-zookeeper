@@ -20,6 +20,7 @@ package org.apache.zookeeper.cli;
 
 import java.io.PrintStream;
 import java.util.Map;
+
 import org.apache.zookeeper.ZooKeeper;
 
 /**
@@ -36,7 +37,8 @@ public abstract class CliCommand {
     /**
      * a CLI command with command string and options.
      * Using System.out and System.err for printing
-     * @param cmdStr the string used to call this command
+     *
+     * @param cmdStr    the string used to call this command
      * @param optionStr the string used to call this command
      */
     public CliCommand(String cmdStr, String optionStr) {
@@ -48,6 +50,7 @@ public abstract class CliCommand {
 
     /**
      * Set out printStream (usable for testing)
+     *
      * @param out
      */
     public void setOut(PrintStream out) {
@@ -56,6 +59,7 @@ public abstract class CliCommand {
 
     /**
      * Set err printStream (usable for testing)
+     *
      * @param err
      */
     public void setErr(PrintStream err) {
@@ -64,6 +68,7 @@ public abstract class CliCommand {
 
     /**
      * set the zookeeper instance
+     *
      * @param zk the ZooKeeper instance.
      */
     public void setZk(ZooKeeper zk) {
@@ -93,6 +98,7 @@ public abstract class CliCommand {
 
     /**
      * add this command to a map. Use the command string as key.
+     *
      * @param cmdMap
      */
     public void addToMap(Map<String, CliCommand> cmdMap) {
@@ -101,6 +107,7 @@ public abstract class CliCommand {
 
     /**
      * parse the command arguments
+     *
      * @param cmdArgs
      * @return this CliCommand
      * @throws CliParseException
@@ -108,7 +115,6 @@ public abstract class CliCommand {
     public abstract CliCommand parse(String[] cmdArgs) throws CliParseException;
 
     /**
-     *
      * @return true if command has watch option, false otherwise
      * @throws CliException
      */

@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import mockit.Invocation;
 import mockit.Mock;
 import mockit.MockUp;
@@ -204,8 +206,8 @@ public class TxnLogDigestTest extends ClientBase {
     }
 
     public static void create(ZooKeeper client, String path, CreateMode mode)
-              throws Exception {
-         client.create(path, path.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, mode);
+            throws Exception {
+        client.create(path, path.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, mode);
     }
 
     /**
@@ -249,7 +251,7 @@ public class TxnLogDigestTest extends ClientBase {
     private void checkNodes(Map<String, String> expectedNodes) throws Exception {
         ZooKeeper client = createClient();
         try {
-            for (Map.Entry<String, String> entry: expectedNodes.entrySet()) {
+            for (Map.Entry<String, String> entry : expectedNodes.entrySet()) {
                 assertEquals(entry.getValue(),
                         new String(client.getData(entry.getKey(), false, null)));
             }
@@ -263,7 +265,7 @@ public class TxnLogDigestTest extends ClientBase {
 
         @Mock
         public synchronized boolean append(Invocation invocation, TxnHeader hdr,
-                Record txn, TxnDigest digest) throws IOException {
+                                           Record txn, TxnDigest digest) throws IOException {
             if (hdr != null && hdr.getZxid() == skipAppendZxid) {
                 LOG.info("skipping txn {}", skipAppendZxid);
                 return true;
@@ -274,5 +276,7 @@ public class TxnLogDigestTest extends ClientBase {
         public static void reset() {
             skipAppendZxid = -1;
         }
-    };
+    }
+
+    ;
 }

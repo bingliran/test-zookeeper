@@ -22,7 +22,9 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.apache.zookeeper.test.ClientBase.verifyThreadTerminated;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.LinkedList;
+
 import org.apache.zookeeper.AsyncCallback.DataCallback;
 import org.apache.zookeeper.AsyncCallback.StringCallback;
 import org.apache.zookeeper.AsyncCallback.VoidCallback;
@@ -133,10 +135,10 @@ public class AsyncHammerTest extends ZKTestCase implements StringCallback, VoidC
                 if (bang) {
                     failed = true;
                     LOG.error(
-                        "Create failed for 0x{} with rc:{} path:{}",
-                        Long.toHexString(zk.getSessionId()),
-                        rc,
-                        path);
+                            "Create failed for 0x{} with rc:{} path:{}",
+                            Long.toHexString(zk.getSessionId()),
+                            rc,
+                            path);
                 }
                 decOutstanding();
                 return;
@@ -157,10 +159,10 @@ public class AsyncHammerTest extends ZKTestCase implements StringCallback, VoidC
                 if (bang) {
                     failed = true;
                     LOG.error(
-                        "Delete failed for 0x{} with rc:{} path:{}",
-                        Long.toHexString(zk.getSessionId()),
-                        rc,
-                        path);
+                            "Delete failed for 0x{} with rc:{} path:{}",
+                            Long.toHexString(zk.getSessionId()),
+                            rc,
+                            path);
                 }
             }
         }

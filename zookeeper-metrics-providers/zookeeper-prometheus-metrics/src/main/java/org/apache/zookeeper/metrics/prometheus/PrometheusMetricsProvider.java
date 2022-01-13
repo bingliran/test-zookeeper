@@ -22,6 +22,7 @@ import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Enumeration;
@@ -42,6 +43,7 @@ import java.util.function.BiConsumer;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.zookeeper.metrics.Counter;
 import org.apache.zookeeper.metrics.CounterSet;
 import org.apache.zookeeper.metrics.Gauge;
@@ -291,7 +293,7 @@ public class PrometheusMetricsProvider implements MetricsProvider {
             Objects.requireNonNull(gaugeSet, "Cannot register a null GaugeSet for " + name);
 
             gaugeSets.compute(name, (id, prev) ->
-                new PrometheusLabelledGaugeWrapper(name, gaugeSet, prev != null ? prev.inner : null));
+                    new PrometheusLabelledGaugeWrapper(name, gaugeSet, prev != null ? prev.inner : null));
         }
 
         @Override
@@ -452,7 +454,7 @@ public class PrometheusMetricsProvider implements MetricsProvider {
          */
         private void sample() {
             gaugeSet.values().forEach((key, value) ->
-                this.inner.labels(key).set(value != null ? value.doubleValue() : 0));
+                    this.inner.labels(key).set(value != null ? value.doubleValue() : 0));
         }
 
         private void unregister() {

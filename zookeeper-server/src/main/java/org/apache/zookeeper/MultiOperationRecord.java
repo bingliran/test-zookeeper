@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.jute.InputArchive;
 import org.apache.jute.OutputArchive;
 import org.apache.jute.Record;
@@ -72,6 +73,7 @@ public class MultiOperationRecord implements Record, Iterable<Op> {
 
     /**
      * Returns the kind of the operations contained by the record.
+     *
      * @return The OpKind value of all the elements in the record.
      */
     public Op.OpKind getOpKind() {
@@ -83,7 +85,7 @@ public class MultiOperationRecord implements Record, Iterable<Op> {
             opKind = ok;
         } else if (ok != opKind) {
             throw new IllegalArgumentException("Mixing read and write operations (transactions)"
-                                               + " is not allowed in a multi request.");
+                    + " is not allowed in a multi request.");
         }
     }
 
@@ -94,19 +96,19 @@ public class MultiOperationRecord implements Record, Iterable<Op> {
             MultiHeader h = new MultiHeader(op.getType(), false, -1);
             h.serialize(archive, tag);
             switch (op.getType()) {
-            case ZooDefs.OpCode.create:
-            case ZooDefs.OpCode.create2:
-            case ZooDefs.OpCode.createTTL:
-            case ZooDefs.OpCode.createContainer:
-            case ZooDefs.OpCode.delete:
-            case ZooDefs.OpCode.setData:
-            case ZooDefs.OpCode.check:
-            case ZooDefs.OpCode.getChildren:
-            case ZooDefs.OpCode.getData:
-                op.toRequestRecord().serialize(archive, tag);
-                break;
-            default:
-                throw new IOException("Invalid type of op");
+                case ZooDefs.OpCode.create:
+                case ZooDefs.OpCode.create2:
+                case ZooDefs.OpCode.createTTL:
+                case ZooDefs.OpCode.createContainer:
+                case ZooDefs.OpCode.delete:
+                case ZooDefs.OpCode.setData:
+                case ZooDefs.OpCode.check:
+                case ZooDefs.OpCode.getChildren:
+                case ZooDefs.OpCode.getData:
+                    op.toRequestRecord().serialize(archive, tag);
+                    break;
+                default:
+                    throw new IOException("Invalid type of op");
             }
         }
         new MultiHeader(-1, true, -1).serialize(archive, tag);
@@ -121,45 +123,45 @@ public class MultiOperationRecord implements Record, Iterable<Op> {
         try {
             while (!h.getDone()) {
                 switch (h.getType()) {
-                case ZooDefs.OpCode.create:
-                case ZooDefs.OpCode.create2:
-                case ZooDefs.OpCode.createContainer:
-                    CreateRequest cr = new CreateRequest();
-                    cr.deserialize(archive, tag);
-                    add(Op.create(cr.getPath(), cr.getData(), cr.getAcl(), cr.getFlags()));
-                    break;
-                case ZooDefs.OpCode.createTTL:
-                    CreateTTLRequest crTtl = new CreateTTLRequest();
-                    crTtl.deserialize(archive, tag);
-                    add(Op.create(crTtl.getPath(), crTtl.getData(), crTtl.getAcl(), crTtl.getFlags(), crTtl.getTtl()));
-                    break;
-                case ZooDefs.OpCode.delete:
-                    DeleteRequest dr = new DeleteRequest();
-                    dr.deserialize(archive, tag);
-                    add(Op.delete(dr.getPath(), dr.getVersion()));
-                    break;
-                case ZooDefs.OpCode.setData:
-                    SetDataRequest sdr = new SetDataRequest();
-                    sdr.deserialize(archive, tag);
-                    add(Op.setData(sdr.getPath(), sdr.getData(), sdr.getVersion()));
-                    break;
-                case ZooDefs.OpCode.check:
-                    CheckVersionRequest cvr = new CheckVersionRequest();
-                    cvr.deserialize(archive, tag);
-                    add(Op.check(cvr.getPath(), cvr.getVersion()));
-                    break;
-                case ZooDefs.OpCode.getChildren:
-                    GetChildrenRequest gcr = new GetChildrenRequest();
-                    gcr.deserialize(archive, tag);
-                    add(Op.getChildren(gcr.getPath()));
-                    break;
-                case ZooDefs.OpCode.getData:
-                    GetDataRequest gdr = new GetDataRequest();
-                    gdr.deserialize(archive, tag);
-                    add(Op.getData(gdr.getPath()));
-                    break;
-                default:
-                    throw new IOException("Invalid type of op");
+                    case ZooDefs.OpCode.create:
+                    case ZooDefs.OpCode.create2:
+                    case ZooDefs.OpCode.createContainer:
+                        CreateRequest cr = new CreateRequest();
+                        cr.deserialize(archive, tag);
+                        add(Op.create(cr.getPath(), cr.getData(), cr.getAcl(), cr.getFlags()));
+                        break;
+                    case ZooDefs.OpCode.createTTL:
+                        CreateTTLRequest crTtl = new CreateTTLRequest();
+                        crTtl.deserialize(archive, tag);
+                        add(Op.create(crTtl.getPath(), crTtl.getData(), crTtl.getAcl(), crTtl.getFlags(), crTtl.getTtl()));
+                        break;
+                    case ZooDefs.OpCode.delete:
+                        DeleteRequest dr = new DeleteRequest();
+                        dr.deserialize(archive, tag);
+                        add(Op.delete(dr.getPath(), dr.getVersion()));
+                        break;
+                    case ZooDefs.OpCode.setData:
+                        SetDataRequest sdr = new SetDataRequest();
+                        sdr.deserialize(archive, tag);
+                        add(Op.setData(sdr.getPath(), sdr.getData(), sdr.getVersion()));
+                        break;
+                    case ZooDefs.OpCode.check:
+                        CheckVersionRequest cvr = new CheckVersionRequest();
+                        cvr.deserialize(archive, tag);
+                        add(Op.check(cvr.getPath(), cvr.getVersion()));
+                        break;
+                    case ZooDefs.OpCode.getChildren:
+                        GetChildrenRequest gcr = new GetChildrenRequest();
+                        gcr.deserialize(archive, tag);
+                        add(Op.getChildren(gcr.getPath()));
+                        break;
+                    case ZooDefs.OpCode.getData:
+                        GetDataRequest gdr = new GetDataRequest();
+                        gdr.deserialize(archive, tag);
+                        add(Op.getData(gdr.getPath()));
+                        break;
+                    default:
+                        throw new IOException("Invalid type of op");
                 }
                 h.deserialize(archive, tag);
             }

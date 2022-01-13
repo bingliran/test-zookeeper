@@ -19,11 +19,11 @@
 package org.apache.zookeeper.version;
 
 public interface Info {
-    int MAJOR=1;
-    int MINOR=0;
-    int MICRO=0;
-    String QUALIFIER="${parsedVersion.qualifier}".isEmpty() ? null : "${parsedVersion.qualifier}";
-    int REVISION=-1; //@deprecated, please use REVISION_HASH
-    String REVISION_HASH="${mvngit.commit.id}";
-    String BUILD_DATE="${build.time}";
+    int MAJOR = 1;
+    int MINOR = 0;
+    int MICRO = 0;
+    String QUALIFIER = "${parsedVersion.qualifier}".isEmpty() ? null : "${parsedVersion.qualifier}";
+    int REVISION = -1; //@deprecated, please use REVISION_HASH
+    String REVISION_HASH = "${mvngit.commit.id}";
+    String BUILD_DATE = "${build.time}";
 }

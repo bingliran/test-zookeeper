@@ -19,6 +19,7 @@ package org.apache.zookeeper.server;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooKeeper;
@@ -39,7 +40,7 @@ public class X509AuthFailureTest extends ZKTestCase {
     public static int CONNECTION_TIMEOUT = 30000;
 
     @BeforeEach
-    public void setup() throws Exception{
+    public void setup() throws Exception {
         clientX509Util = new ClientX509Util();
         String testDataPath = System.getProperty("test.data.dir", "src/test/resources/data");
         System.setProperty(ServerCnxnFactory.ZOOKEEPER_SERVER_CNXN_FACTORY, "org.apache.zookeeper.server.NettyServerCnxnFactory");
@@ -75,12 +76,12 @@ public class X509AuthFailureTest extends ZKTestCase {
         ZooKeeperServerMainTest.MainThread mt = new ZooKeeperServerMainTest.MainThread(CLIENT_PORT, SECURE_CLIENT_PORT, true, null);
         mt.start();
         assertTrue(
-            ClientBase.waitForServerUp("127.0.0.1:" + CLIENT_PORT, ClientBase.CONNECTION_TIMEOUT));
+                ClientBase.waitForServerUp("127.0.0.1:" + CLIENT_PORT, ClientBase.CONNECTION_TIMEOUT));
 
         try {
             ZooKeeper zk = createZKClnt("127.0.0.1:" + SECURE_CLIENT_PORT);
             fail("should not be reached");
-        } catch (Exception e){
+        } catch (Exception e) {
             //Expected
         }
         ServerStats serverStats = mt.getSecureCnxnFactory().getZooKeeperServer().serverStats();

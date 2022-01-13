@@ -19,10 +19,12 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.zookeeper.AsyncCallback.MultiCallback;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -75,7 +77,7 @@ public class MultiAsyncTransactionTest extends ClientBase {
      * get rollbacked correctly when multi-op failed. This cause
      * create sequential node request in subsequent multi-op to failed because
      * sequential node name generation is incorrect.
-     *
+     * <p>
      * The check is to make sure that each request in multi-op failed with
      * the correct reason.
      */

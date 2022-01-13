@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,11 +22,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
@@ -191,10 +193,10 @@ public class NettyServerCnxnFactoryTest extends ClientBase {
         public void process(WatchedEvent event) {
             LOG.info(String.format("WATCHER [thread: %d, cnx:%d] - new event: %s", cnxnThreadId, cnxnId, event.toString()));
             if (event.getState() == Event.KeeperState.SyncConnected) {
-              int created = cnxnCreated.addAndGet(1);
-              if (created == cnxnLimit) {
-                latch.countDown();
-              }
+                int created = cnxnCreated.addAndGet(1);
+                if (created == cnxnLimit) {
+                    latch.countDown();
+                }
             }
         }
     }
@@ -227,7 +229,7 @@ public class NettyServerCnxnFactoryTest extends ClientBase {
             for (int j = 0; j < cnxnPerThread; j++) {
                 try {
                     zks.add(new ZooKeeper(hostPort, 30000,
-                                          new ClientConnectionWatcher(cnxnCreated, cnxnLimit, cnxnThreadId, j, latch)));
+                            new ClientConnectionWatcher(cnxnCreated, cnxnLimit, cnxnThreadId, j, latch)));
                 } catch (Exception e) {
                     LOG.info("Error while creating zk client", e);
                 }

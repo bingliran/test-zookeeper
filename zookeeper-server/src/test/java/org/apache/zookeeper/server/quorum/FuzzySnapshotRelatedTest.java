@@ -21,6 +21,7 @@ package org.apache.zookeeper.server.quorum;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.security.sasl.SaslException;
+
 import org.apache.jute.OutputArchive;
 import org.apache.zookeeper.AsyncCallback.MultiCallback;
 import org.apache.zookeeper.CreateMode;
@@ -83,7 +85,7 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
         for (int i = 0; i < ENSEMBLE_SERVERS; i++) {
             clientPorts[i] = PortAssignment.unique();
             server = "server." + i + "=127.0.0.1:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                     + ":participant;127.0.0.1:" + clientPorts[i];
+                    + ":participant;127.0.0.1:" + clientPorts[i];
             sb.append(server + "\n");
         }
         String currentQuorumCfgSection = sb.toString();
@@ -175,7 +177,7 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
     /**
      * It's possibel during SNAP sync, the parent is serialized before the
      * child get deleted during sending the snapshot over.
-     *
+     * <p>
      * In which case, we need to make sure the pzxid get correctly updated
      * when applying the txns received.
      */
@@ -209,7 +211,7 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
     /**
      * It's possible during taking fuzzy snapshot, the parent is serialized
      * before the child get deleted in the fuzzy range.
-     *
+     * <p>
      * In which case, we need to make sure the pzxid get correctly updated
      * when replaying the txns.
      */
@@ -268,7 +270,8 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
                 ), new MultiCallback() {
                     @Override
                     public void processResult(int rc, String path, Object ctx,
-                            List<OpResult> opResults) {}
+                                              List<OpResult> opResults) {
+                    }
                 }, null);
 
                 LOG.info("Wait for the signal to continue");
@@ -354,7 +357,7 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
 
             assertEquals(stat1, stat2);
         } finally {
-            for (ZooKeeper z: compareZk) {
+            for (ZooKeeper z : compareZk) {
                 z.close();
             }
         }
@@ -482,7 +485,7 @@ public class FuzzySnapshotRelatedTest extends QuorumPeerTestBase {
         }
 
         public Stat setData(String path, byte data[], int version, long zxid,
-                long time) throws NoNodeException {
+                            long time) throws NoNodeException {
             if (setListener != null) {
                 setListener.process();
             }

@@ -22,7 +22,7 @@ package org.apache.zookeeper.test;
  * This is a simple test to check the integrity of ZooKeeper servers. The client
  * simply cycles through blasting changes to ZooKeeper and the checking what it
  * gets back.
- *
+ * <p>
  * The check is very simple. The value of the last successful read or write is
  * stored in lastValue. When we issue a request, that value becomes a possible
  * value. The difficulty is that when a communication error happens, the client
@@ -35,6 +35,7 @@ package org.apache.zookeeper.test;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.zookeeper.AsyncCallback.DataCallback;
 import org.apache.zookeeper.AsyncCallback.StatCallback;
 import org.apache.zookeeper.CreateMode;

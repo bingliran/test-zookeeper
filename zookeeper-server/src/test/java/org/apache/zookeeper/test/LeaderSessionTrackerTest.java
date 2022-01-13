@@ -20,9 +20,11 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZKTestCase;
@@ -75,7 +77,7 @@ public class LeaderSessionTrackerTest extends ZKTestCase {
      * When we create ephemeral node, we need to check against global
      * session, so the leader never accept request from an expired session
      * (that we no longer track)
-     *
+     * <p>
      * This is not the same as SessionInvalidationTest since session
      * is not in closing state
      */

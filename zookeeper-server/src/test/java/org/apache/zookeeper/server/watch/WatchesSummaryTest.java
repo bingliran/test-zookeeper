@@ -18,7 +18,9 @@
 package org.apache.zookeeper.server.watch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Map;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,16 +28,19 @@ import org.junit.jupiter.api.Test;
 public class WatchesSummaryTest extends ZKTestCase {
 
     private WatchesSummary s;
+
     @BeforeEach
     public void setUp() {
         s = new WatchesSummary(1, 2, 3);
     }
+
     @Test
     public void testGetters() {
         assertEquals(1, s.getNumConnections());
         assertEquals(2, s.getNumPaths());
         assertEquals(3, s.getTotalWatches());
     }
+
     @Test
     public void testToMap() {
         Map<String, Object> m = s.toMap();

@@ -22,7 +22,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.NoSuchElementException;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.test.ClientBase;
@@ -141,6 +143,7 @@ public class DistributedQueueTest extends ClientBase {
     public void testRemove2() throws Exception {
         createNremoveMtest("/testRemove2", 10, 2);
     }
+
     @Test
     public void testRemove3() throws Exception {
         createNremoveMtest("/testRemove3", 1000, 1000);

@@ -21,10 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,7 @@ public class WatchesReportTest extends ZKTestCase {
 
     private Map<Long, Set<String>> m;
     private WatchesReport r;
+
     @BeforeEach
     public void setUp() {
         m = new HashMap<Long, Set<String>>();
@@ -45,12 +48,14 @@ public class WatchesReportTest extends ZKTestCase {
         m.put(2L, s);
         r = new WatchesReport(m);
     }
+
     @Test
     public void testHasPaths() {
         assertTrue(r.hasPaths(1L));
         assertTrue(r.hasPaths(2L));
         assertFalse(r.hasPaths(3L));
     }
+
     @Test
     public void testGetPaths() {
         Set<String> s = r.getPaths(1L);
@@ -62,6 +67,7 @@ public class WatchesReportTest extends ZKTestCase {
         assertTrue(s.contains("path2a"));
         assertNull(r.getPaths(3L));
     }
+
     @Test
     public void testToMap() {
         assertEquals(m, r.toMap());

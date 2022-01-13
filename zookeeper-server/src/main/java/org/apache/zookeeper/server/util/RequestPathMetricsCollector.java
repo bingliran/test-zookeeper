@@ -34,6 +34,7 @@ import static org.apache.zookeeper.ZooDefs.OpCode.setACL;
 import static org.apache.zookeeper.ZooDefs.OpCode.setData;
 import static org.apache.zookeeper.ZooDefs.OpCode.setWatches2;
 import static org.apache.zookeeper.ZooDefs.OpCode.sync;
+
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,6 +52,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.server.Request;
 import org.slf4j.Logger;
@@ -137,18 +139,18 @@ public class RequestPathMetricsCollector {
 
     static boolean isWriteOp(int requestType) {
         switch (requestType) {
-        case ZooDefs.OpCode.sync:
-        case ZooDefs.OpCode.create:
-        case ZooDefs.OpCode.create2:
-        case ZooDefs.OpCode.createContainer:
-        case ZooDefs.OpCode.delete:
-        case ZooDefs.OpCode.deleteContainer:
-        case ZooDefs.OpCode.setData:
-        case ZooDefs.OpCode.reconfig:
-        case ZooDefs.OpCode.setACL:
-        case ZooDefs.OpCode.multi:
-        case ZooDefs.OpCode.check:
-            return true;
+            case ZooDefs.OpCode.sync:
+            case ZooDefs.OpCode.create:
+            case ZooDefs.OpCode.create2:
+            case ZooDefs.OpCode.createContainer:
+            case ZooDefs.OpCode.delete:
+            case ZooDefs.OpCode.deleteContainer:
+            case ZooDefs.OpCode.setData:
+            case ZooDefs.OpCode.reconfig:
+            case ZooDefs.OpCode.setACL:
+            case ZooDefs.OpCode.multi:
+            case ZooDefs.OpCode.check:
+                return true;
         }
         return false;
     }
@@ -186,10 +188,10 @@ public class RequestPathMetricsCollector {
         scheduledExecutor.scheduleWithFixedDelay(() -> {
             LOG.info("%nHere are the top Read paths:");
             logTopPaths(aggregatePaths(4, queue -> !queue.isWriteOperation()),
-                        entry -> LOG.info("{} : {}", entry.getKey(), entry.getValue()));
+                    entry -> LOG.info("{} : {}", entry.getKey(), entry.getValue()));
             LOG.info("%nHere are the top Write paths:");
             logTopPaths(aggregatePaths(4, queue -> queue.isWriteOperation()),
-                        entry -> LOG.info("{} : {}", entry.getKey(), entry.getValue()));
+                    entry -> LOG.info("{} : {}", entry.getKey(), entry.getValue()));
         }, COLLECTOR_INITIAL_DELAY, COLLECTOR_DELAY, TimeUnit.MINUTES);
     }
 
@@ -260,19 +262,19 @@ public class RequestPathMetricsCollector {
         final Map<String, Integer> combinedMap = new HashMap<>(REQUEST_PREPROCESS_TOPPATH_MAX);
         final int maxDepth = Math.min(queryMaxDepth, REQUEST_PREPROCESS_PATH_DEPTH);
         immutableRequestsMap.values()
-                            .stream()
-                            .filter(predicate)
-                            .forEach(pathStatsQueue -> pathStatsQueue.collectStats(maxDepth).forEach(
-                                (path, count) -> combinedMap.put(path, combinedMap.getOrDefault(path, 0) + count)));
+                .stream()
+                .filter(predicate)
+                .forEach(pathStatsQueue -> pathStatsQueue.collectStats(maxDepth).forEach(
+                        (path, count) -> combinedMap.put(path, combinedMap.getOrDefault(path, 0) + count)));
         return combinedMap;
     }
 
     void logTopPaths(Map<String, Integer> combinedMap, final Consumer<Map.Entry<String, Integer>> output) {
         combinedMap.entrySet()
-                   .stream()
-                   // sort by path count
-                   .sorted(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed())
-                   .limit(REQUEST_PREPROCESS_TOPPATH_MAX).forEach(output);
+                .stream()
+                // sort by path count
+                .sorted(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed())
+                .limit(REQUEST_PREPROCESS_TOPPATH_MAX).forEach(output);
     }
 
     class PathStatsQueue {
@@ -331,8 +333,8 @@ public class RequestPathMetricsCollector {
             // Take a snapshot of the current slot and convert it to map.
             // Set the initial size as 0 since we don't want it to padding nulls in the end.
             Map<String, Integer> snapShot = mapReducePaths(
-                maxDepth,
-                Arrays.asList(currentSlot.get().toArray(new String[0])));
+                    maxDepth,
+                    Arrays.asList(currentSlot.get().toArray(new String[0])));
             // Starting from the snapshot and go through the queue to reduce them into one map
             // the iterator can run concurrently with write but we want to use a real lock in the test
             synchronized (accurateMode ? requestPathStats : new Object()) {

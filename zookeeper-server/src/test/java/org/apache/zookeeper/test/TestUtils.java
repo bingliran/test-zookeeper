@@ -19,6 +19,7 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 
 /**
@@ -29,10 +30,8 @@ public class TestUtils {
     /**
      * deletes a folder recursively
      *
-     * @param file
-     *            folder to be deleted
-     * @param failOnError
-     *            if true file deletion success is ensured
+     * @param file        folder to be deleted
+     * @param failOnError if true file deletion success is ensured
      */
     public static boolean deleteFileRecursively(
             File file, final boolean failOnError) {

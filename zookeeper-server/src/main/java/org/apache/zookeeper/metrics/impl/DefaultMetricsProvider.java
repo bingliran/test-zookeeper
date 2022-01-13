@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiConsumer;
+
 import org.apache.zookeeper.metrics.Counter;
 import org.apache.zookeeper.metrics.CounterSet;
 import org.apache.zookeeper.metrics.Gauge;
@@ -181,11 +182,11 @@ public class DefaultMetricsProvider implements MetricsProvider {
             });
 
             gaugeSets.forEach((name, gaugeSet) ->
-                gaugeSet.values().forEach((key, value) -> {
-                    if (key != null) {
-                        sink.accept(key + "_" + name, value != null ? value : 0);
-                    }
-                })
+                    gaugeSet.values().forEach((key, value) -> {
+                        if (key != null) {
+                            sink.accept(key + "_" + name, value != null ? value : 0);
+                        }
+                    })
             );
 
             counters.values().forEach(metric -> {

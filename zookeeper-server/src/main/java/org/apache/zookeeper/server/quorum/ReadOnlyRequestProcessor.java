@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.quorum;
 
 import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.proto.ReplyHeader;
@@ -74,26 +75,26 @@ public class ReadOnlyRequestProcessor extends ZooKeeperCriticalThread implements
 
                 // filter read requests
                 switch (request.type) {
-                case OpCode.sync:
-                case OpCode.create:
-                case OpCode.create2:
-                case OpCode.createTTL:
-                case OpCode.createContainer:
-                case OpCode.delete:
-                case OpCode.deleteContainer:
-                case OpCode.setData:
-                case OpCode.reconfig:
-                case OpCode.setACL:
-                case OpCode.multi:
-                case OpCode.check:
-                    sendErrorResponse(request);
-                    continue;
-                case OpCode.closeSession:
-                case OpCode.createSession:
-                    if (!request.isLocalSession()) {
+                    case OpCode.sync:
+                    case OpCode.create:
+                    case OpCode.create2:
+                    case OpCode.createTTL:
+                    case OpCode.createContainer:
+                    case OpCode.delete:
+                    case OpCode.deleteContainer:
+                    case OpCode.setData:
+                    case OpCode.reconfig:
+                    case OpCode.setACL:
+                    case OpCode.multi:
+                    case OpCode.check:
                         sendErrorResponse(request);
                         continue;
-                    }
+                    case OpCode.closeSession:
+                    case OpCode.createSession:
+                        if (!request.isLocalSession()) {
+                            sendErrorResponse(request);
+                            continue;
+                        }
                 }
 
                 // proceed to the next processor

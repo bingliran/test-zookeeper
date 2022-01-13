@@ -19,6 +19,7 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.Assert.assertEquals;
+
 import org.apache.zookeeper.Quotas;
 import org.junit.Test;
 

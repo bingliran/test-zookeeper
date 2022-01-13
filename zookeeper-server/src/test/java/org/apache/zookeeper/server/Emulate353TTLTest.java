@@ -23,7 +23,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.TestableZooKeeper;
@@ -77,7 +79,7 @@ public class Emulate353TTLTest extends ClientBase {
         DataTree dataTree = serverFactory.zkServer.getZKDatabase().dataTree;
         long ephemeralOwner = EphemeralTypeEmulate353.ttlToEphemeralOwner(100);
         dataTree.createNode("/foo", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, ephemeralOwner, dataTree.getNode("/").stat.getCversion()
-                                                                                                      + 1, 1, 1);
+                + 1, 1, 1);
 
         final AtomicLong fakeElapsed = new AtomicLong(0);
         ContainerManager containerManager = newContainerManager(fakeElapsed);

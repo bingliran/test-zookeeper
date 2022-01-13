@@ -22,7 +22,9 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
+
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.client.HostProvider;
 import org.apache.zookeeper.client.ZKClientConfig;
@@ -50,7 +52,7 @@ public class ClientRequestTimeoutTest extends QuorumPeerTestBase {
         for (int i = 0; i < SERVER_COUNT; i++) {
             clientPorts[i] = PortAssignment.unique();
             server = "server." + i + "=127.0.0.1:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                     + ":participant;127.0.0.1:" + clientPorts[i];
+                    + ":participant;127.0.0.1:" + clientPorts[i];
             sb.append(server + "\n");
         }
         String currentQuorumCfgSection = sb.toString();
@@ -64,7 +66,7 @@ public class ClientRequestTimeoutTest extends QuorumPeerTestBase {
         // ensure server started
         for (int i = 0; i < SERVER_COUNT; i++) {
             assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    "waiting for server " + i + " being up");
         }
 
         CountdownWatcher watch1 = new CountdownWatcher();
@@ -96,7 +98,7 @@ public class ClientRequestTimeoutTest extends QuorumPeerTestBase {
 
     /**
      * @return connection string in the form of
-     *         127.0.0.1:port1,127.0.0.1:port2,127.0.0.1:port3
+     * 127.0.0.1:port1,127.0.0.1:port2,127.0.0.1:port3
      */
     private String getCxnString(int[] clientPorts) {
         StringBuffer hostPortBuffer = new StringBuffer();
@@ -113,22 +115,22 @@ public class ClientRequestTimeoutTest extends QuorumPeerTestBase {
     class CustomClientCnxn extends ClientCnxn {
 
         CustomClientCnxn(
-            String chrootPath,
-            HostProvider hostProvider,
-            int sessionTimeout,
-            ZKClientConfig clientConfig,
-            Watcher defaultWatcher,
-            ClientCnxnSocket clientCnxnSocket,
-            boolean canBeReadOnly
+                String chrootPath,
+                HostProvider hostProvider,
+                int sessionTimeout,
+                ZKClientConfig clientConfig,
+                Watcher defaultWatcher,
+                ClientCnxnSocket clientCnxnSocket,
+                boolean canBeReadOnly
         ) throws IOException {
             super(
-                chrootPath,
-                hostProvider,
-                sessionTimeout,
-                clientConfig,
-                defaultWatcher,
-                clientCnxnSocket,
-                canBeReadOnly);
+                    chrootPath,
+                    hostProvider,
+                    sessionTimeout,
+                    clientConfig,
+                    defaultWatcher,
+                    clientCnxnSocket,
+                    canBeReadOnly);
         }
 
         @Override
@@ -151,22 +153,22 @@ public class ClientRequestTimeoutTest extends QuorumPeerTestBase {
 
         @Override
         ClientCnxn createConnection(
-            String chrootPath,
-            HostProvider hostProvider,
-            int sessionTimeout,
-            ZKClientConfig clientConfig,
-            Watcher defaultWatcher,
-            ClientCnxnSocket clientCnxnSocket,
-            boolean canBeReadOnly
+                String chrootPath,
+                HostProvider hostProvider,
+                int sessionTimeout,
+                ZKClientConfig clientConfig,
+                Watcher defaultWatcher,
+                ClientCnxnSocket clientCnxnSocket,
+                boolean canBeReadOnly
         ) throws IOException {
             return new CustomClientCnxn(
-                chrootPath,
-                hostProvider,
-                sessionTimeout,
-                clientConfig,
-                defaultWatcher,
-                clientCnxnSocket,
-                canBeReadOnly);
+                    chrootPath,
+                    hostProvider,
+                    sessionTimeout,
+                    clientConfig,
+                    defaultWatcher,
+                    clientCnxnSocket,
+                    canBeReadOnly);
         }
 
     }

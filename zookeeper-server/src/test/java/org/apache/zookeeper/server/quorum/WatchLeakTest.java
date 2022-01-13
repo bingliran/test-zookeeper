@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+
 import org.apache.jute.InputArchive;
 import org.apache.jute.OutputArchive;
 import org.apache.zookeeper.ClientCnxn;
@@ -304,7 +306,6 @@ public class WatchLeakTest {
      * Forge an invalid session packet as a LEADER do
      *
      * @param valid <code>true</code> to create a valid session message
-     *
      * @throws Exception
      */
     private QuorumPacket createValidateSessionPacketResponse(boolean valid) throws Exception {

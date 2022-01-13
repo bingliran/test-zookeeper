@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server;
 
 import java.util.concurrent.CountDownLatch;
+
 import org.apache.zookeeper.server.ZooKeeperServer.State;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.zookeeper.server.ZooKeeperServer.State;
  */
 public final class ZooKeeperServerShutdownHandler {
 
-        private final CountDownLatch shutdownLatch;
+    private final CountDownLatch shutdownLatch;
 
     ZooKeeperServerShutdownHandler(CountDownLatch shutdownLatch) {
         this.shutdownLatch = shutdownLatch;

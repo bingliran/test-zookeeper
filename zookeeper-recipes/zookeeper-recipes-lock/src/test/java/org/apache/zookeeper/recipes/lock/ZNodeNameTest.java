@@ -21,10 +21,12 @@ package org.apache.zookeeper.recipes.lock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,7 +40,7 @@ public class ZNodeNameTest {
         ZNodeName zname;
 
         final Collection<ZNodeName> nodeNames = Arrays.asList(names).stream()
-            .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
+                .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
 
         final Iterator<ZNodeName> it = nodeNames.iterator();
 
@@ -74,7 +76,7 @@ public class ZNodeNameTest {
         ZNodeName zname;
 
         final Collection<ZNodeName> nodeNames = Arrays.asList(names).stream()
-            .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
+                .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
 
         final Iterator<ZNodeName> it = nodeNames.iterator();
 
@@ -107,14 +109,14 @@ public class ZNodeNameTest {
     @Test
     public void testOrderWithDifferentPrefixIncludingSessionId() throws Exception {
         String[] names = {
-            "x-242681582799028564-0000000002",
-            "x-170623981976748329-0000000003",
-            "x-98566387950223723-0000000001"
+                "x-242681582799028564-0000000002",
+                "x-170623981976748329-0000000003",
+                "x-98566387950223723-0000000001"
         };
         ZNodeName zname;
 
         final Collection<ZNodeName> nodeNames = Arrays.asList(names).stream()
-            .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
+                .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
 
         final Iterator<ZNodeName> it = nodeNames.iterator();
 
@@ -140,7 +142,7 @@ public class ZNodeNameTest {
         ZNodeName zname;
 
         final Collection<ZNodeName> nodeNames = Arrays.asList(names).stream()
-            .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
+                .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
 
         final Iterator<ZNodeName> it = nodeNames.iterator();
 
@@ -166,7 +168,7 @@ public class ZNodeNameTest {
         ZNodeName zname;
 
         final Collection<ZNodeName> nodeNames = Arrays.asList(names).stream()
-            .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
+                .map(name -> new ZNodeName(name)).sorted().collect(Collectors.toList());
 
         final Iterator<ZNodeName> it = nodeNames.iterator();
 

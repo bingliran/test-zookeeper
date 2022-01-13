@@ -17,6 +17,7 @@ limitations under the License.
 # ZooKeeper-cli: the ZooKeeper command line interface
 
 ## Pre-requisites
+
 Enter into the ZooKeeper-cli
 
 ```bash
@@ -29,7 +30,9 @@ bin/zkCli.sh -waitforconnection -timeout 3000 -server remoteIP:2181
 # connect with a custom client configuration properties file
 bin/zkCli.sh -client-configuration /path/to/client.properties
 ```
+
 ## help
+
 Showing helps about ZooKeeper commands
 
 ```bash
@@ -66,6 +69,7 @@ ZooKeeper -server host:port cmd args
 ```
 
 ## addauth
+
 Add a authorized user for ACL
 
 ```bash
@@ -82,6 +86,7 @@ Add a authorized user for ACL
 ```
 
 ## close
+
 Close this client/session.
 
 ```bash
@@ -91,6 +96,7 @@ Close this client/session.
 ```
 
 ## config
+
 Showing the config of quorum membership
 
 ```bash
@@ -100,7 +106,9 @@ Showing the config of quorum membership
 	server.3=[2001:db8:1:0:0:242:ac11:2]:22888:23888:participant
 	version=0
 ```
+
 ## connect
+
 Connect a ZooKeeper server.
 
 ```bash
@@ -112,7 +120,9 @@ Connect a ZooKeeper server.
 # connect a remote server
 [zkshell: 5] connect remoteIP:2181
 ```
+
 ## create
+
 Create a znode.
 
 ```bash
@@ -161,7 +171,9 @@ Create a znode.
 [zkshell: 21] get /ttl_node
 	org.apache.zookeeper.KeeperException$NoNodeException: KeeperErrorCode = NoNode for /ttl_node
 ```
+
 ## delete
+
 Delete a node with a specific path
 
 ```bash
@@ -171,6 +183,7 @@ Delete a node with a specific path
 ```
 
 ## deleteall
+
 Delete all nodes under a specific path
 
 ```bash
@@ -182,6 +195,7 @@ zkshell: 1] ls /config
 ```
 
 ## delquota
+
 Delete the quota under a path
 
 ```bash
@@ -195,7 +209,9 @@ Delete the quota under a path
 [zkshell: 6] delquota -B /c4
 
 ```
+
 ## get
+
 Get the data of the specific path
 
 ```bash
@@ -226,6 +242,7 @@ Get the data of the specific path
 ```
 
 ## getAcl
+
 Get the ACL permission of one path
 
 ```bash
@@ -238,7 +255,9 @@ Get the ACL permission of one path
 	'world,'anyone
 	: cdrwa
 ```
+
 ## getAllChildrenNumber
+
 Get all numbers of children nodes under a specific path
 
 ```bash
@@ -249,7 +268,9 @@ Get all numbers of children nodes under a specific path
 [zkshell: 3] getAllChildrenNumber /ZooKeeper/quota
 	0
 ```
+
 ## getEphemerals
+
 Get all the ephemeral nodes created by this session
 
 ```bash
@@ -270,6 +291,7 @@ Get all the ephemeral nodes created by this session
 ```
 
 ## history
+
 Showing the history about the recent 11 commands that you have executed
 
 ```bash
@@ -285,6 +307,7 @@ Showing the history about the recent 11 commands that you have executed
 ```
 
 ## listquota
+
 Listing the quota of one path
 
 ```bash
@@ -295,6 +318,7 @@ Listing the quota of one path
 ```
 
 ## ls
+
 Listing the child nodes of one path
 
 ```bash
@@ -332,6 +356,7 @@ Listing the child nodes of one path
 ```
 
 ## printwatches
+
 A switch to turn on/off whether printing watches or not.
 
 ```bash
@@ -346,6 +371,7 @@ A switch to turn on/off whether printing watches or not.
 ```
 
 ## quit
+
 Quit the CLI windows.
 
 ```bash
@@ -353,9 +379,11 @@ Quit the CLI windows.
 ```
 
 ## reconfig
+
 Change the membership of the ensemble during the runtime.
 
-Before using this cli,read the details in the [Dynamic Reconfiguration](zookeeperReconfig.html) about the reconfig feature,especially the "Security" part.
+Before using this cli,read the details in the [Dynamic Reconfiguration](zookeeperReconfig.html) about the reconfig
+feature,especially the "Security" part.
 
 Pre-requisites:
 
@@ -395,6 +423,7 @@ Pre-requisites:
 ```
 
 ## redo
+
 Redo the cmd with the index from history.
 
 ```bash
@@ -409,6 +438,7 @@ Redo the cmd with the index from history.
 ```
 
 ## removewatches
+
 Remove the watches under a node.
 
 ```bash
@@ -421,6 +451,7 @@ Remove the watches under a node.
 ```
 
 ## set
+
 Set/update the data on a path.
 
 ```bash
@@ -447,6 +478,7 @@ Set/update the data on a path.
 ```
 
 ## setAcl
+
 Set the Acl permission for one node.
 
 ```bash
@@ -484,6 +516,7 @@ Set the Acl permission for one node.
 ```
 
 ## setquota
+
 Set the quota in one path.
 
 ```bash
@@ -527,6 +560,7 @@ foo
 ```
 
 ## stat
+
 Showing the stat/metadata of one node.
 
 ```bash
@@ -545,6 +579,7 @@ Showing the stat/metadata of one node.
 ```
 
 ## sync
+
 Sync the data of one node between leader and followers(Asynchronous sync)
 
 ```bash
@@ -553,6 +588,7 @@ Sync the data of one node between leader and followers(Asynchronous sync)
 ```
 
 ## version
+
 Show the version of the ZooKeeper client/CLI
 
 ```bash
@@ -561,6 +597,7 @@ ZooKeeper CLI version: 3.6.0-SNAPSHOT-29f9b2c1c0e832081f94d59a6b88709c5f1bb3ca, 
 ```
 
 ## whoami
+
 Gives all authentication information added into the current session.
 
     [zkshell: 1] whoami

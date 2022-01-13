@@ -25,11 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
+
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.DummyWatcher;
 import org.apache.zookeeper.PortAssignment;
@@ -98,12 +100,12 @@ public class FileTxnLogTest extends ZKTestCase {
         // Append and commit 2 transactions to the log
         // Prior to ZOOKEEPER-2249, attempting to pad in association with the second transaction will corrupt the first
         fileTxnLog.append(
-            new TxnHeader(1, 1, 1, 1, ZooDefs.OpCode.create),
-            new CreateTxn("/testPreAllocSizeSmallerThanTxnData1", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
+                new TxnHeader(1, 1, 1, 1, ZooDefs.OpCode.create),
+                new CreateTxn("/testPreAllocSizeSmallerThanTxnData1", data, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
         fileTxnLog.commit();
         fileTxnLog.append(
-            new TxnHeader(1, 1, 2, 2, ZooDefs.OpCode.create),
-            new CreateTxn("/testPreAllocSizeSmallerThanTxnData2", new byte[]{}, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
+                new TxnHeader(1, 1, 2, 2, ZooDefs.OpCode.create),
+                new CreateTxn("/testPreAllocSizeSmallerThanTxnData2", new byte[]{}, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
         fileTxnLog.commit();
         fileTxnLog.close();
 
@@ -145,8 +147,8 @@ public class FileTxnLogTest extends ZKTestCase {
         // When ...
         for (int i = 0; i < 50; i++) {
             fileTxnLog.append(
-                new TxnHeader(1, 1, 1, 1, ZooDefs.OpCode.create),
-                new CreateTxn("/testFsyncThresholdCountIncreased", new byte[]{}, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
+                    new TxnHeader(1, 1, 1, 1, ZooDefs.OpCode.create),
+                    new CreateTxn("/testFsyncThresholdCountIncreased", new byte[]{}, ZooDefs.Ids.OPEN_ACL_UNSAFE, false, 0));
             fileTxnLog.commit(); // only 1 commit, otherwise it will be flaky
             // Then ... verify serverStats is updated to the number of commits (as threshold is set to 0)
             assertEquals((long) i + 1, serverStats.getFsyncThresholdExceedCount());

@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,6 +34,7 @@ import java.security.cert.Certificate;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.jute.Record;
 import org.apache.zookeeper.ClientCnxn;
@@ -118,6 +120,7 @@ public class NIOServerCnxn extends ServerCnxn {
     /**
      * send buffer without using the asynchronous
      * calls to selector and then close the socket
+     *
      * @param bb
      */
     void sendBufferSync(ByteBuffer bb) {
@@ -169,13 +172,15 @@ public class NIOServerCnxn extends ServerCnxn {
         setStale();
         ServerMetrics.getMetrics().CONNECTION_DROP_COUNT.add(1);
         throw new EndOfStreamException("Unable to read additional data from client,"
-                                       + " it probably closed the socket:"
-                                       + " address = " + sock.socket().getRemoteSocketAddress() + ","
-                                       + " session = 0x" + Long.toHexString(sessionId),
-                                       DisconnectReason.UNABLE_TO_READ_FROM_CLIENT);
+                + " it probably closed the socket:"
+                + " address = " + sock.socket().getRemoteSocketAddress() + ","
+                + " session = 0x" + Long.toHexString(sessionId),
+                DisconnectReason.UNABLE_TO_READ_FROM_CLIENT);
     }
 
-    /** Read the request payload (everything following the length prefix) */
+    /**
+     * Read the request payload (everything following the length prefix)
+     */
     private void readPayload() throws IOException, InterruptedException, ClientCnxnLimitException {
         //失败
         if (incomingBuffer.remaining() != 0) { // have we read length bytes?
@@ -455,6 +460,7 @@ public class NIOServerCnxn extends ServerCnxn {
 
         /**
          * Check if we are ready to send another chunk.
+         *
          * @param force force sending, even if not a full chunk
          */
         private void checkFlush(boolean force) {
@@ -486,7 +492,9 @@ public class NIOServerCnxn extends ServerCnxn {
         }
 
     }
-    /** Return if four letter word found and responded to, otw false
+
+    /**
+     * Return if four letter word found and responded to, otw false
      * [ruok] 查看当前zkServer是否启动，返回imok. ...
      * [dump] 列出未经处理的会话和临时节点 ...
      * [conf] 查看服务器配置 ...
@@ -495,8 +503,7 @@ public class NIOServerCnxn extends ServerCnxn {
      * [mntr] 监控zk健康信息 ...
      * [wchs] 展示watch的信息
      * 四字命令
-     *
-     * **/
+     **/
     private boolean checkFourLetterWord(final SelectionKey k, final int len) throws IOException {
         // We take advantage of the limited size of the length to look
         // for cmds. They are all 4-bytes which fits inside of an int
@@ -530,9 +537,9 @@ public class NIOServerCnxn extends ServerCnxn {
         if (!FourLetterCommands.isEnabled(cmd)) {
             LOG.debug("Command {} is not executed because it is not in the whitelist.", cmd);
             NopCommand nopCmd = new NopCommand(
-                pwriter,
-                this,
-                cmd + " is not executed because it is not in the whitelist.");
+                    pwriter,
+                    this,
+                    cmd + " is not executed because it is not in the whitelist.");
             nopCmd.start();
             return true;
         }
@@ -557,8 +564,9 @@ public class NIOServerCnxn extends ServerCnxn {
         }
     }
 
-    /** Reads the first 4 bytes of lenBuffer, which could be true length or
-     *  four letter word.
+    /**
+     * Reads the first 4 bytes of lenBuffer, which could be true length or
+     * four letter word.
      *
      * @param k selection key
      * @return true if length read, otw false (wasn't really the length)
@@ -573,7 +581,7 @@ public class NIOServerCnxn extends ServerCnxn {
         }
         if (len < 0 || len > BinaryInputArchive.maxBuffer) {
             throw new IOException("Len error. "
-                    + "A message from " +  this.getRemoteSocketAddress() + " with advertised length of " + len
+                    + "A message from " + this.getRemoteSocketAddress() + " with advertised length of " + len
                     + " is either a malformed message or too large to process"
                     + " (length is greater than jute.maxbuffer=" + BinaryInputArchive.maxBuffer + ")");
         }
@@ -645,12 +653,12 @@ public class NIOServerCnxn extends ServerCnxn {
         }
 
         String logMsg = String.format(
-            "客户端关闭连接 %s %s",
-            sock.socket().getRemoteSocketAddress(),
-            sessionId != 0
-                ? "which had sessionid 0x" + Long.toHexString(sessionId)
-                : "(no session established for client)"
-            );
+                "客户端关闭连接 %s %s",
+                sock.socket().getRemoteSocketAddress(),
+                sessionId != 0
+                        ? "which had sessionid 0x" + Long.toHexString(sessionId)
+                        : "(no session established for client)"
+        );
         LOG.debug(logMsg);
 
         closeSock(sock);
@@ -721,9 +729,9 @@ public class NIOServerCnxn extends ServerCnxn {
         ReplyHeader h = new ReplyHeader(ClientCnxn.NOTIFICATION_XID, -1L, 0);
         if (LOG.isTraceEnabled()) {
             ZooTrace.logTraceMessage(
-                LOG,
-                ZooTrace.EVENT_DELIVERY_TRACE_MASK,
-                "Deliver event " + event + " to 0x" + Long.toHexString(this.sessionId) + " through " + this);
+                    LOG,
+                    ZooTrace.EVENT_DELIVERY_TRACE_MASK,
+                    "Deliver event " + event + " to 0x" + Long.toHexString(this.sessionId) + " through " + this);
         }
 
         // Convert WatchedEvent to a type that can be sent over the wire

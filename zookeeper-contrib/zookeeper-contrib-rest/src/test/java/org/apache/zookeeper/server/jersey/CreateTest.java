@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -67,43 +67,42 @@ public class CreateTest extends Base {
     public static Collection<Object[]> data() throws Exception {
         String baseZnode = Base.createBaseZNode();
 
-        return Arrays.asList(new Object[][] {
-          {MediaType.APPLICATION_JSON,
-              baseZnode, "foo bar", "utf8",
-              ClientResponse.Status.CREATED,
-              new ZPath(baseZnode + "/foo bar"), null,
-              false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t1", "utf8",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t1"),
-              null, false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t1", "utf8",
-              ClientResponse.Status.CONFLICT, null, null, false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t2", "utf8",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t2"),
-              "".getBytes(), false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t2", "utf8",
-              ClientResponse.Status.CONFLICT, null, null, false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t3", "utf8",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t3"),
-              "foo".getBytes(), false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t3", "utf8",
-              ClientResponse.Status.CONFLICT, null, null, false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-t4", "base64",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t4"),
-              "foo".getBytes(), false },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-", "utf8",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-"), null,
-              true },
-          {MediaType.APPLICATION_JSON, baseZnode, "c-", "utf8",
-              ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-"), null,
-              true }
-          });
+        return Arrays.asList(new Object[][]{
+                {MediaType.APPLICATION_JSON,
+                        baseZnode, "foo bar", "utf8",
+                        ClientResponse.Status.CREATED,
+                        new ZPath(baseZnode + "/foo bar"), null,
+                        false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t1", "utf8",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t1"),
+                        null, false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t1", "utf8",
+                        ClientResponse.Status.CONFLICT, null, null, false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t2", "utf8",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t2"),
+                        "".getBytes(), false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t2", "utf8",
+                        ClientResponse.Status.CONFLICT, null, null, false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t3", "utf8",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t3"),
+                        "foo".getBytes(), false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t3", "utf8",
+                        ClientResponse.Status.CONFLICT, null, null, false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-t4", "base64",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-t4"),
+                        "foo".getBytes(), false},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-", "utf8",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-"), null,
+                        true},
+                {MediaType.APPLICATION_JSON, baseZnode, "c-", "utf8",
+                        ClientResponse.Status.CREATED, new ZPath(baseZnode + "/c-"), null,
+                        true}
+        });
     }
 
     public CreateTest(String accept, String path, String name, String encoding,
-            ClientResponse.Status status, ZPath expectedPath, byte[] data,
-            boolean sequence)
-    {
+                      ClientResponse.Status status, ZPath expectedPath, byte[] data,
+                      boolean sequence) {
         this.accept = accept;
         this.path = path;
         this.name = name;
@@ -117,7 +116,7 @@ public class CreateTest extends Base {
     @Test
     public void testCreate() throws Exception {
         WebResource wr = znodesr.path(path).queryParam("dataformat", encoding)
-            .queryParam("name", name);
+                .queryParam("name", name);
         if (data == null) {
             wr = wr.queryParam("null", "true");
         }

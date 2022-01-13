@@ -28,8 +28,10 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import org.apache.jute.BinaryOutputArchive;
 import org.apache.jute.OutputArchive;
 import org.apache.jute.Record;

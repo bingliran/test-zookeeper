@@ -20,6 +20,7 @@ package org.apache.zookeeper;
 
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.WatcherType;
 
@@ -36,11 +37,11 @@ public class WatchDeregistration {
     private final ZKWatchManager zkManager;
 
     public WatchDeregistration(
-        String clientPath,
-        Watcher watcher,
-        WatcherType watcherType,
-        boolean local,
-        ZKWatchManager zkManager) {
+            String clientPath,
+            Watcher watcher,
+            WatcherType watcherType,
+            boolean local,
+            ZKWatchManager zkManager) {
         this.clientPath = clientPath;
         this.watcher = watcher;
         this.watcherType = watcherType;
@@ -51,9 +52,8 @@ public class WatchDeregistration {
     /**
      * Unregistering watcher that was added on path.
      *
-     * @param rc
-     *            the result code of the operation that attempted to remove
-     *            watch on the path.
+     * @param rc the result code of the operation that attempted to remove
+     *           watch on the path.
      */
     public Map<EventType, Set<Watcher>> unregister(int rc) throws KeeperException {
         return zkManager.removeWatcher(clientPath, watcher, watcherType, local, rc);

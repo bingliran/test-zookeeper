@@ -25,7 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import java.net.InetSocketAddress;
+
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.junit.jupiter.api.Test;
 

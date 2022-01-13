@@ -19,6 +19,7 @@ package org.apache.zookeeper.audit;
 
 import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -27,6 +28,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -126,7 +128,7 @@ public class Log4jAuditLoggerTest extends QuorumPeerTestBase {
             assertEquals(Code.BADVERSION, code);
         }
         verifyLog(getAuditLog(AuditConstants.OP_DELETE, path,
-                Result.FAILURE),
+                        Result.FAILURE),
                 readAuditLog(os));
         zk.delete(path, -1);
         verifyLog(getAuditLog(AuditConstants.OP_DELETE, path),
@@ -147,7 +149,7 @@ public class Log4jAuditLoggerTest extends QuorumPeerTestBase {
             assertEquals(Code.BADVERSION, code);
         }
         verifyLog(getAuditLog(AuditConstants.OP_SETDATA, path,
-                Result.FAILURE),
+                        Result.FAILURE),
                 readAuditLog(os));
         zk.setData(path, "newdata".getBytes(), -1);
         verifyLog(getAuditLog(AuditConstants.OP_SETDATA, path),
@@ -202,7 +204,7 @@ public class Log4jAuditLoggerTest extends QuorumPeerTestBase {
         List<String> multiOpLogs = readAuditLog(os, 3);
         // verify that each multi operation success is logged
         verifyLog(getAuditLog(AuditConstants.OP_CREATE, multiop,
-                Result.SUCCESS, null, createMode),
+                        Result.SUCCESS, null, createMode),
                 multiOpLogs.get(0));
         verifyLog(getAuditLog(AuditConstants.OP_SETDATA, multiop),
                 multiOpLogs.get(1));
@@ -222,7 +224,7 @@ public class Log4jAuditLoggerTest extends QuorumPeerTestBase {
         // Verify that multi operation failure is logged, and there is no path
         // mentioned in the audit log
         verifyLog(getAuditLog(AuditConstants.OP_MULTI_OP, null,
-                Result.FAILURE),
+                        Result.FAILURE),
                 readAuditLog(os));
     }
 

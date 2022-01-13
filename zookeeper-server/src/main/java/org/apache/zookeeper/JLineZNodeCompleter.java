@@ -20,6 +20,7 @@ package org.apache.zookeeper;
 
 import java.util.Collections;
 import java.util.List;
+
 import jline.console.completer.Completer;
 
 class JLineZNodeCompleter implements Completer {

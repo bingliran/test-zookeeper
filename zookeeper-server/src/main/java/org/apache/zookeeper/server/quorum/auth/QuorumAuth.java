@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.quorum.auth;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.zookeeper.server.quorum.QuorumAuthPacket;
 import org.slf4j.Logger;
@@ -62,16 +63,16 @@ public class QuorumAuth {
 
         static Status getStatus(int status) {
             switch (status) {
-            case 0:
-                return IN_PROGRESS;
-            case 1:
-                return SUCCESS;
-            case -1:
-                return ERROR;
-            default:
-                LOG.error("Unknown status:{}!", status);
-                assert false : "Unknown status!";
-                return ERROR;
+                case 0:
+                    return IN_PROGRESS;
+                case 1:
+                    return SUCCESS;
+                case -1:
+                    return ERROR;
+                default:
+                    LOG.error("Unknown status:{}!", status);
+                    assert false : "Unknown status!";
+                    return ERROR;
             }
         }
 

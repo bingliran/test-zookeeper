@@ -19,6 +19,7 @@
 package org.apache.zookeeper.server.quorum.auth;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.security.auth.login.Configuration;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZKTestCase;
@@ -77,33 +79,33 @@ public class QuorumAuthTestBase extends ZKTestCase {
     }
 
     protected String startQuorum(final int serverCount, Map<String, String> authConfigs,
-        int authServerCount) throws IOException {
+                                 int authServerCount) throws IOException {
         return this.startQuorum(serverCount, authConfigs, authServerCount, false);
     }
 
     protected String startMultiAddressQuorum(final int serverCount, Map<String, String> authConfigs,
-        int authServerCount) throws IOException {
+                                             int authServerCount) throws IOException {
         System.setProperty(QuorumPeer.CONFIG_KEY_MULTI_ADDRESS_ENABLED, "true");
         return this.startQuorum(serverCount, authConfigs, authServerCount, true);
     }
 
     protected String startQuorum(
-        final int serverCount,
-        Map<String, String> authConfigs,
-        int authServerCount,
-        boolean multiAddress) throws IOException {
+            final int serverCount,
+            Map<String, String> authConfigs,
+            int authServerCount,
+            boolean multiAddress) throws IOException {
         StringBuilder connectStr = new StringBuilder();
         final int[] clientPorts = startQuorum(serverCount, connectStr, authConfigs, authServerCount, multiAddress);
         for (int i = 0; i < serverCount; i++) {
             assertTrue(
-                ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], ClientBase.CONNECTION_TIMEOUT),
-                "waiting for server " + i + " being up");
+                    ClientBase.waitForServerUp("127.0.0.1:" + clientPorts[i], ClientBase.CONNECTION_TIMEOUT),
+                    "waiting for server " + i + " being up");
         }
         return connectStr.toString();
     }
 
     protected int[] startQuorum(final int serverCount, StringBuilder connectStr, Map<String, String> authConfigs,
-        int authServerCount, boolean multiAddress) throws IOException {
+                                int authServerCount, boolean multiAddress) throws IOException {
         final int[] clientPorts = new int[serverCount];
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < serverCount; i++) {
@@ -134,10 +136,10 @@ public class QuorumAuthTestBase extends ZKTestCase {
     }
 
     private void startServer(
-        Map<String, String> authConfigs,
-        final int[] clientPorts,
-        String quorumCfg,
-        int i) throws IOException {
+            Map<String, String> authConfigs,
+            final int[] clientPorts,
+            String quorumCfg,
+            int i) throws IOException {
         MainThread mthread = new MainThread(i, clientPorts[i], quorumCfg, authConfigs);
         mt.add(mthread);
         mthread.start();

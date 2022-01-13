@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.jute.Record;
 import org.apache.zookeeper.admin.ZooKeeperAdmin;
 import org.apache.zookeeper.proto.ReplyHeader;
@@ -54,6 +55,7 @@ public class TestableZooKeeper extends ZooKeeperAdmin {
     /**
      * Cause this ZooKeeper object to stop receiving from the ZooKeeperServer
      * for the given number of milliseconds.
+     *
      * @param ms the number of milliseconds to pause.
      * @return true if the connection is paused, otherwise false
      */
@@ -101,14 +103,15 @@ public class TestableZooKeeper extends ZooKeeperAdmin {
     }
 
     public ReplyHeader submitRequest(
-        RequestHeader h,
-        Record request,
-        Record response,
-        WatchRegistration watchRegistration) throws InterruptedException {
+            RequestHeader h,
+            Record request,
+            Record response,
+            WatchRegistration watchRegistration) throws InterruptedException {
         return cnxn.submitRequest(h, request, response, watchRegistration);
     }
 
-    /** Testing only!!! Really!!!! This is only here to test when the client
+    /**
+     * Testing only!!! Really!!!! This is only here to test when the client
      * disconnects from the server w/o sending a session disconnect (ie
      * ending the session cleanly). The server will eventually notice the
      * client is no longer pinging and will timeout the session.

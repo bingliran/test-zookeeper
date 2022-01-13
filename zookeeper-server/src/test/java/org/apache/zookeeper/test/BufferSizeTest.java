@@ -20,8 +20,10 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
+
 import org.apache.jute.BinaryInputArchive;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -66,7 +68,9 @@ public class BufferSizeTest extends ClientBase {
         });
     }
 
-    /** Issues requests containing data smaller, equal, and greater than TEST_MAXBUFFER. */
+    /**
+     * Issues requests containing data smaller, equal, and greater than TEST_MAXBUFFER.
+     */
     private void testRequests(ClientOp clientOp) throws Exception {
         clientOp.execute(new byte[TEST_MAXBUFFER - 60]);
         try {

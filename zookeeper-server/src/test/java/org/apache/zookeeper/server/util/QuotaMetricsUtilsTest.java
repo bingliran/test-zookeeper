@@ -21,9 +21,11 @@ package org.apache.zookeeper.server.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.Quotas;
 import org.apache.zookeeper.StatsTrack;
@@ -200,14 +202,14 @@ public class QuotaMetricsUtilsTest extends ZKTestCase {
         final Map<String, Number> metricsMap = new HashMap<>();
 
         QuotaMetricsUtils.collectQuotaLimitOrUsage(Quotas.quotaPath("/ns1") + QuotaMetricsUtils.LIMIT_END_STRING,
-                                        new DataNode(new byte[0], null, null),
-                                        metricsMap,
-                                        QuotaMetricsUtils.QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_BYTES_LIMIT);
+                new DataNode(new byte[0], null, null),
+                metricsMap,
+                QuotaMetricsUtils.QUOTA_LIMIT_USAGE_METRIC_TYPE.QUOTA_BYTES_LIMIT);
 
         assertEquals(1, metricsMap.size());
         final Map.Entry<String, Number> entry = metricsMap.entrySet().iterator().next();
         assertEquals("ns1", entry.getKey());
-        assertEquals(-1L,  entry.getValue().longValue());
+        assertEquals(-1L, entry.getValue().longValue());
     }
 
     @Test

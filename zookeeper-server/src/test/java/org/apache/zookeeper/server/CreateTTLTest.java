@@ -23,11 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
 import org.apache.zookeeper.AsyncCallback;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -62,8 +64,8 @@ public class CreateTTLTest extends ClientBase {
     @BeforeEach
     public void setUp(TestInfo testInfo) throws Exception {
         System.setProperty(
-            EphemeralType.EXTENDED_TYPES_ENABLED_PROPERTY,
-            disabledTests.contains(testInfo.getTestMethod().get().getName()) ? "false" : "true");
+                EphemeralType.EXTENDED_TYPES_ENABLED_PROPERTY,
+                disabledTests.contains(testInfo.getTestMethod().get().getName()) ? "false" : "true");
         super.setUpWithServerId(254);
         zk = createClient();
     }
@@ -104,8 +106,8 @@ public class CreateTTLTest extends ClientBase {
         assertNull(zk.exists(path, false), "An invalid CreateTTLRequest should not result in znode creation");
 
         request = new CreateTTLRequest(path, new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT_WITH_TTL.toFlag(),
-                                       EphemeralType.TTL.maxValue()
-                                               + 1);
+                EphemeralType.TTL.maxValue()
+                        + 1);
         response = new CreateResponse();
         r = zk.submitRequest(h, request, response, null);
         assertEquals(r.getErr(), Code.BADARGUMENTS.intValue(), "An invalid CreateTTLRequest should throw BadArguments");

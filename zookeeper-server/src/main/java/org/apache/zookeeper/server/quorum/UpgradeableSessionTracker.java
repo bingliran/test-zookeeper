@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.server.SessionTracker;
 import org.apache.zookeeper.server.ZooKeeperServerListener;
@@ -114,7 +115,7 @@ public abstract class UpgradeableSessionTracker implements SessionTracker {
     }
 
     public void checkGlobalSession(long sessionId, Object owner)
-        throws KeeperException.SessionExpiredException, KeeperException.SessionMovedException {
+            throws KeeperException.SessionExpiredException, KeeperException.SessionMovedException {
         throw new UnsupportedOperationException();
     }
 
@@ -127,6 +128,6 @@ public abstract class UpgradeableSessionTracker implements SessionTracker {
 
     public Set<Long> localSessions() {
         return (localSessionTracker == null) ? Collections.<Long>emptySet()
-            : localSessionTracker.localSessions();
+                : localSessionTracker.localSessions();
     }
 }

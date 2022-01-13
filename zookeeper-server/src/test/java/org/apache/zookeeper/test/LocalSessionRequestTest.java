@@ -19,6 +19,7 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.server.Request;
@@ -72,6 +73,7 @@ public class LocalSessionRequestTest extends ZKTestCase {
 
     /**
      * Walk through the target peer commmittedLog.
+     *
      * @param sessionId
      * @param peerId
      */

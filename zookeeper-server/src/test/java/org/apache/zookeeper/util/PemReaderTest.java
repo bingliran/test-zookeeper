@@ -20,6 +20,7 @@ package org.apache.zookeeper.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
@@ -27,6 +28,7 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Optional;
+
 import org.apache.zookeeper.common.BaseX509ParameterizedTestCase;
 import org.apache.zookeeper.common.KeyStoreFileType;
 import org.apache.zookeeper.common.X509KeyType;
@@ -42,8 +44,8 @@ public class PemReaderTest extends BaseX509ParameterizedTestCase {
             throws Exception {
         init(caKeyType, certKeyType, keyPassword, paramIndex);
         Optional<String> optPassword = x509TestContext.getKeyStorePassword().length() > 0
-                                               ? Optional.of(x509TestContext.getKeyStorePassword())
-                                               : Optional.empty();
+                ? Optional.of(x509TestContext.getKeyStorePassword())
+                : Optional.empty();
         PrivateKey privateKey = PemReader.loadPrivateKey(x509TestContext.getKeyStoreFile(KeyStoreFileType.PEM), optPassword);
         assertEquals(x509TestContext.getKeyStoreKeyPair().getPrivate(), privateKey);
     }

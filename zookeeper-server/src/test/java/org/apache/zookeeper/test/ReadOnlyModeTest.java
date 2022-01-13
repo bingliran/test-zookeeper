@@ -24,11 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Layout;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -150,7 +152,7 @@ public class ReadOnlyModeTest extends ZKTestCase {
         watcher.reset();
         qu.start(2);
         assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + qu.getPeer(2).clientPort, CONNECTION_TIMEOUT),
-            "waiting for server up");
+                "waiting for server up");
         zk.close();
         watcher.reset();
 
@@ -229,7 +231,7 @@ public class ReadOnlyModeTest extends ZKTestCase {
         watcher.reset();
         qu.start(2);
         assertTrue(ClientBase.waitForServerUp("127.0.0.1:" + qu.getPeer(2).clientPort, CONNECTION_TIMEOUT),
-            "waiting for server up");
+                "waiting for server up");
         LOG.info("Server 127.0.0.1:{} is up", qu.getPeer(2).clientPort);
         // ZOOKEEPER-2722: wait until we can connect to a read-write server after the quorum
         // is formed. Otherwise, it is possible that client first connects to a read-only server,

@@ -19,12 +19,14 @@
 package org.apache.zookeeper.server.command;
 
 import java.io.PrintWriter;
+
 import org.apache.zookeeper.server.DataTree;
 import org.apache.zookeeper.server.ServerCnxn;
 
 public class WatchCommand extends AbstractFourLetterCommand {
 
     int len = 0;
+
     public WatchCommand(PrintWriter pw, ServerCnxn serverCnxn, int len) {
         super(pw, serverCnxn);
         this.len = len;

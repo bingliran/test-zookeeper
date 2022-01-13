@@ -56,7 +56,7 @@ public class NetUtils {
             int i = hostPort.lastIndexOf(']');
             if (i < 0) {
                 throw new IllegalArgumentException(
-                    hostPort + " starts with '[' but has no matching ']'");
+                        hostPort + " starts with '[' but has no matching ']'");
             }
             String host = hostPort.substring(1, i);
             if (host.isEmpty()) {
@@ -65,10 +65,10 @@ public class NetUtils {
             if (hostPort.length() > i + 1) {
                 return getHostPort(hostPort, i, host);
             }
-            return new String[] { host };
+            return new String[]{host};
         } else {
             //Not an IPV6 host port string
-            return new String[] {};
+            return new String[]{};
         }
     }
 
@@ -83,6 +83,6 @@ public class NetUtils {
         }
         //do not include
         String port = hostPort.substring(indexOfClosingBracket + 2);
-        return new String[] { host, port };
+        return new String[]{host, port};
     }
 }

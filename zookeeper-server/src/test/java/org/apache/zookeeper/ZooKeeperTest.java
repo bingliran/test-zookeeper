@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.zookeeper.AsyncCallback.VoidCallback;
 import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.ZooDefs.Ids;
@@ -56,9 +58,7 @@ import org.apache.zookeeper.test.ClientBase;
 import org.junit.jupiter.api.Test;
 
 /**
- *
  * Testing ZooKeeper public methods
- *
  */
 public class ZooKeeperTest extends ClientBase {
 
@@ -506,7 +506,7 @@ public class ZooKeeperTest extends ClientBase {
     }
 
     private String executeLine(ZooKeeperMain zkMain, String cmd)
-        throws InterruptedException, IOException {
+            throws InterruptedException, IOException {
         // setup redirect out/err streams to get System.in/err, use this
         // judiciously!
         final PrintStream systemErr = System.err; // get current err
@@ -669,14 +669,14 @@ public class ZooKeeperTest extends ClientBase {
             CountdownWatcher watcher = new CountdownWatcher();
             HostProvider aHostProvider = new StaticHostProvider(new ConnectStringParser(hostPort).getServerAddresses());
             newZKClient = new ZooKeeper(
-                hostPort,
-                zk.getSessionTimeout(),
-                watcher,
-                zk.getSessionId(),
-                zk.getSessionPasswd(),
-                false,
-                aHostProvider,
-                clientConfig);
+                    hostPort,
+                    zk.getSessionTimeout(),
+                    watcher,
+                    zk.getSessionId(),
+                    zk.getSessionPasswd(),
+                    false,
+                    aHostProvider,
+                    clientConfig);
             watcher.waitForConnected(CONNECTION_TIMEOUT);
             assertEquals(zk.getSessionId(), newZKClient.getSessionId(), "Old client session id and new clinet session id must be same");
         } finally {
@@ -760,7 +760,7 @@ public class ZooKeeperTest extends ClientBase {
         expectedResults.add("ip: 127.0.0.1");
 
         // Check who ami without authentication/without any user into the session
-        cmd.parse(new String[] { "whoami" });
+        cmd.parse(new String[]{"whoami"});
         String actualResult = runCommandExpect(cmd);
         assertClientAuthInfo(expectedResults, actualResult);
 
@@ -780,7 +780,7 @@ public class ZooKeeperTest extends ClientBase {
     private void assertClientAuthInfo(List<String> expected, String actual) {
         expected.forEach(s -> {
             assertTrue(actual.contains(s),
-                "Expected result part '" + s + "' not present in actual result '" + actual + "' ");
+                    "Expected result part '" + s + "' not present in actual result '" + actual + "' ");
         });
     }
 

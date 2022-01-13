@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
 import org.apache.yetus.audience.InterfaceAudience;
 import org.apache.zookeeper.admin.ZooKeeperAdmin;
 import org.apache.zookeeper.cli.CliCommand;
@@ -53,7 +54,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The command line client to ZooKeeper.
- *
  */
 @InterfaceAudience.Public
 public class ZooKeeperMain {
@@ -83,14 +83,14 @@ public class ZooKeeperMain {
         commandMap.put("printwatches", "on|off");
         commandMap.put("quit", "");
         Stream.of(CommandFactory.Command.values())
-            .map(command -> CommandFactory.getInstance(command))
-            // add all commands to commandMapCli and commandMap
-            .forEach(cliCommand ->{
-                cliCommand.addToMap(commandMapCli);
-                commandMap.put(
-                        cliCommand.getCmdStr(),
-                        cliCommand.getOptionStr());
-            });
+                .map(command -> CommandFactory.getInstance(command))
+                // add all commands to commandMapCli and commandMap
+                .forEach(cliCommand -> {
+                    cliCommand.addToMap(commandMapCli);
+                    commandMap.put(
+                            cliCommand.getCmdStr(),
+                            cliCommand.getOptionStr());
+                });
     }
 
     static void usage() {
@@ -112,7 +112,7 @@ public class ZooKeeperMain {
             if (connectLatch != null) {
                 // connection success
                 if (event.getType() == Event.EventType.None
-                    && event.getState() == Event.KeeperState.SyncConnected) {
+                        && event.getState() == Event.KeeperState.SyncConnected) {
                     connectLatch.countDown();
                 }
             }
@@ -122,7 +122,6 @@ public class ZooKeeperMain {
 
     /**
      * A storage class for both command line options and shell commands.
-     *
      */
     static class MyCommandOptions {
 
@@ -160,6 +159,7 @@ public class ZooKeeperMain {
         /**
          * Parses a command line that may contain one or more flags
          * before an optional command string
+         *
          * @param args command line arguments
          * @return true if parsing succeeded, false otherwise.
          */
@@ -201,6 +201,7 @@ public class ZooKeeperMain {
 
         /**
          * Breaks a string into command + arguments.
+         *
          * @param cmdstring string of form "cmd arg1 arg2..etc"
          * @return true if parsing succeeded.
          */
@@ -229,7 +230,6 @@ public class ZooKeeperMain {
     /**
      * Makes a list of possible completions, either for commands
      * or for zk nodes if the token to complete begins with /
-     *
      */
 
     protected void addToHistory(int i, String cmd) {
@@ -327,10 +327,10 @@ public class ZooKeeperMain {
                     executeLine(line);
                 }
             } catch (ClassNotFoundException
-                | NoSuchMethodException
-                | InvocationTargetException
-                | IllegalAccessException
-                | InstantiationException e
+                    | NoSuchMethodException
+                    | InvocationTargetException
+                    | IllegalAccessException
+                    | InstantiationException e
             ) {
                 LOG.debug("Unable to start jline", e);
                 jlinemissing = true;

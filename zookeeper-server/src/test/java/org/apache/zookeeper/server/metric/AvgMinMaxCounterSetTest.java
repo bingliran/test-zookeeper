@@ -19,7 +19,9 @@
 package org.apache.zookeeper.server.metric;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Map;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

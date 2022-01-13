@@ -19,8 +19,10 @@
 package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+
 import org.apache.zookeeper.server.auth.DigestAuthenticationProvider;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.jupiter.api.AfterAll;

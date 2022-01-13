@@ -8,16 +8,16 @@
 
 For the latest information about Apache ZooKeeper, please visit our website at:
 
-   https://zookeeper.apache.org
+https://zookeeper.apache.org
 
 and our wiki, at:
 
-   https://cwiki.apache.org/confluence/display/ZOOKEEPER
+https://cwiki.apache.org/confluence/display/ZOOKEEPER
 
 ## Packaging/release artifacts
 
-Either downloaded from https://zookeeper.apache.org/releases.html or
-found in zookeeper-assembly/target directory after building the project with maven.
+Either downloaded from https://zookeeper.apache.org/releases.html or found in zookeeper-assembly/target directory after
+building the project with maven.
 
     apache-zookeeper-[version].tar.gz
 
@@ -33,26 +33,34 @@ found in zookeeper-assembly/target directory after building the project with mav
         Contains all the jar files required to run ZooKeeper
         Full documentation can also be found in the docs folder
 
-As of version 3.5.5, the parent, zookeeper and zookeeper-jute artifacts
-are deployed to the central repository after the release
-is voted on and approved by the Apache ZooKeeper PMC:
+As of version 3.5.5, the parent, zookeeper and zookeeper-jute artifacts are deployed to the central repository after the
+release is voted on and approved by the Apache ZooKeeper PMC:
 
-  https://repo1.maven.org/maven2/org/apache/zookeeper/zookeeper
+https://repo1.maven.org/maven2/org/apache/zookeeper/zookeeper
 
 ## Java 8
 
-If you are going to compile with Java 1.8, you should use a
-recent release at u211 or above.
+If you are going to compile with Java 1.8, you should use a recent release at u211 or above.
 
 # Contributing
-We always welcome new contributors to the project! See [How to Contribute](https://cwiki.apache.org/confluence/display/ZOOKEEPER/HowToContribute) for details on how to submit patches as pull requests and other aspects of our contribution workflow.
+
+We always welcome new contributors to the project!
+See [How to Contribute](https://cwiki.apache.org/confluence/display/ZOOKEEPER/HowToContribute) for details on how to
+submit patches as pull requests and other aspects of our contribution workflow.
 
 
 [ciBadge]: https://github.com/apache/zookeeper/workflows/CI/badge.svg
+
 [ciLink]: https://github.com/apache/zookeeper/actions
+
 [liBadge]: https://img.shields.io/github/license/apache/zookeeper?color=282661
+
 [liLink]: https://github.com/apache/zookeeper/blob/master/LICENSE.txt
+
 [mcBadge]: https://img.shields.io/maven-central/v/org.apache.zookeeper/zookeeper
+
 [mcLink]: https://zookeeper.apache.org/releases
+
 [trBadge]: https://travis-ci.org/apache/zookeeper.svg?branch=master
+
 [trLink]: https://travis-ci.org/apache/zookeeper

@@ -20,9 +20,11 @@ package org.apache.zookeeper.server.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.junit.jupiter.api.Test;
 

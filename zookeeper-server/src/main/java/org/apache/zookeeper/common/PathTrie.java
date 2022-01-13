@@ -28,6 +28,7 @@
  import java.util.concurrent.locks.ReadWriteLock;
  import java.util.concurrent.locks.ReentrantReadWriteLock;
  import java.util.stream.Stream;
+
  import org.slf4j.Logger;
  import org.slf4j.LoggerFactory;
 
@@ -37,21 +38,25 @@
   * looks like a tree with edges mapping to
   * the component of a path.
   * example /ab/bc/cf would map to a trie
-  *           /
-  *        ab/
-  *        (ab)
-  *      bc/
-  *       /
-  *      (bc)
-  *   cf/
-  *   (cf)
+  * /
+  * ab/
+  * (ab)
+  * bc/
+  * /
+  * (bc)
+  * cf/
+  * (cf)
   */
  public class PathTrie {
 
-     /** Logger for this class */
+     /**
+      * Logger for this class
+      */
      private static final Logger LOG = LoggerFactory.getLogger(PathTrie.class);
 
-     /** Root node of PathTrie */
+     /**
+      * Root node of PathTrie
+      */
      private final TrieNode rootNode;
 
      private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
@@ -71,7 +76,7 @@
           * Create a trie node with parent as parameter.
           *
           * @param parent the parent of this node
-          * @param value the value stored in this node
+          * @param value  the value stored in this node
           */
          private TrieNode(TrieNode parent, String value) {
              this.value = value;
@@ -127,7 +132,7 @@
           * Add a child to the existing node.
           *
           * @param childName the string name of the child
-          * @param node the node that is the child
+          * @param node      the node that is the child
           */
          void addChild(String childName, TrieNode node) {
              this.children.putIfAbsent(childName, node);
@@ -345,7 +350,7 @@
          }
      }
 
-     private static String[] split(final String path){
+     private static String[] split(final String path) {
          return Stream.of(path.split("/"))
                  .filter(t -> !t.trim().isEmpty())
                  .toArray(String[]::new);

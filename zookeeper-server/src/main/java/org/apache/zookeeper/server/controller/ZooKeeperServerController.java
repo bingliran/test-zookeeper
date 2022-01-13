@@ -19,7 +19,9 @@
 package org.apache.zookeeper.server.controller;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.IOException;
+
 import org.apache.zookeeper.server.ExitCode;
 import org.apache.zookeeper.server.ServerCnxn;
 import org.apache.zookeeper.server.ServerCnxnFactory;
@@ -34,7 +36,6 @@ import org.slf4j.LoggerFactory;
  * Class which accepts commands to modify ZooKeeperServer state or Connection state at runtime for the purpose of
  * single machine integration testing. Not meant to be used in production. It is recommended to use this in conjunction
  * with the CommandListener HttpServer and CommandClient.
- *
  */
 @SuppressFBWarnings(value = "IS2_INCONSISTENT_SYNC", justification = "quorum peer is internally synchronized.")
 public class ZooKeeperServerController {

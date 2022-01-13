@@ -20,6 +20,7 @@ package org.apache.zookeeper.server.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.apache.zookeeper.data.ClientInfo;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.auth.AuthenticationProvider;
@@ -29,6 +30,7 @@ public final class AuthUtil {
     private AuthUtil() {
         //Utility classes should not have public constructors
     }
+
     /**
      * Gives user name
      *
@@ -44,7 +46,7 @@ public final class AuthUtil {
     /**
      * Returns a formatted, comma-separated list of the user IDs held
      * in {@code authInfo}, or {@code null} if no user IDs were found.
-     *
+     * <p>
      * Note that while the result may be easy on the eyes, it is
      * underspecified: it does not mention the corresponding {@code
      * scheme}, nor are its components escaped.  It is intended for
@@ -60,9 +62,9 @@ public final class AuthUtil {
         }
 
         String formatted = authInfo.stream()
-            .map(AuthUtil::getUser)
-            .filter(name -> name != null && !name.trim().isEmpty())
-            .collect(Collectors.joining(","));
+                .map(AuthUtil::getUser)
+                .filter(name -> name != null && !name.trim().isEmpty())
+                .collect(Collectors.joining(","));
 
         return formatted.isEmpty() ? null : formatted;
     }

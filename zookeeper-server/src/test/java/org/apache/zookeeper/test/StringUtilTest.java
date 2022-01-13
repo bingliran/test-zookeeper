@@ -20,8 +20,10 @@ package org.apache.zookeeper.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.Arrays;
 import java.util.Collections;
+
 import org.apache.zookeeper.ZKTestCase;
 import org.apache.zookeeper.common.StringUtils;
 import org.junit.jupiter.api.Assertions;
@@ -66,7 +68,7 @@ public class StringUtilTest extends ZKTestCase {
     public void testStringJoin() {
         final String expected = "a,B,null,d";
         assertEquals(expected,
-            StringUtils.joinStrings(Arrays.asList("a", "B", null, "d"), ","));
+                StringUtils.joinStrings(Arrays.asList("a", "B", null, "d"), ","));
     }
 
 }

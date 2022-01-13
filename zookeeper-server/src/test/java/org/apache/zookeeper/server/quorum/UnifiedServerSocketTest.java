@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -42,6 +43,7 @@ import java.util.stream.Stream;
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSocket;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.common.BaseX509ParameterizedTestCase;
 import org.apache.zookeeper.common.ClientX509Util;
@@ -267,7 +269,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testConnectWithSSLToNonStrictServer(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -302,7 +304,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testConnectWithSSLToStrictServer(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -338,7 +340,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testConnectWithoutSSLToNonStrictServer(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -369,7 +371,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testConnectWithoutSSLToNonStrictServerPartialWrite(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -403,7 +405,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testConnectWithoutSSLToStrictServer(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -442,14 +444,14 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
      * accept() thread while doing mode detection if a misbehaving client
      * connects. A misbehaving client is one that either disconnects
      * immediately, or connects but does not send any data.
-     *
+     * <p>
      * This version of the test uses a non-strict server socket (i.e. it
      * accepts both TLS and plaintext connections).
      */
     @ParameterizedTest
     @MethodSource("data")
     public void testTLSDetectionNonBlockingNonStrictServerIdleClient(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -505,7 +507,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testTLSDetectionNonBlockingStrictServerIdleClient(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -546,7 +548,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testTLSDetectionNonBlockingNonStrictServerDisconnectedClient(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();
@@ -601,7 +603,7 @@ public class UnifiedServerSocketTest extends BaseX509ParameterizedTestCase {
     @ParameterizedTest
     @MethodSource("data")
     public void testTLSDetectionNonBlockingStrictServerDisconnectedClient(
-        final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
+            final X509KeyType caKeyType, final X509KeyType certKeyType, final Boolean hostnameVerification, final Integer paramIndex
     ) throws Exception {
         init(caKeyType, certKeyType, hostnameVerification, paramIndex);
         setUp();

@@ -22,6 +22,7 @@ import static org.apache.zookeeper.test.ClientBase.CONNECTION_TIMEOUT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.zookeeper.PortAssignment;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.test.ClientBase;
@@ -46,7 +48,7 @@ import org.junit.jupiter.api.Timeout;
  * has its limitation: it requires a quorum of server to work. When no quorum can be formed,
  * rolling restart is the only approach to reconfigure the ensemble (e.g. removing bad nodes
  * such that a new quorum with smaller number of nodes can be formed.).
- *
+ * <p>
  * See ZOOKEEPER-2819 for more details.
  */
 public class ReconfigRollingRestartCompatibilityTest extends QuorumPeerTestBase {
@@ -62,7 +64,7 @@ public class ReconfigRollingRestartCompatibilityTest extends QuorumPeerTestBase 
         for (int i = 0; i < serverCount; i++) {
             clientPorts.put(i, PortAssignment.unique());
             server = "server." + i + "=localhost:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                     + ":participant;localhost:" + clientPorts.get(i);
+                    + ":participant;localhost:" + clientPorts.get(i);
             serverAddress.put(i, server);
             sb.append(server + "\n");
         }
@@ -74,7 +76,7 @@ public class ReconfigRollingRestartCompatibilityTest extends QuorumPeerTestBase 
         for (Integer sid : sidsToAdd) {
             clientPorts.put(sid, PortAssignment.unique());
             serverAddress.put(sid, "server." + sid + "=localhost:" + PortAssignment.unique() + ":" + PortAssignment.unique()
-                                   + ":participant;localhost:" + clientPorts.get(sid));
+                    + ":participant;localhost:" + clientPorts.get(sid));
         }
 
         for (Integer sid : sidsToRemove) {
