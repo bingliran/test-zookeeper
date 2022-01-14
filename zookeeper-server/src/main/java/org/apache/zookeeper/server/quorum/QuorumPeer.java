@@ -536,9 +536,21 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
      * Zab protocol that peer is running.
      */
     public enum ZabState {
+        /**
+         * leader选举阶段
+         */
         ELECTION,
+        /**
+         * leader确认阶段
+         */
         DISCOVERY,
+        /**
+         * 数据同步阶段
+         */
         SYNCHRONIZATION,
+        /**
+         * 原子播报阶段
+         */
         BROADCAST
     }
 
@@ -1417,9 +1429,11 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
 
     @Override
     public void run() {
+        //设置自己的线程名称
         updateThreadName();
 
         LOG.debug("Starting quorum peer");
+        //配置jmx
         try {
             jmxQuorumBean = new QuorumBean(this);
             MBeanRegistry.getInstance().register(jmxQuorumBean, null);
@@ -1451,17 +1465,23 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         try {
             /*
              * Main loop
+             * 首先没有被shutdown
              */
             while (running) {
                 if (unavailableStartTime == 0) {
                     unavailableStartTime = Time.currentElapsedTime();
                 }
-
+                /*
+                 * 查看当前状态
+                 */
                 switch (getPeerState()) {
+                    /*
+                     * 如果是正在选举领导人
+                     */
                     case LOOKING:
                         LOG.info("LOOKING");
                         ServerMetrics.getMetrics().LOOKING_COUNT.add(1);
-
+                        //先判断当前服务是不是需要以只读方式启动
                         if (Boolean.getBoolean("readonlymode.enabled")) {
                             LOG.info("Attempting to start ReadOnlyZooKeeperServer");
 
