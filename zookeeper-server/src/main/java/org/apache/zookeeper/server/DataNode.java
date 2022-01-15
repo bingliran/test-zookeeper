@@ -49,6 +49,7 @@ public class DataNode implements Record {
 
     /**
      * the data for this datanode
+     * 本节点数据
      */
     byte[] data;
 

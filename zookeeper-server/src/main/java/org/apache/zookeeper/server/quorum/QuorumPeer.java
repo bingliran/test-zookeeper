@@ -672,6 +672,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
 
     /**
      * This is who I think the leader currently is.
+     * 当前服务认为的领导人
      */
     private volatile Vote currentVote;
 
@@ -1141,19 +1142,26 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         return quorumStats;
     }
 
+    /**
+     * 线程启动
+     */
     @Override
     public synchronized void start() {
         if (!getView().containsKey(myid)) {
             throw new RuntimeException("My id " + myid + " not in the peer list");
         }
+        //加载历史数据
         loadDataBase();
+        //启动服务
         startServerCnxnFactory();
         try {
             adminServer.start();
         } catch (AdminServerException e) {
             LOG.warn("Problem starting AdminServer", e);
         }
+        //开始选举
         startLeaderElection();
+        //jvm休眠监测
         startJvmPauseMonitor();
         super.start();
     }
@@ -1229,6 +1237,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
     public synchronized void startLeaderElection() {
         try {
             if (getPeerState() == ServerState.LOOKING) {
+                //我觉得我是 但不完全是
                 currentVote = new Vote(myid, getLastLoggedZxid(), getCurrentEpoch());
             }
         } catch (IOException e) {
@@ -1236,7 +1245,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
             re.setStackTrace(e.getStackTrace());
             throw re;
         }
-
+        //开始领导人选举
         this.electionAlg = createElectionAlgorithm(electionType);
     }
 
@@ -1374,6 +1383,8 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
             case 2:
                 throw new UnsupportedOperationException("Election Algorithm 2 is not supported.");
             case 3:
+                //QuorumCnxManager 用来维护选举中的网络通信
+                //每个服务只能同时有一个 QuorumCnxManager
                 QuorumCnxManager qcm = createCnxnManager();
                 QuorumCnxManager oldQcm = qcmRef.getAndSet(qcm);
                 if (oldQcm != null) {
@@ -1425,6 +1436,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         return null;
     }
 
+    /**
+     * 此字段为false时表示正在执行领导人选举
+     */
     boolean shuttingDownLE = false;
 
     @Override
@@ -1512,6 +1526,7 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                             try {
                                 roZkMgr.start();
                                 reconfigFlagClear();
+                                //当前为LOOKING状态 发起选举
                                 if (shuttingDownLE) {
                                     shuttingDownLE = false;
                                     startLeaderElection();
@@ -2266,6 +2281,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         });
     }
 
+    /**
+     * 获取当前服务自己的朝代
+     */
     public long getCurrentEpoch() throws IOException {
         if (currentEpoch == -1) {
             currentEpoch = readLongFromFile(CURRENT_EPOCH_FILENAME);
@@ -2273,6 +2291,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
         return currentEpoch;
     }
 
+    /**
+     * 获取领导者使用的朝代
+     */
     public long getAcceptedEpoch() throws IOException {
         if (acceptedEpoch == -1) {
             acceptedEpoch = readLongFromFile(ACCEPTED_EPOCH_FILENAME);
