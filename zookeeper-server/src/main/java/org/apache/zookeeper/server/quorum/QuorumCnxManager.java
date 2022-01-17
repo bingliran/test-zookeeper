@@ -519,7 +519,9 @@ public class QuorumCnxManager {
             // Otherwise proceed with the connection
         } else {
             LOG.debug("Have larger server identifier, so keeping the connection: (myId:{} --> sid:{})", self.getId(), sid);
+            //发送来自toSend的消息
             SendWorker sw = new SendWorker(sock, sid);
+            //接收消息放入recvQueue中
             RecvWorker rw = new RecvWorker(sock, din, sid, sw);
             sw.setRecv(rw);
 
@@ -531,6 +533,7 @@ public class QuorumCnxManager {
 
             senderWorkerMap.put(sid, sw);
 
+            //需要发送的消息队列(如果不存在则初始化) 在toSend方法中添加
             queueSendMap.putIfAbsent(sid, new CircularBlockingQueue<>(SEND_CAPACITY));
 
             sw.start();
@@ -604,6 +607,7 @@ public class QuorumCnxManager {
         try {
             protocolVersion = din.readLong();
             if (protocolVersion >= 0) { // this is a server id and not a protocol version
+                //接收到的消息的服务器id
                 sid = protocolVersion;
             } else {
                 try {
@@ -620,7 +624,7 @@ public class QuorumCnxManager {
                     return;
                 }
             }
-
+            //观察者id设置为最小
             if (sid == QuorumPeer.OBSERVER_ID) {
                 /*
                  * Choose identifier at random. We need a value to identify
@@ -636,8 +640,10 @@ public class QuorumCnxManager {
         }
 
         // do authenticating learner
+        //Sasl
         authServer.authenticate(sock, din);
-        //If wins the challenge, then close the new connection.
+        //If wins the challenge, then close the new connection.\
+        //如果serverId比我小则断开连接之后根据地址重新建立连接
         if (sid < self.getId()) {
             /*
              * This replica might still believe that the connection to sid is
@@ -656,6 +662,7 @@ public class QuorumCnxManager {
             closeSocket(sock);
 
             if (electionAddr != null) {
+                //建立连接并初始化接收&发送消息的线程
                 connectOne(sid, electionAddr);
             } else {
                 connectOne(sid);
@@ -666,10 +673,13 @@ public class QuorumCnxManager {
             LOG.warn("We got a connection request from a server with our own ID. "
                     + "This should be either a configuration error, or a bug.");
         } else { // Otherwise start worker threads to receive data.
+            //发送来自toSend的消息
             SendWorker sw = new SendWorker(sock, sid);
+            //接收消息放入recvQueue中
             RecvWorker rw = new RecvWorker(sock, din, sid, sw);
             sw.setRecv(rw);
 
+            //关闭之前的连接 如果存在
             SendWorker vsw = senderWorkerMap.get(sid);
 
             if (vsw != null) {
@@ -677,7 +687,7 @@ public class QuorumCnxManager {
             }
 
             senderWorkerMap.put(sid, sw);
-
+            //需要发送的消息队列 在toSend方法中添加
             queueSendMap.putIfAbsent(sid, new CircularBlockingQueue<>(SEND_CAPACITY));
 
             sw.start();
@@ -947,6 +957,7 @@ public class QuorumCnxManager {
                 LOG.debug("Listener thread started, myId: {}", self.getId());
                 Set<InetSocketAddress> addresses;
 
+                //是否监听所有ip，默认为false，配置文件可配置
                 if (self.getQuorumListenOnAllIPs()) {
                     addresses = self.getElectionAddress().getWildcardAddresses();
                 } else {
@@ -960,6 +971,7 @@ public class QuorumCnxManager {
 
                 final ExecutorService executor = Executors.newFixedThreadPool(addresses.size());
                 try {
+                    //建立连接的处理程序
                     listenerHandlers.forEach(executor::submit);
                 } finally {
                     // prevent executor's threads to leak after ListenerHandler tasks complete
@@ -1065,13 +1077,14 @@ public class QuorumCnxManager {
             private void acceptConnections() {
                 int numRetries = 0;
                 Socket client = null;
-
+                //带有重试循环处理连接
                 while ((!shutdown) && (portBindMaxRetry == 0 || numRetries < portBindMaxRetry)) {
                     try {
                         serverSocket = createNewServerSocket();
                         LOG.info("{} is accepting connections now, my election bind port: {}", QuorumCnxManager.this.mySid, address.toString());
                         while (!shutdown) {
                             try {
+                                //建立连接
                                 client = serverSocket.accept();
                                 setSockOpts(client);
                                 LOG.info("Received connection request from {}", client.getRemoteSocketAddress());
@@ -1083,6 +1096,7 @@ public class QuorumCnxManager {
                                 if (quorumSaslAuthEnabled) {
                                     receiveConnectionAsync(client);
                                 } else {
+                                    //建立连接并初始化
                                     receiveConnection(client);
                                 }
                                 numRetries = 0;

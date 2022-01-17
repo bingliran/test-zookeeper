@@ -18,68 +18,19 @@
 
 package org.apache.zookeeper.server.quorum;
 
-import static org.apache.zookeeper.common.NetUtils.formatInetAddr;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import javax.security.sasl.SaslException;
-
 import org.apache.yetus.audience.InterfaceAudience;
 import org.apache.zookeeper.KeeperException.BadArgumentsException;
-import org.apache.zookeeper.common.AtomicFileOutputStream;
-import org.apache.zookeeper.common.AtomicFileWritingIdiom;
+import org.apache.zookeeper.common.*;
 import org.apache.zookeeper.common.AtomicFileWritingIdiom.WriterStatement;
-import org.apache.zookeeper.common.QuorumX509Util;
-import org.apache.zookeeper.common.Time;
-import org.apache.zookeeper.common.X509Exception;
 import org.apache.zookeeper.jmx.MBeanRegistry;
 import org.apache.zookeeper.jmx.ZKMBeanInfo;
-import org.apache.zookeeper.server.ServerCnxn;
-import org.apache.zookeeper.server.ServerCnxnFactory;
-import org.apache.zookeeper.server.ServerMetrics;
-import org.apache.zookeeper.server.ZKDatabase;
-import org.apache.zookeeper.server.ZooKeeperServer;
-import org.apache.zookeeper.server.ZooKeeperThread;
+import org.apache.zookeeper.server.*;
 import org.apache.zookeeper.server.admin.AdminServer;
 import org.apache.zookeeper.server.admin.AdminServer.AdminServerException;
 import org.apache.zookeeper.server.admin.AdminServerFactory;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
-import org.apache.zookeeper.server.quorum.auth.NullQuorumAuthLearner;
-import org.apache.zookeeper.server.quorum.auth.NullQuorumAuthServer;
-import org.apache.zookeeper.server.quorum.auth.QuorumAuth;
-import org.apache.zookeeper.server.quorum.auth.QuorumAuthLearner;
-import org.apache.zookeeper.server.quorum.auth.QuorumAuthServer;
-import org.apache.zookeeper.server.quorum.auth.SaslQuorumAuthLearner;
-import org.apache.zookeeper.server.quorum.auth.SaslQuorumAuthServer;
+import org.apache.zookeeper.server.quorum.auth.*;
 import org.apache.zookeeper.server.quorum.flexible.QuorumMaj;
 import org.apache.zookeeper.server.quorum.flexible.QuorumOracleMaj;
 import org.apache.zookeeper.server.quorum.flexible.QuorumVerifier;
@@ -88,6 +39,24 @@ import org.apache.zookeeper.server.util.JvmPauseMonitor;
 import org.apache.zookeeper.server.util.ZxidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.security.sasl.SaslException;
+import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.apache.zookeeper.common.NetUtils.formatInetAddr;
 
 /**
  * This class manages the quorum protocol. There are three states this server
@@ -1391,9 +1360,11 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                     LOG.warn("Clobbering already-set QuorumCnxManager (restarting leader election?)");
                     oldQcm.halt();
                 }
+                //启动连接程序
                 QuorumCnxManager.Listener listener = qcm.listener;
                 if (listener != null) {
                     listener.start();
+                    //启动选举程序
                     FastLeaderElection fle = new FastLeaderElection(this, qcm);
                     fle.start();
                     le = fle;
@@ -1529,8 +1500,10 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                                 //当前为LOOKING状态 发起选举
                                 if (shuttingDownLE) {
                                     shuttingDownLE = false;
+                                    //启动选举程序
                                     startLeaderElection();
                                 }
+                                //lookForLeader开始选举
                                 setCurrentVote(makeLEStrategy().lookForLeader());
                             } catch (Exception e) {
                                 LOG.warn("Unexpected exception", e);
@@ -1544,10 +1517,12 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
                         } else {
                             try {
                                 reconfigFlagClear();
+                                //启动选举程序
                                 if (shuttingDownLE) {
                                     shuttingDownLE = false;
                                     startLeaderElection();
                                 }
+                                //lookForLeader开始选举
                                 setCurrentVote(makeLEStrategy().lookForLeader());
                             } catch (Exception e) {
                                 LOG.warn("Unexpected exception", e);
