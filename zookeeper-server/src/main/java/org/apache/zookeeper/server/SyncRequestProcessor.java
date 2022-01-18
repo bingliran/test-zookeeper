@@ -239,6 +239,7 @@ public class SyncRequestProcessor extends ZooKeeperCriticalThread implements Req
         ServerMetrics.getMetrics().BATCH_SIZE.add(toFlush.size());
 
         long flushStartTime = Time.currentElapsedTime();
+        //写磁盘
         zks.getZKDatabase().commit();
         ServerMetrics.getMetrics().SYNC_PROCESSOR_FLUSH_TIME.add(Time.currentElapsedTime() - flushStartTime);
 

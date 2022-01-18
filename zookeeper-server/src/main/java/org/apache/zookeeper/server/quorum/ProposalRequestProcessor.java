@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * This RequestProcessor simply forwards requests to an AckRequestProcessor and
  * SyncRequestProcessor.
+ * 仅转发
  */
 public class ProposalRequestProcessor implements RequestProcessor {
 
@@ -82,6 +83,7 @@ public class ProposalRequestProcessor implements RequestProcessor {
             if (request.getHdr() != null) {
                 // We need to sync and get consensus on any transactions
                 try {
+                    //写操作
                     zks.getLeader().propose(request);
                 } catch (XidRolloverException e) {
                     throw new RequestProcessorException(e.getMessage(), e);

@@ -177,6 +177,7 @@ public class FinalRequestProcessor implements RequestProcessor {
         String path = null;
         int responseSize = 0;
         try {
+            //异常判断
             if (request.getHdr() != null && request.getHdr().getType() == OpCode.error) {
                 AuditHelper.addAuditLog(request, rc, true);
                 /*
@@ -203,6 +204,7 @@ public class FinalRequestProcessor implements RequestProcessor {
 
             LOG.debug("{}", request);
 
+            //失效计数
             if (request.isStale()) {
                 ServerMetrics.getMetrics().STALE_REPLIES.add(1);
             }
@@ -211,7 +213,7 @@ public class FinalRequestProcessor implements RequestProcessor {
                 throw KeeperException.create(Code.THROTTLEDOP);
             }
 
-            AuditHelper.addAuditLog(request, rc);
+            AuditHelper.addAuditLog(request, rc);//执行结果日志
 
             switch (request.type) {
                 case OpCode.ping: {
@@ -686,6 +688,7 @@ public class FinalRequestProcessor implements RequestProcessor {
         LOG.info("shutdown of request processor complete");
     }
 
+    //更新响应计数
     private void updateStats(Request request, String lastOp, long lastZxid) {
         if (request.cnxn == null) {
             return;

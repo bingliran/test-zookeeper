@@ -1273,7 +1273,9 @@ public class Leader extends LearnerMaster {
             LOG.debug("Proposing:: {}", request);
 
             lastProposed = p.packet.getZxid();
+            //添加到未完成事务
             outstandingProposals.put(lastProposed, p);
+            //告知所有的Follower角色
             sendPacket(pp);
         }
         ServerMetrics.getMetrics().PROPOSAL_COUNT.add(1);
