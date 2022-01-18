@@ -138,7 +138,7 @@ public class ObserverRequestProcessor extends ZooKeeperCriticalThread implements
         if (!finished) {
             Request upgradeRequest = null;
             try {
-                upgradeRequest = zks.checkUpgradeSession(request);
+                upgradeRequest = zks.checkUpgradeSession(request);//是否升级为全局会话,当请求为写入时
             } catch (KeeperException ke) {
                 if (request.getHdr() != null) {
                     request.getHdr().setType(OpCode.error);

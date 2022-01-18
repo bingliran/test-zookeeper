@@ -324,6 +324,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
      */
     protected void pRequest2Txn(int type, long zxid, Request request, Record record, boolean deserialize) throws KeeperException, IOException, RequestProcessorException {
         if (request.getHdr() == null) {
+            // 新生事务头
             request.setHdr(new TxnHeader(request.sessionId, request.cxid, zxid,
                     Time.currentWallTime(), type));
         }
@@ -686,18 +687,21 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
         }
         CreateMode createMode = CreateMode.fromFlag(flags);
         validateCreateRequest(path, createMode, request, ttl);
+        //验证父路径
         String parentPath = validatePathForCreate(path, request.sessionId);
-
+        // 移除重复的ACL项 & 验证顺序
         List<ACL> listACL = fixupACL(path, request.authInfo, acl);
         ChangeRecord parentRecord = getRecordForPath(parentPath);
-
+        // 检查ACL列表
         zks.checkACL(request.cnxn, parentRecord.acl, ZooDefs.Perms.CREATE, request.authInfo, path, listACL);
         int parentCVersion = parentRecord.stat.getCversion();
         if (createMode.isSequential()) {
             path = path + String.format(Locale.ENGLISH, "%010d", parentCVersion);
         }
+        // 验证路径
         validatePath(path, request.sessionId);
         try {
+            //验证节点是否存在
             if (getRecordForPath(path) != null) {
                 throw new KeeperException.NodeExistsException(path);
             }
@@ -708,8 +712,10 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
         if (ephemeralParent) {
             throw new KeeperException.NoChildrenForEphemeralsException(path);
         }
+        // 新的子节点版本号
         int newCversion = parentRecord.stat.getCversion() + 1;
         zks.checkQuota(path, null, data, OpCode.create);
+        // 新生事务
         if (type == OpCode.createContainer) {
             request.setTxn(new CreateContainerTxn(path, data, listACL, newCversion));
         } else if (type == OpCode.createTTL) {
@@ -718,6 +724,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
             request.setTxn(new CreateTxn(path, data, listACL, createMode.isEphemeral(), newCversion));
         }
 
+        //节点类型设置临时所有者
         TxnHeader hdr = request.getHdr();
         long ephemeralOwner = 0;
         if (createMode.isContainer()) {
@@ -729,11 +736,14 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
         }
         StatPersisted s = DataTree.createStat(hdr.getZxid(), hdr.getTime(), ephemeralOwner);
         parentRecord = parentRecord.duplicate(request.getHdr().getZxid());
+        //递增parent的child数
         parentRecord.childCount++;
         parentRecord.stat.setCversion(newCversion);
         parentRecord.stat.setPzxid(request.getHdr().getZxid());
+        //摘要
         parentRecord.precalculatedDigest = precalculateDigest(
                 DigestOpCode.UPDATE, parentPath, parentRecord.data, parentRecord.stat);
+        //更改父节点
         addChangeRecord(parentRecord);
         ChangeRecord nodeRecord = new ChangeRecord(
                 request.getHdr().getZxid(), path, s, 0, listACL);
@@ -741,6 +751,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
         nodeRecord.precalculatedDigest = precalculateDigest(
                 DigestOpCode.ADD, path, nodeRecord.data, s);
         setTxnDigest(request, nodeRecord.precalculatedDigest);
+        //更改子节点
         addChangeRecord(nodeRecord);
     }
 
@@ -780,7 +791,9 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
         request.setHdr(null);
         request.setTxn(null);
 
+        //先判断request是否可以使用
         if (!request.isThrottled()) {
+            //执行
             pRequestHelper(request);
         }
 

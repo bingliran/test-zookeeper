@@ -230,6 +230,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                 commitIsWaiting = !committedRequests.isEmpty();
                 requestsToProcess = queuedRequests.size();
                 // Avoid sync if we have something to do
+                //双重检查锁 没有数据处理时等待被wakeup唤醒
                 if (requestsToProcess == 0 && !commitIsWaiting) {
                     // Waiting for requests to process
                     synchronized (this) {
@@ -258,6 +259,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                  */
                 Request request;
                 int readsProcessed = 0;
+                //这个循环的条件是：没有停止、有请求需要被处理、取出的 Request 不为空
                 while (!stopped
                         && requestsToProcess > 0
                         && (maxReadBatchSize < 0 || readsProcessed <= maxReadBatchSize)
