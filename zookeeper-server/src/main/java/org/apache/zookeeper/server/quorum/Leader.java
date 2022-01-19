@@ -928,6 +928,7 @@ public class Leader extends LearnerMaster {
         // in order to be committed, a proposal must be accepted by a quorum.
         //
         // getting a quorum from all necessary configurations.
+        //是否过半同意
         if (!p.hasAllQuorums()) {
             return false;
         }
@@ -978,6 +979,7 @@ public class Leader extends LearnerMaster {
             commit(zxid);
             inform(p);
         }
+        //提交
         zk.commitProcessor.commit(p.request);
         if (pendingSyncs.containsKey(zxid)) {
             for (LearnerSyncRequest r : pendingSyncs.remove(zxid)) {
@@ -997,6 +999,7 @@ public class Leader extends LearnerMaster {
      * @param followerAddr
      */
     @Override
+    //对于来自 Follower 节点 Proposal ack 的处理
     public synchronized void processAck(long sid, long zxid, SocketAddress followerAddr) {
         if (!allowedToCommit) {
             return; // last op committed was a leader change - from now on
@@ -1235,6 +1238,11 @@ public class Leader extends LearnerMaster {
      *
      * @param request
      * @return the proposal that is queued to send to all the members
+     * <p>
+     * 这个方法的主要作用就是将 Request 封装（序列化）为 Proposal 与 QuorumPacket，然后完成两件事：
+     * 1. 将 Proposal 加入到 Leader.outstandingProposals HashMap中，这个 map 的 key 为 zxid，value 为 Proposal
+     * 这个 HashMap 的含义 Leader 决定要持久化、但是还没有完成共识
+     * 2. 将 QuorumPacket 加入到所有 Follower 对应的 LearnerHandler 的队列中，LearnerHandler 线程会负责消费此队列上的元素进行发送
      */
     public Proposal propose(Request request) throws XidRolloverException {
         if (request.isThrottled()) {
@@ -1250,16 +1258,20 @@ public class Leader extends LearnerMaster {
             shutdown(msg);
             throw new XidRolloverException(msg);
         }
-
+        //1. 序列化写事务请求于 byte[] 数组中
         byte[] data = SerializeUtils.serializeRequest(request);
+        //2. 设置字节长度
         proposalStats.setLastBufferSize(data.length);
+        //3. 构造一个待序列化发送的 QuorumPacket 数据包，其 Jute 框架中 Record 接口的子类
         QuorumPacket pp = new QuorumPacket(Leader.PROPOSAL, request.zxid, data, null);
-
+        //4. 构造一个新的 Proposal 实例
         Proposal p = new Proposal();
+        //5. QuorumPacket 实例作为 Proposal 的字段
         p.packet = pp;
+        //6. Request 实例作为 Proposal 的字段
         p.request = request;
-
         synchronized (this) {
+            //7. QuorumVerifier 作为 Proposal 的字段
             p.addQuorumVerifier(self.getQuorumVerifier());
 
             if (request.getHdr().getType() == OpCode.reconfig) {
@@ -1273,9 +1285,9 @@ public class Leader extends LearnerMaster {
             LOG.debug("Proposing:: {}", request);
 
             lastProposed = p.packet.getZxid();
-            //添加到未完成事务
+            //8. 将 Proposal 加入到队列 outstandingProposals 中去，这里的 outstanding 含义是尚未解决（一致性 2PC 共识）的
             outstandingProposals.put(lastProposed, p);
-            //告知所有的Follower角色
+            //9. 将 QuorumPacket 加入到所有 LearnerHandler 实例内的 queuedPackets 队列中，等待被消费
             sendPacket(pp);
         }
         ServerMetrics.getMetrics().PROPOSAL_COUNT.add(1);

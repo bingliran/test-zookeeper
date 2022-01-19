@@ -62,6 +62,13 @@ public class LeaderZooKeeperServer extends QuorumZooKeeperServer {
         return self.leader;
     }
 
+    /**
+     * LeaderZooKeeperServer 的请求处理链比较特殊，具有分叉，如下所示：
+     * 首先是：LeaderRequestProcessor -> PrepRequestProcessor -> ProposalRequestProcessor
+     * 从 ProposalRequestProcessor 下有两个分叉，分别为：
+     * CommitProcessor -> Leader.ToBeAppliedRequestProcessor -> FinalRequestProcessor
+     * SyncRequestProcessor -> AckRequestProcessor
+     */
     @Override
     protected void setupRequestProcessors() {
         RequestProcessor finalProcessor = new FinalRequestProcessor(this);

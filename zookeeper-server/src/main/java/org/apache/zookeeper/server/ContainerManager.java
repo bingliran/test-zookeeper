@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
  * checks container nodes that have a cversion &gt; 0 and have no children. A
  * delete is attempted on the node. The result of the delete is unimportant.
  * If the proposal fails or the container node is not empty there's no harm.
+ *
+ * 在leader上的节点管理器 定时清理容器节点和临时节点
  */
 public class ContainerManager {
 
@@ -184,6 +186,7 @@ public class ContainerManager {
                 }
             }
         }
+        // 过期节点
         for (String ttlPath : zkDb.getDataTree().getTtls()) {
             DataNode node = zkDb.getDataTree().getNode(ttlPath);
             if (node != null) {

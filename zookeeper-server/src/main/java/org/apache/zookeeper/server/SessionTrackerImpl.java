@@ -46,11 +46,11 @@ import org.slf4j.LoggerFactory;
 public class SessionTrackerImpl extends ZooKeeperCriticalThread implements SessionTracker {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionTrackerImpl.class);
-
+    //Long 类型的 sessionID 映射为 Session 类型实例
     protected final ConcurrentHashMap<Long, SessionImpl> sessionsById = new ConcurrentHashMap<Long, SessionImpl>();
 
     private final ExpiryQueue<SessionImpl> sessionExpiryQueue;
-
+    //Long 类型的 sessionID 映射为 Session 实例对应的超时时间
     protected final ConcurrentMap<Long, Integer> sessionsWithTimeout;
     private final AtomicLong nextSessionId = new AtomicLong();
 

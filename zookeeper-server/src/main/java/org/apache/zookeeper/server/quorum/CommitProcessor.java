@@ -369,6 +369,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                                  * originated from a different server and there is no local bookkeeping or a local client
                                  * session that needs to be notified.
                                  */
+                                //更新信息
                                 topPending.setHdr(request.getHdr());
                                 topPending.setTxn(request.getTxn());
                                 topPending.setTxnDigest(request.getTxnDigest());
@@ -394,6 +395,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                         commitsProcessed++;
 
                         // Process the write inline.
+                        //提交到final
                         processWrite(request);
 
                         commitIsWaiting = !committedRequests.isEmpty();
@@ -490,6 +492,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
         processCommitMetrics(request, true);
 
         long timeBeforeFinalProc = Time.currentElapsedTime();
+        //提交到final
         nextProcessor.processRequest(request);
         ServerMetrics.getMetrics().WRITE_FINAL_PROC_TIME.add(Time.currentElapsedTime() - timeBeforeFinalProc);
     }
@@ -604,6 +607,9 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
         }
     }
 
+    /**
+     * 真正执行操作
+     */
     public void commit(Request request) {
         if (stopped || request == null) {
             return;

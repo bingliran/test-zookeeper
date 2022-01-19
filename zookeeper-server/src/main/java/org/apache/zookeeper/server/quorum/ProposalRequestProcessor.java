@@ -83,11 +83,12 @@ public class ProposalRequestProcessor implements RequestProcessor {
             if (request.getHdr() != null) {
                 // We need to sync and get consensus on any transactions
                 try {
-                    //写操作
+                    //这里主要是将 request 构造为 Proposal 与 QuorumPacket 然后加入队列 等待同步
                     zks.getLeader().propose(request);
                 } catch (XidRolloverException e) {
                     throw new RequestProcessorException(e.getMessage(), e);
                 }
+                // 事务请求还需要走另一条并行的请求处理路线：SyncRequestProcessor -> AckRequestProcessor
                 syncProcessor.processRequest(request);
             }
         }
