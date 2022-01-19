@@ -326,6 +326,7 @@ public class ZKDatabase {
      * maintains a list of last <i>committedLog</i>
      * or so committed requests. This is used for
      * fast follower synchronization.
+     * 事务日志
      *
      * @param request committed request
      */

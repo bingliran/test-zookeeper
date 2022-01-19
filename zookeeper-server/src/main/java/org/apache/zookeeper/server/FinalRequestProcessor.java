@@ -158,6 +158,7 @@ public class FinalRequestProcessor implements RequestProcessor {
         }
         ProcessTxnResult rc = null;
         if (!request.isThrottled()) {
+            //提交到database
             rc = applyRequest(request);
         }
         if (request.cnxn == null) {
