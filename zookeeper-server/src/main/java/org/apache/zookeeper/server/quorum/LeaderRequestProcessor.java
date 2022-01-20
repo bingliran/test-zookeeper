@@ -56,6 +56,7 @@ public class LeaderRequestProcessor implements RequestProcessor {
         // an ephemeral node, in which case we upgrade the session
         Request upgradeRequest = null;
         try {
+            //如果是写操作则只能由leader来执行 将这个request升级为全局会话
             upgradeRequest = lzks.checkUpgradeSession(request);
         } catch (KeeperException ke) {
             if (request.getHdr() != null) {
@@ -68,6 +69,7 @@ public class LeaderRequestProcessor implements RequestProcessor {
         } catch (IOException ie) {
             LOG.error("Unexpected error in upgrade", ie);
         }
+        //在leader创建一个session来保证request可被处理
         if (upgradeRequest != null) {
             nextProcessor.processRequest(upgradeRequest);
         }

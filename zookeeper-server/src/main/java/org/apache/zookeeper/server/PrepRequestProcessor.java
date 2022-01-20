@@ -148,7 +148,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
                         .add(Time.currentElapsedTime() - request.prepQueueStartTime);
                 if (LOG.isTraceEnabled()) {
                     long traceMask = ZooTrace.CLIENT_REQUEST_TRACE_MASK;
-                    if (request.type == OpCode.ping) {
+                    if (request.type == OpCode.ping) {//ping 日志
                         traceMask = ZooTrace.CLIENT_PING_TRACE_MASK;
                     }
                     ZooTrace.logRequest(LOG, traceMask, 'P', request, "");
@@ -158,6 +158,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
                 }
 
                 request.prepStartTime = Time.currentElapsedTime();
+                //
                 pRequest(request);
             }
         } catch (Exception e) {
@@ -201,6 +202,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
 
     protected void addChangeRecord(ChangeRecord c) {
         synchronized (zks.outstandingChanges) {
+            //未完成更改
             zks.outstandingChanges.add(c);
             zks.outstandingChangesForPath.put(c.path, c);
             ServerMetrics.getMetrics().OUTSTANDING_CHANGES_QUEUED.add(1);
@@ -815,6 +817,7 @@ public class PrepRequestProcessor extends ZooKeeperCriticalThread implements Req
                 case OpCode.createContainer:
                 case OpCode.create:
                 case OpCode.create2:
+                    //创建节点请求
                     CreateRequest create2Request = new CreateRequest();
                     pRequest2Txn(request.type, zks.getNextZxid(), request, create2Request, true);
                     break;

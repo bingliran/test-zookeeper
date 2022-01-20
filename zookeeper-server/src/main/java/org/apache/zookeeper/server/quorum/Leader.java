@@ -453,14 +453,18 @@ public class Leader extends LearnerMaster {
 
         @Override
         public void run() {
+            //确保 ZooKeeper 服务器线程没有关闭且 List<ServerSocket> 容器不为空
             if (!stop.get() && !serverSockets.isEmpty()) {
+                //根据 Leader.serverSockets 容器大小来创建一个线程池
                 ExecutorService executor = Executors.newFixedThreadPool(serverSockets.size());
+                //创建一个倒计时用于锁
                 CountDownLatch latch = new CountDownLatch(serverSockets.size());
-
+                //为 Leader.serverSockets 容器内的每一个 ServerSocket 创建一个 LearnerCnxAcceptorHandler 实例
                 serverSockets.forEach(serverSocket ->
                         executor.submit(new LearnerCnxAcceptorHandler(serverSocket, latch)));
 
                 try {
+                    //当前线程阻塞，直到线程池中的所有线程都调用了 latch.countDown() 方法（通常是在 finally 语句块中执行）
                     latch.await();
                 } catch (InterruptedException ie) {
                     LOG.error("Interrupted while sleeping in LearnerCnxAcceptor.", ie);
@@ -589,29 +593,35 @@ public class Leader extends LearnerMaster {
         LOG.info("LEADING - LEADER ELECTION TOOK - {} {}", electionTimeTaken, QuorumPeer.FLE_TIME_UNIT);
         self.start_fle = 0;
         self.end_fle = 0;
-
+        //注册 JMX，其由于管理 Java Application
         zk.registerJMX(new LeaderBean(this, zk), self.jmxLocalPeerBean);
 
         try {
             self.setZabState(QuorumPeer.ZabState.DISCOVERY);
             self.tick.set(0);
+            //再次尝试反序列快照数据
             zk.loadData();
-
+            //根据 epoch 以及 zxid 来构造一个新的 Leader 状态
             leaderStateSummary = new StateSummary(self.getCurrentEpoch(), zk.getLastProcessedZxid());
 
             // Start thread that waits for connection requests from
             // new followers.
+            //构造一个 LearnerCnxAcceptor 线程实例
             cnxAcceptor = new LearnerCnxAcceptor();
+            /**
+             * 异步地启动 LearnerCnxAcceptor#run 方法，我们需要关注其异步执行逻辑
+             * 这是异步完成的，是一个重点
+             */
             cnxAcceptor.start();
-
+            //完成 epoch 共识，其返回值为 Leader 选举过程中最大的 epoch +1
             long epoch = getEpochToPropose(self.getId(), self.getAcceptedEpoch());
-
+            //设置 Leader 内部的 LeaderZooKeeperServer 实例的 zxid
             zk.setZxid(ZxidUtils.makeZxid(epoch, 0));
 
             synchronized (this) {
                 lastProposed = zk.getZxid();
             }
-
+            //将当前 LeaderZooKeeperServer 实例的 zxid 构造为一个 Packet 实例
             newLeaderProposal.packet = new QuorumPacket(NEWLEADER, zk.getZxid(), null, null);
 
             if ((newLeaderProposal.packet.getZxid() & 0xffffffffL) != 0) {
@@ -658,13 +668,19 @@ public class Leader extends LearnerMaster {
             // We have to get at least a majority of servers in sync with
             // us. We do this by waiting for the NEWLEADER packet to get
             // acknowledged
-
+            /**
+             *  waitForEpochAck() 方法主要用于达成过半数节点对新 epoch 的 ack
+             *  epoch 共识操作由 LearnerCnxAcceptor 线程内的 LearnerHandler 完成
+             */
             waitForEpochAck(self.getId(), leaderStateSummary);
             self.setCurrentEpoch(epoch);
             self.setLeaderAddressAndId(self.getQuorumAddress(), self.getId());
             self.setZabState(QuorumPeer.ZabState.SYNCHRONIZATION);
 
             try {
+                /**阻塞，直到过半数的节点返回对新 Leader 数据同步完成的 ack
+                 * 数据同步的操作还是由异步的 LearnerHandler 线程完成
+                 */
                 waitForNewLeaderAck(self.getId(), zk.getZxid());
             } catch (InterruptedException e) {
                 shutdown("Waiting for a quorum of followers, only synced with sids: [ "
@@ -689,7 +705,10 @@ public class Leader extends LearnerMaster {
                 }
                 return;
             }
-
+            /**
+             * 此时 Leader 与其他 Learner 已经达成了对 epoch 以及数据一致性的共识，这个时候才能
+             * 启动一个 ZooKeeperServer 实例（Leader 节点对应 LeaderZooKeeperServer 实例）
+             */
             startZkServer();
 
             /**
@@ -762,27 +781,7 @@ public class Leader extends LearnerMaster {
                         break;
                     }
 
-                    /*
-                     *
-                     * We will need to re-validate the outstandingProposal to maintain the progress of ZooKeeper.
-                     * It is likely a proposal is waiting for enough ACKs to be committed. The proposals are sent out, but the
-                     * only follower goes away which makes the proposals will not be committed until the follower recovers back.
-                     * An earlier proposal which is not committed will block any further proposals. So, We need to re-validate those
-                     * outstanding proposal with the help from Oracle. A key point in the process of re-validation is that the proposals
-                     * need to be processed in order.
-                     *
-                     * We make the whole method blocking to avoid any possible race condition on outstandingProposal and lastCommitted
-                     * as well as to avoid nested synchronization.
-                     *
-                     * As a more generic approach, we pass the object of forwardingFollowers to QuorumOracleMaj to determine if we need
-                     * the help from Oracle.
-                     *
-                     *
-                     * the size of outstandingProposals can be 1. The only one outstanding proposal is the one waiting for the ACK from
-                     * the leader itself.
-                     * */
-                    if (!tickSkip && !syncedAckSet.hasAllQuorums()
-                            && !(self.getQuorumVerifier().overrideQuorumDecision(getForwardingFollowers()) && self.getQuorumVerifier().revalidateOutstandingProp(this, new ArrayList<>(outstandingProposals.values()), lastCommitted))) {
+                    if (!tickSkip && !syncedAckSet.hasAllQuorums()) {
                         // Lost quorum of last committed and/or last proposed
                         // config, set shutdown flag
                         shutdownMessage = "Not sufficient followers synced, only synced with sids: [ "
@@ -1262,7 +1261,7 @@ public class Leader extends LearnerMaster {
         byte[] data = SerializeUtils.serializeRequest(request);
         //2. 设置字节长度
         proposalStats.setLastBufferSize(data.length);
-        //3. 构造一个待序列化发送的 QuorumPacket 数据包，其 Jute 框架中 Record 接口的子类
+        //3. 构造一个待序列化发送的 QuorumPacket 数据包
         QuorumPacket pp = new QuorumPacket(Leader.PROPOSAL, request.zxid, data, null);
         //4. 构造一个新的 Proposal 实例
         Proposal p = new Proposal();
