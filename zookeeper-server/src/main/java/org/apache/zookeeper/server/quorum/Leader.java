@@ -941,8 +941,10 @@ public class Leader extends LearnerMaster {
             LOG.warn("First is 0x{}", Long.toHexString(lastCommitted + 1));
         }
 
+        //在未完成的事务中删除这个
         outstandingProposals.remove(zxid);
 
+        //添加到toBeApplied队列
         if (p.request != null) {
             toBeApplied.add(p);
         }
@@ -975,6 +977,7 @@ public class Leader extends LearnerMaster {
             informAndActivate(p, designatedLeader);
         } else {
             p.request.logLatency(ServerMetrics.getMetrics().QUORUM_ACK_LATENCY);
+            //通知Follower事务提交
             commit(zxid);
             inform(p);
         }
@@ -998,7 +1001,7 @@ public class Leader extends LearnerMaster {
      * @param followerAddr
      */
     @Override
-    //对于来自 Follower 节点 Proposal ack 的处理
+    //对于来自 Proposal ack 的处理 可能来自于Follower和Leader
     public synchronized void processAck(long sid, long zxid, SocketAddress followerAddr) {
         if (!allowedToCommit) {
             return; // last op committed was a leader change - from now on

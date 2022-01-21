@@ -120,6 +120,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
 
     /**
      * Requests that have been committed.
+     * 需要提交的请求队列
      */
     protected final LinkedBlockingQueue<Request> committedRequests = new LinkedBlockingQueue<Request>();
 
@@ -271,6 +272,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                         requests.addLast(request);
                         ServerMetrics.getMetrics().REQUESTS_IN_SESSION_QUEUE.add(requests.size());
                     } else {
+                        //不是写入请求直接跳过
                         readsProcessed++;
                         numReadQueuedRequests.decrementAndGet();
                         sendToNextProcessor(request);
@@ -339,12 +341,14 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                          * a commit for a local write, as commits are received in order. Else
                          * it must be a commit for a remote write.
                          */
+                        //写入请求要保证顺序
                         if (!queuedWriteRequests.isEmpty()
                                 && queuedWriteRequests.peek().sessionId == request.sessionId
                                 && queuedWriteRequests.peek().cxid == request.cxid) {
                             /*
                              * Commit matches the earliest write in our write queue.
                              */
+                            //当前session还有未处理的request
                             Deque<Request> sessionQueue = pendingRequests.get(request.sessionId);
                             ServerMetrics.getMetrics().PENDING_SESSION_QUEUE_SIZE.add(pendingRequests.size());
                             if (sessionQueue == null || sessionQueue.isEmpty() || !needCommit(sessionQueue.peek())) {

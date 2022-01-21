@@ -578,7 +578,6 @@ public class LearnerHandler extends ZooKeeperThread {
                 //通过响应得到 StateSummary 实例
                 ss = new StateSummary(bbepoch.getInt(), ackEpochPacket.getZxid());
                 /**
-                 * 阻塞 5：
                  * 阻塞直到得到半数以上的节点对新 epoch 达成共识
                  */
                 //这里我们来看 Leader#learnerMaster() 方法，其用于阻塞直到 Leader 得到过半数节点对新 epoch 的 ack

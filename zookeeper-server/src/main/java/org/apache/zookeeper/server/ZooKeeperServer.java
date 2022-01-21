@@ -1839,12 +1839,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     // entry point for FinalRequestProcessor.java
     public ProcessTxnResult processTxn(Request request) {
         TxnHeader hdr = request.getHdr();
+        //处理session
         processTxnForSessionEvents(request, hdr, request.getTxn());
 
         final boolean writeRequest = (hdr != null);
         final boolean quorumRequest = request.isQuorum();
 
         // return fast w/o synchronization when we get a read
+        //读请求不处理
         if (!writeRequest && !quorumRequest) {
             return new ProcessTxnResult();
         }
@@ -1879,7 +1881,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             return rc;
         }
     }
-
+    //处理session
     private void processTxnForSessionEvents(Request request, TxnHeader hdr, Record txn) {
         int opCode = (request == null) ? hdr.getType() : request.type;
         long sessionId = (request == null) ? hdr.getClientId() : request.sessionId;
