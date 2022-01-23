@@ -1451,6 +1451,9 @@ public class QuorumPeer extends ZooKeeperThread implements QuorumStats.Provider 
             /*
              * Main loop
              * 首先没有被shutdown
+             * 就拿 follower.followLeader();来讲 这是一个阻塞程序
+             * 在和leader连接失败时退出阻塞认为Leader失效 然后发起新的选举
+             *
              */
             while (running) {
                 if (unavailableStartTime == 0) {

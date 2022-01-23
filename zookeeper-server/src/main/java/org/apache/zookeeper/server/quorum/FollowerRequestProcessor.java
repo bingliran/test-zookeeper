@@ -83,6 +83,7 @@ public class FollowerRequestProcessor extends ZooKeeperCriticalThread implements
                 // We want to queue the request to be processed before we submit
                 // the request to the leader so that we are ready to receive
                 // the response
+                //发送给下一个处理链
                 maybeSendRequestToNextProcessor(request);
 
                 if (request.isThrottled()) {
@@ -94,6 +95,7 @@ public class FollowerRequestProcessor extends ZooKeeperCriticalThread implements
                 // path, but different from others, we need to keep track
                 // of the sync operations this follower has pending, so we
                 // add it to pendingSyncs.
+                //事务操作发送给领导者
                 switch (request.type) {
                     case OpCode.sync:
                         zks.pendingSyncs.add(request);

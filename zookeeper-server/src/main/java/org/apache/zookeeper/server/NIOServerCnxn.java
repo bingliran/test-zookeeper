@@ -724,6 +724,7 @@ public class NIOServerCnxn extends ServerCnxn {
      * (non-Javadoc)
      *
      * @see org.apache.zookeeper.server.ServerCnxnIface#process(org.apache.zookeeper.proto.WatcherEvent)
+     * 发送监听事件响应
      */
     @Override
     public void process(WatchedEvent event) {

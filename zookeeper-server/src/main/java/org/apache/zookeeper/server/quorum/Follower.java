@@ -74,6 +74,7 @@ public class Follower extends Learner {
     void followLeader() throws InterruptedException {
         self.end_fle = Time.currentElapsedTime();
         long electionTimeTaken = self.end_fle - self.start_fle;
+        //记录选举耗时
         self.setElectionTimeTaken(electionTimeTaken);
         ServerMetrics.getMetrics().ELECTION_TIME.add(electionTimeTaken);
         LOG.info("FOLLOWING - LEADER ELECTION TOOK - {} {}", electionTimeTaken, QuorumPeer.FLE_TIME_UNIT);
@@ -88,6 +89,7 @@ public class Follower extends Learner {
             self.setZabState(QuorumPeer.ZabState.DISCOVERY);
             QuorumServer leaderServer = findLeader();
             try {
+                //建立和Leader的连接
                 connectToLeader(leaderServer.addr, leaderServer.hostname);
                 connectionTime = System.currentTimeMillis();
                 long newEpochZxid = registerWithLeader(Leader.FOLLOWERINFO);
@@ -104,9 +106,11 @@ public class Follower extends Learner {
                             + ZxidUtils.zxidToString(self.getAcceptedEpoch()));
                     throw new IOException("Error: Epoch of leader is lower");
                 }
+                //更新zxid
                 long startTime = Time.currentElapsedTime();
                 self.setLeaderAddressAndId(leaderServer.addr, leaderServer.getId());
                 self.setZabState(QuorumPeer.ZabState.SYNCHRONIZATION);
+                //同步数据
                 syncWithLeader(newEpochZxid);
                 self.setZabState(QuorumPeer.ZabState.BROADCAST);
                 completedSync = true;
@@ -122,9 +126,10 @@ public class Follower extends Learner {
                 }
                 // create a reusable packet to reduce gc impact
                 QuorumPacket qp = new QuorumPacket();
+                //接收leader发送的数据
                 while (this.isRunning()) {
-                    readPacket(qp);
-                    processPacket(qp);
+                    readPacket(qp);//读
+                    processPacket(qp);//执行
                 }
             } catch (Exception e) {
                 LOG.warn("Exception when following the leader", e);
@@ -181,7 +186,7 @@ public class Follower extends Learner {
                     QuorumVerifier qv = self.configFromString(new String(setDataTxn.getData(), UTF_8));
                     self.setLastSeenQuorumVerifier(qv, true);
                 }
-
+                //事务日志
                 fzk.logRequest(hdr, txn, digest);
                 if (hdr != null) {
                     /*
@@ -201,7 +206,7 @@ public class Follower extends Learner {
                     ServerMetrics.getMetrics().OM_PROPOSAL_PROCESS_TIME.add(Time.currentElapsedTime() - startTime);
                 }
                 break;
-            case Leader.COMMIT:
+            case Leader.COMMIT://接收来自leader的提交
                 ServerMetrics.getMetrics().LEARNER_COMMIT_RECEIVED_COUNT.add(1);
                 fzk.commit(qp.getZxid());
                 if (om != null) {

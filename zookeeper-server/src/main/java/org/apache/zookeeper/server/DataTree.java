@@ -103,11 +103,18 @@ public class DataTree {
     /**
      * This map provides a fast lookup to the datanodes. The tree is the
      * source of truth and is where all the locking occurs
+     * 数据
      */
     private final NodeHashMap nodes;
 
+    /**
+     * 单节点监听
+     */
     private IWatchManager dataWatches;
 
+    /**
+     * 单节点+字节点监听
+     */
     private IWatchManager childWatches;
 
     /**

@@ -546,6 +546,8 @@ public class Learner {
      * Finally, synchronize our history with the Leader (if Follower)
      * or the LearnerMaster (if Observer).
      *
+     * 同步zxid并重新加载数据
+     *
      * @param newLeaderZxid
      * @throws IOException
      * @throws InterruptedException

@@ -120,6 +120,10 @@ public class WatchManager implements IWatchManager {
         return triggerWatch(path, type, null);
     }
 
+    /**
+     * 触发监听事件
+     * supress被排除的
+     */
     @Override
     public WatcherOrBitSet triggerWatch(String path, EventType type, WatcherOrBitSet supress) {
         WatchedEvent e = new WatchedEvent(type, KeeperState.SyncConnected, path);
@@ -166,6 +170,7 @@ public class WatchManager implements IWatchManager {
             if (supress != null && supress.contains(w)) {
                 continue;
             }
+            //发送到Cnxn的process
             w.process(e);
         }
 

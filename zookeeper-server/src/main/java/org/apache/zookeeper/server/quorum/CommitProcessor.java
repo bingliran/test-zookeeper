@@ -320,6 +320,8 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
 
                     /*
                      * Loop through all the commits, and try to drain them.
+                     * https://www.zhihu.com/question/28414001
+                     * hashSet为什么遍历结果是有序的
                      */
                     Set<Long> queuesToDrain = new HashSet<>();
                     long startWriteTime = Time.currentElapsedTime();
@@ -342,6 +344,7 @@ public class CommitProcessor extends ZooKeeperCriticalThread implements RequestP
                          * it must be a commit for a remote write.
                          */
                         //写入请求要保证顺序
+                        //在这个session中还有其他未处理的请求会按照队列顺序处理
                         if (!queuedWriteRequests.isEmpty()
                                 && queuedWriteRequests.peek().sessionId == request.sessionId
                                 && queuedWriteRequests.peek().cxid == request.cxid) {

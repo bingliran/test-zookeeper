@@ -582,6 +582,7 @@ public class Leader extends LearnerMaster {
     /**
      * This method is main function that is called to lead
      *
+     * 领导者上任流程
      * @throws IOException
      * @throws InterruptedException
      */
@@ -599,7 +600,7 @@ public class Leader extends LearnerMaster {
         try {
             self.setZabState(QuorumPeer.ZabState.DISCOVERY);
             self.tick.set(0);
-            //再次尝试反序列快照数据
+            //反序列快照数据
             zk.loadData();
             //根据 epoch 以及 zxid 来构造一个新的 Leader 状态
             leaderStateSummary = new StateSummary(self.getCurrentEpoch(), zk.getLastProcessedZxid());
@@ -609,8 +610,8 @@ public class Leader extends LearnerMaster {
             //构造一个 LearnerCnxAcceptor 线程实例
             cnxAcceptor = new LearnerCnxAcceptor();
             /**
-             * 异步地启动 LearnerCnxAcceptor#run 方法，我们需要关注其异步执行逻辑
-             * 这是异步完成的，是一个重点
+             * 异步地启动 LearnerCnxAcceptor#run 方法，
+             * 也就是启动和Follower通信LearnerHandler
              */
             cnxAcceptor.start();
             //完成 epoch 共识，其返回值为 Leader 选举过程中最大的 epoch +1
@@ -630,6 +631,7 @@ public class Leader extends LearnerMaster {
 
             QuorumVerifier lastSeenQV = self.getLastSeenQuorumVerifier();
             QuorumVerifier curQV = self.getQuorumVerifier();
+            //这种情况发生下服务器缺失版本配置 兼容旧版本
             if (curQV.getVersion() == 0 && curQV.getVersion() == lastSeenQV.getVersion()) {
                 // This was added in ZOOKEEPER-1783. The initial config has version 0 (not explicitly
                 // specified by the user; the lack of version in a config file is interpreted as version=0).
@@ -742,6 +744,7 @@ public class Leader extends LearnerMaster {
             // If not null then shutdown this leader
             String shutdownMessage = null;
 
+            //与Follower保持连接
             while (true) {
                 synchronized (this) {
                     long start = Time.currentElapsedTime();

@@ -46,6 +46,12 @@ public class Test {
                 CreateMode.PERSISTENT);
         System.out.println(s1);
 
+        zooKeeper.exists("", new Watcher() {
+            @Override
+            public void process(WatchedEvent event) {
+
+            }
+        });
         TimeUnit.DAYS.sleep(1);
     }
 }

@@ -729,7 +729,7 @@ public class LearnerHandler extends ZooKeeperThread {
                 messageTracker.trackReceived(qp.getType());
 
                 long traceMask = ZooTrace.SERVER_PACKET_TRACE_MASK;
-                //处理消息类型为 PING（心跳包），可以见得 Ping 包的发送者将是 Learner，接收者则是 Leader
+                //处理消息类型为 PING（心跳包
                 if (qp.getType() == Leader.PING) {
                     traceMask = ZooTrace.SERVER_PING_TRACE_MASK;
                 }
